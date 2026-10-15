@@ -70,8 +70,24 @@ export default function App() {
           zIndex: 100
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#f59e0b' }}>✦</span>
+        <div
+          style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }}
+          onClick={() => setViewMode('map')}
+          title="Trở về bản đồ"
+        >
+          <img
+            src="/logo.png"
+            alt="Logo Cảnh sát học bài"
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: '50%',
+              objectFit: 'cover',
+              border: '2px solid #f59e0b',
+              boxShadow: '0 0 8px rgba(245, 158, 11, 0.45)',
+              flexShrink: 0
+            }}
+          />
           <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem' }}>Một Đời Người, Một Con Đường</strong>
         </div>
 
