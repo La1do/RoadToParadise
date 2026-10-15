@@ -94,6 +94,11 @@ test('Game 2: Yêu cầu giao diện và logic (Game2Scramble)', () => {
   assert.match(jsxContent, /Xác nhận thứ tự/);
   assert.match(jsxContent, /reinforce/);
 
+  // Kéo thả (drag & drop) và tách riêng từng ý
+  assert.match(jsxContent, /draggable/, 'Thẻ phải kéo được (drag & drop)');
+  assert.match(jsxContent, /onDrop/, 'Phải có vùng thả (drop zone)');
+  assert.match(jsxContent, /slots\.map/, 'Phải tách riêng từng ý thành từng card');
+
   // Kiểm tra CSS: thẻ bo tròn, chiều cao >= 44px
   assert.match(cssContent, /min-height:\s*44px/, 'Thẻ từ và nút phải có chiều cao >= 44px');
   assert.match(cssContent, /border-radius:\s*22px/, 'Thẻ bo tròn');

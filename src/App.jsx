@@ -10,9 +10,10 @@ import { Game1Copy, Game2Scramble, GameResultModal } from './components/games';
 import CharacterDemo from './components/character/CharacterDemo';
 import DayRoadMap from './components/map/DayRoadMap';
 import { CutscenePlayer, FirstPersonIntro, CUTSCENES } from './components/cutscenes';
+import { CustomExamReview } from './components/exam';
 
 export default function App() {
-  const [viewMode, setViewMode] = useState('map'); // 'map' | 'cutscene' | 'game1' | 'game2' | 'character' | 'bench'
+  const [viewMode, setViewMode] = useState('map'); // 'map' | 'pov' | 'cutscene' | 'game1' | 'game2' | 'custom-practice' | 'character' | 'bench'
   const [selectedQuestion, setSelectedQuestion] = useState(questionsData.questions[0]);
   const [selectedSlotIndex, setSelectedSlotIndex] = useState(0);
   const [selectedStep, setSelectedStep] = useState(1);
@@ -39,6 +40,7 @@ export default function App() {
 
   const navItems = [
     { id: 'map', label: '🗺️ Bản đồ' },
+    { id: 'custom-practice', label: '🎯 Ôn & Thi riêng' },
     { id: 'pov', label: '📱 Cảnh mở đầu (POV)' },
     { id: 'cutscene', label: '🎬 Kịch bản' },
     { id: 'game1', label: '✍️ Chép lại' },
@@ -110,6 +112,13 @@ export default function App() {
                 }
               }}
             />
+          </div>
+        )}
+
+        {/* 1.2. Chế độ Ôn tập Xáo từ & Thi riêng tự chọn (Tab riêng) */}
+        {viewMode === 'custom-practice' && (
+          <div style={{ width: '100%', maxWidth: 1040, padding: '1rem', boxSizing: 'border-box' }}>
+            <CustomExamReview onBackToMap={() => setViewMode('map')} />
           </div>
         )}
 
@@ -187,9 +196,9 @@ export default function App() {
           </div>
         )}
 
-        {/* 4. Game 2: Xáo từ (Học cả câu) */}
+        {/* 4. Game 2: Xáo từ (Học cả câu - tách từng ô theo từng ý) */}
         {viewMode === 'game2' && (
-          <div style={{ width: '100%', maxWidth: 880, padding: '1rem', boxSizing: 'border-box' }}>
+          <div style={{ width: '100%', maxWidth: 960, padding: '1rem', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
               <button
                 onClick={() => setViewMode('map')}
@@ -198,14 +207,15 @@ export default function App() {
                 ← Trở về bản đồ
               </button>
               <span style={{ fontSize: '0.9rem', color: '#f59e0b', fontWeight: 'bold' }}>
-                Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Xáo từ
+                Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Xáo từ theo từng ý
               </span>
             </div>
 
             <Game2Scramble
+              question={selectedQuestion}
               slot={selectedQuestion}
               questionText={selectedQuestion.question}
-              onComplete={res => setModalResult(res.reinforceGrade)}
+              onComplete={res => setModalResult(res.summary ? { isExact: res.isExact, accuracy: res.summary.avgAccuracy } : res.reinforceGrade)}
               onNext={() => setViewMode('map')}
             />
           </div>
