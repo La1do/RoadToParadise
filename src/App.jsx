@@ -1,55 +1,12 @@
 import React, { useState } from 'react';
-import questionsData from './data/questions.json';
-import {
-  compareAnswer,
-  generateExerciseForStep,
-  LEARNING_STEPS,
-  getNextWordHint
-} from './core';
-import { Game1Copy, Game2Scramble, GameResultModal, FirstPersonMotorbikeGame2 } from './components/games';
-import CharacterDemo from './components/character/CharacterDemo';
-import DayRoadMap from './components/map/DayRoadMap';
-import { CutscenePlayer, FirstPersonIntro, CUTSCENES } from './components/cutscenes';
 import { CustomExamReview } from './components/exam';
 
 export default function App() {
-  const [viewMode, setViewMode] = useState('map'); // 'map' | 'pov' | 'cutscene' | 'game1' | 'game2' | 'custom-practice' | 'character' | 'bench'
-  const [selectedQuestion, setSelectedQuestion] = useState(questionsData.questions[0]);
-  const [selectedSlotIndex, setSelectedSlotIndex] = useState(0);
-  const [selectedStep, setSelectedStep] = useState(1);
-  const [cutsceneStageId, setCutsceneStageId] = useState(1);
-  const [modalResult, setModalResult] = useState(null);
-  // Lưu trạng thái làm bài Game 2 để chuyển câu không bị mất đáp án
-  const [game2Progress, setGame2Progress] = useState({});
-
-  // Bench mode state
-  const [userInput, setUserInput] = useState('');
-  const [gradeResult, setGradeResult] = useState(null);
-  const [hint, setHint] = useState(null);
-
-  const slot = selectedQuestion.slots[selectedSlotIndex] || selectedQuestion.slots[0];
-  const exercise = generateExerciseForStep(selectedStep, slot);
-
-  const handleCheck = () => {
-    const result = compareAnswer(userInput, slot.answer);
-    setGradeResult(result);
-  };
-
-  const handleGetHint = () => {
-    const h = getNextWordHint(userInput, slot.answer);
-    setHint(h);
-  };
+  // Branch main: Ẩn tất cả các tab khác, chỉ giữ và hiển thị tab '🎯 Ôn & Thi riêng'
+  const [viewMode, setViewMode] = useState('custom-practice');
 
   const navItems = [
-    { id: 'map', label: '🗺️ Bản đồ' },
-    { id: 'custom-practice', label: '🎯 Ôn & Thi riêng' },
-    { id: 'pov', label: '📱 Cảnh mở đầu (POV)' },
-    { id: 'cutscene', label: '🎬 Kịch bản' },
-    { id: 'game1', label: '✍️ Chép lại' },
-    { id: 'game2', label: '🧩 Xáo từ' },
-    { id: 'motorbike', label: '🛵 Xe máy Wave (POV)' },
-    { id: 'character', label: '👤 Nhân vật Minh' },
-    { id: 'bench', label: '🧪 Core Bench' }
+    { id: 'custom-practice', label: '🎯 Ôn & Thi riêng' }
   ];
 
   return (
@@ -59,7 +16,7 @@ export default function App() {
         style={{
           background: '#1e293b',
           borderBottom: '1px solid #334155',
-          padding: '0.6rem 1rem',
+          padding: '0.6rem 1.2rem',
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
@@ -72,8 +29,8 @@ export default function App() {
       >
         <div
           style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }}
-          onClick={() => setViewMode('map')}
-          title="Trở về bản đồ"
+          onClick={() => setViewMode('custom-practice')}
+          title="Một Đời Người, Một Con Đường"
         >
           <img
             src="/logo.png"
@@ -88,24 +45,24 @@ export default function App() {
               flexShrink: 0
             }}
           />
-          <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem' }}>Một Đời Người, Một Con Đường</strong>
+          <strong style={{ fontSize: '1.1rem', letterSpacing: '0.02rem' }}>Một Đời Người, Một Con Đường</strong>
         </div>
 
-        <nav style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
+        <nav style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
           {navItems.map(item => (
             <button
               key={item.id}
               onClick={() => setViewMode(item.id)}
               style={{
-                padding: '0.4rem 0.75rem',
-                borderRadius: 6,
+                padding: '0.45rem 1.1rem',
+                borderRadius: 8,
                 border: 'none',
-                background: viewMode === item.id ? '#0284c7' : '#334155',
-                color: viewMode === item.id ? '#fff' : '#cbd5e1',
+                background: '#0284c7',
+                color: '#fff',
                 cursor: 'pointer',
-                fontWeight: viewMode === item.id ? 'bold' : 'normal',
-                fontSize: '0.85rem',
-                transition: 'all 0.15s ease'
+                fontWeight: 'bold',
+                fontSize: '0.92rem',
+                boxShadow: '0 2px 8px rgba(2, 132, 199, 0.45)'
               }}
             >
               {item.label}
@@ -114,417 +71,12 @@ export default function App() {
         </nav>
       </header>
 
-      {/* Main Content Area */}
+      {/* Main Content Area - Full width trên PC */}
       <main style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-        {/* 1. Bản đồ một ngày */}
-        {viewMode === 'map' && (
-          <div style={{ width: '100%', maxWidth: 1240, margin: '0 auto', background: '#090d16' }}>
-            <DayRoadMap
-              onSelectAction={({ mode, question, slotIndex, stepId }) => {
-                setSelectedQuestion(question);
-                setSelectedSlotIndex(slotIndex || 0);
-                if (stepId === 2) {
-                  setViewMode('game2');
-                } else {
-                  setSelectedStep(stepId || 1);
-                  setViewMode('game1');
-                }
-              }}
-            />
-          </div>
-        )}
-
-        {/* 1.2. Chế độ Ôn tập Xáo từ & Thi riêng tự chọn (Tab riêng) */}
-        {viewMode === 'custom-practice' && (
-          <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
-            <CustomExamReview onBackToMap={() => setViewMode('map')} />
-          </div>
-        )}
-
-        {/* 1.5. Cảnh mở đầu góc nhìn thứ nhất (POV Intro) */}
-        {viewMode === 'pov' && (
-          <div style={{ width: '100%', maxWidth: 1100, margin: '1rem auto' }}>
-            <FirstPersonIntro
-              tenNhanVat="Minh"
-              soCau={selectedQuestion.id}
-              noiDungCauHoi={selectedQuestion.question}
-              dapAnMau={selectedQuestion.fullAnswer || slot.answer}
-              chang={selectedQuestion.stageId}
-              onStartGame1={({ userInput: typed }) => {
-                setUserInput(typed || '');
-                setViewMode('game1');
-              }}
-              onSkip={() => {}}
-            />
-          </div>
-        )}
-
-        {/* 2. Cảnh Kịch Bản (Cutscene Player) */}
-        {viewMode === 'cutscene' && (
-          <div style={{ width: '100%', maxWidth: 900, margin: '1rem auto' }}>
-            <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center', marginBottom: '0.8rem' }}>
-              {[1, 2, 3, 4].map(sId => (
-                <button
-                  key={sId}
-                  onClick={() => setCutsceneStageId(sId)}
-                  style={{
-                    padding: '0.4rem 0.8rem',
-                    borderRadius: 4,
-                    border: 'none',
-                    background: cutsceneStageId === sId ? '#f59e0b' : '#334155',
-                    color: cutsceneStageId === sId ? '#000' : '#fff',
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    fontSize: '0.85rem'
-                  }}
-                >
-                  Chặng {sId}
-                </button>
-              ))}
-            </div>
-
-            <CutscenePlayer
-              key={cutsceneStageId}
-              stageId={cutsceneStageId}
-              onComplete={() => setViewMode('map')}
-              onSkip={() => setViewMode('map')}
-            />
-          </div>
-        )}
-
-        {/* 3. Game 1: Chép lại (Học cả câu - tách từng ô input cho từng ý) */}
-        {viewMode === 'game1' && (
-          <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
-              <button
-                onClick={() => setViewMode('map')}
-                style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                ← Trở về bản đồ
-              </button>
-              <span style={{ fontSize: '1rem', color: '#f59e0b', fontWeight: 'bold' }}>
-                Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Tách riêng từng ý
-              </span>
-            </div>
-
-            <Game1Copy
-              question={selectedQuestion}
-              onComplete={res => setModalResult(res.summary ? { isExact: res.isExact, accuracy: res.summary.avgAccuracy } : res.gradeResult)}
-              onNext={() => setViewMode('game2')}
-            />
-          </div>
-        )}
-
-        {/* 4. Game 2: Xáo từ (Học cả câu - tách từng ô theo từng ý) */}
-        {viewMode === 'game2' && (
-          <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <button
-                  onClick={() => setViewMode('map')}
-                  style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
-                >
-                  ← Trở về bản đồ
-                </button>
-
-                {/* Điều hướng nhanh câu trước / câu sau */}
-                <button
-                  disabled={selectedQuestion.id <= 1}
-                  onClick={() => {
-                    const prevQ = questionsData.questions.find(q => q.id === selectedQuestion.id - 1);
-                    if (prevQ) {
-                      setSelectedQuestion(prevQ);
-                      setSelectedSlotIndex(0);
-                    }
-                  }}
-                  style={{
-                    background: selectedQuestion.id <= 1 ? '#1e293b' : '#334155',
-                    color: selectedQuestion.id <= 1 ? '#64748b' : '#fff',
-                    border: '1px solid #475569',
-                    padding: '0.5rem 0.8rem',
-                    borderRadius: 6,
-                    cursor: selectedQuestion.id <= 1 ? 'not-allowed' : 'pointer',
-                    fontWeight: 600,
-                    fontSize: '0.85rem'
-                  }}
-                >
-                  ← Câu trước
-                </button>
-
-                <button
-                  disabled={selectedQuestion.id >= questionsData.questions.length}
-                  onClick={() => {
-                    const nextQ = questionsData.questions.find(q => q.id === selectedQuestion.id + 1);
-                    if (nextQ) {
-                      setSelectedQuestion(nextQ);
-                      setSelectedSlotIndex(0);
-                    }
-                  }}
-                  style={{
-                    background: selectedQuestion.id >= questionsData.questions.length ? '#1e293b' : '#334155',
-                    color: selectedQuestion.id >= questionsData.questions.length ? '#64748b' : '#fff',
-                    border: '1px solid #475569',
-                    padding: '0.5rem 0.8rem',
-                    borderRadius: 6,
-                    cursor: selectedQuestion.id >= questionsData.questions.length ? 'not-allowed' : 'pointer',
-                    fontWeight: 600,
-                    fontSize: '0.85rem'
-                  }}
-                >
-                  Câu sau →
-                </button>
-              </div>
-
-              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '1rem', color: '#f59e0b', fontWeight: 'bold' }}>
-                  Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Xáo từ
-                </span>
-                <button
-                  onClick={() => setViewMode('motorbike')}
-                  style={{ background: '#0284c7', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}
-                >
-                  🛵 Chuyển sang góc nhìn xe máy
-                </button>
-              </div>
-            </div>
-
-            <Game2Scramble
-              key={selectedQuestion.id}
-              question={selectedQuestion}
-              slot={selectedQuestion}
-              questionText={selectedQuestion.question}
-              initialState={game2Progress[selectedQuestion.id]}
-              onStateChange={state => {
-                setGame2Progress(prev => ({
-                  ...prev,
-                  [selectedQuestion.id]: state
-                }));
-              }}
-              onComplete={res => setModalResult(res.summary ? { isExact: res.isExact, accuracy: res.summary.avgAccuracy } : res.reinforceGrade)}
-              onNext={() => {
-                const nextQ = questionsData.questions.find(q => q.id === selectedQuestion.id + 1);
-                if (nextQ) {
-                  setSelectedQuestion(nextQ);
-                  setSelectedSlotIndex(0);
-                } else {
-                  setViewMode('map');
-                }
-              }}
-            />
-          </div>
-        )}
-
-        {/* 4.5. Game 2: Cảnh chạy xe máy góc nhìn thứ nhất (Motorbike POV) */}
-        {viewMode === 'motorbike' && (
-          <div style={{ width: '100%', maxWidth: 1440, padding: '1rem', boxSizing: 'border-box' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-              <button
-                onClick={() => setViewMode('map')}
-                style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                ← Trở về bản đồ
-              </button>
-
-              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '1rem', color: '#38bdf8', fontWeight: 'bold' }}>
-                  🛵 Minh (21 tuổi) lái xe Wave đi học • Xáo từ góc nhìn thứ nhất
-                </span>
-                <button
-                  onClick={() => setViewMode('game2')}
-                  style={{ background: '#334155', border: 'none', color: '#cbd5e1', padding: '0.4rem 0.8rem', borderRadius: 6, cursor: 'pointer', fontSize: '0.85rem' }}
-                >
-                  🧩 Xem dạng danh sách
-                </button>
-              </div>
-            </div>
-
-            <FirstPersonMotorbikeGame2
-              tenNhanVat="Minh"
-              soCau={selectedQuestion.id}
-              questionText={selectedQuestion.question}
-              dapAnChuan={selectedQuestion.fullAnswer || slot.answer}
-              cumTu={selectedQuestion.fullPhrases || slot.phrases}
-              theNhieu={['Lời giả dối', 'Kh 22:15', 'sách đóng']}
-              chang={selectedQuestion.stageId || 1}
-              onComplete={res => setModalResult({ isExact: res.isPassed, accuracy: res.accuracy })}
-              onNext={() => setViewMode('map')}
-            />
-          </div>
-        )}
-
-        {/* 5. Nhân vật Minh */}
-        {viewMode === 'character' && (
-          <div style={{ width: '100%', padding: '1rem', boxSizing: 'border-box' }}>
-            <CharacterDemo />
-          </div>
-        )}
-
-        {/* 6. Core Bench */}
-        {viewMode === 'bench' && (
-          <div style={{ width: '100%', maxWidth: 850, margin: '1.5rem auto', padding: '0 1rem', color: '#0f172a' }}>
-            <div style={{ background: '#ffffff', padding: '1.5rem', borderRadius: 8, boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
-              <h2 style={{ marginTop: 0 }}>Core Engines Test Bench</h2>
-
-              {/* Chọn câu */}
-              <section style={{ marginBottom: '1rem' }}>
-                <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.3rem' }}>
-                  Chọn câu hỏi (Tổng 20 câu - 4 chặng):
-                </label>
-                <select
-                  value={selectedQuestion.id}
-                  onChange={e => {
-                    const q = questionsData.questions.find(item => item.id === Number(e.target.value));
-                    setSelectedQuestion(q);
-                    setSelectedSlotIndex(0);
-                    setUserInput('');
-                    setGradeResult(null);
-                    setHint(null);
-                  }}
-                  style={{ width: '100%', padding: '0.5rem', fontSize: '0.95rem', borderRadius: 4, border: '1px solid #ccc' }}
-                >
-                  {questionsData.questions.map(q => (
-                    <option key={q.id} value={q.id}>
-                      Câu {q.id} (Chặng {q.stageId}): {q.question.slice(0, 80)}...
-                    </option>
-                  ))}
-                </select>
-              </section>
-
-              {/* Chọn ô */}
-              <div style={{ background: '#f8f9fa', padding: '0.8rem', borderRadius: 6, marginBottom: '1rem' }}>
-                <div style={{ marginBottom: '0.5rem' }}>
-                  <strong>Nội dung câu:</strong> {selectedQuestion.question}
-                </div>
-                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                  <span style={{ fontWeight: 'bold' }}>Chọn ô:</span>
-                  {selectedQuestion.slots.map((s, idx) => (
-                    <button
-                      key={s.slotIndex}
-                      onClick={() => {
-                        setSelectedSlotIndex(idx);
-                        setUserInput('');
-                        setGradeResult(null);
-                        setHint(null);
-                      }}
-                      style={{
-                        padding: '0.3rem 0.6rem',
-                        borderRadius: 4,
-                        cursor: 'pointer',
-                        border: selectedSlotIndex === idx ? '2px solid #0066cc' : '1px solid #ccc',
-                        background: selectedSlotIndex === idx ? '#e6f0ff' : '#fff',
-                        fontWeight: selectedSlotIndex === idx ? 'bold' : 'normal'
-                      }}
-                    >
-                      Ô {s.label} ({s.title || `Ô ${s.slotIndex}`})
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Chọn bậc */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '0.4rem', marginBottom: '1rem' }}>
-                {LEARNING_STEPS.map(st => (
-                  <button
-                    key={st.id}
-                    onClick={() => {
-                      setSelectedStep(st.id);
-                      setGradeResult(null);
-                      setHint(null);
-                    }}
-                    style={{
-                      padding: '0.5rem 0.3rem',
-                      fontSize: '0.8rem',
-                      borderRadius: 4,
-                      border: selectedStep === st.id ? '2px solid #28a745' : '1px solid #ccc',
-                      background: selectedStep === st.id ? '#e8f5e9' : '#fff',
-                      cursor: 'pointer',
-                      textAlign: 'center'
-                    }}
-                  >
-                    <strong>Bậc {st.id}</strong>
-                    <div>{st.name}</div>
-                  </button>
-                ))}
-              </div>
-
-              {/* Bậc đang chọn */}
-              <div style={{ border: '1px solid #e2e8f0', padding: '1rem', borderRadius: 6, marginBottom: '1rem' }}>
-                <h4 style={{ margin: '0 0 0.5rem 0' }}>Bậc {selectedStep}: {LEARNING_STEPS.find(s => s.id === selectedStep)?.name}</h4>
-                <div style={{ background: '#fffbeb', padding: '0.6rem', borderRadius: 4, marginBottom: '0.8rem', fontSize: '0.9rem' }}>
-                  <strong>Đáp án mẫu:</strong> {slot.answer}
-                </div>
-
-                <textarea
-                  rows={3}
-                  value={userInput}
-                  onChange={e => setUserInput(e.target.value)}
-                  placeholder="Gõ đáp án để test chấm điểm..."
-                  style={{ width: '100%', padding: '0.5rem', borderRadius: 4, border: '1px solid #ccc', boxSizing: 'border-box' }}
-                />
-
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                  <button
-                    onClick={handleCheck}
-                    style={{ padding: '0.5rem 1rem', background: '#0284c7', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontWeight: 'bold' }}
-                  >
-                    Chấm điểm
-                  </button>
-                  <button
-                    onClick={handleGetHint}
-                    style={{ padding: '0.5rem 1rem', background: '#f59e0b', color: '#000', border: 'none', borderRadius: 4, cursor: 'pointer', fontWeight: 'bold' }}
-                  >
-                    Gợi ý 1 từ
-                  </button>
-                </div>
-
-                {hint && (
-                  <div style={{ marginTop: '0.5rem', background: '#fef3c7', padding: '0.5rem', borderRadius: 4, fontSize: '0.9rem' }}>
-                    💡 Từ tiếp theo: <strong>"{hint.hintWord}"</strong> (Còn {hint.remainingWordCount} từ)
-                  </div>
-                )}
-              </div>
-
-              {/* Kết quả chấm điểm */}
-              {gradeResult && (
-                <div style={{ border: gradeResult.isExact ? '1px solid #86efac' : '1px solid #fca5a5', background: gradeResult.isExact ? '#f0fdf4' : '#fef2f2', padding: '1rem', borderRadius: 6 }}>
-                  <h4 style={{ margin: '0 0 0.5rem 0', color: gradeResult.isExact ? '#16a34a' : '#dc2626' }}>
-                    {gradeResult.isExact ? 'Chính xác 100%!' : `Độ chính xác: ${gradeResult.accuracy}%`}
-                  </h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
-                    {gradeResult.userTokensResult.map((t, idx) => (
-                      <span
-                        key={idx}
-                        style={{
-                          padding: '0.15rem 0.4rem',
-                          borderRadius: 3,
-                          background: t.status === 'correct' ? '#bbf7d0' : '#fecaca',
-                          color: t.status === 'correct' ? '#14532d' : '#991b1b',
-                          fontWeight: t.status === 'correct' ? 'normal' : 'bold'
-                        }}
-                      >
-                        {t.text}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
+          <CustomExamReview />
+        </div>
       </main>
-
-      {/* Result Modal nếu có */}
-      {modalResult && (
-        <GameResultModal
-          gradeResult={modalResult}
-          slotTitle={`Câu ${selectedQuestion.id} - Ô ${slot.label}`}
-          onRetry={() => setModalResult(null)}
-          onContinue={() => {
-            setModalResult(null);
-            setViewMode('map');
-          }}
-        />
-      )}
     </div>
   );
 }
