@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import './FirstPersonIntro.css';
 
 /**
- * Cảnh mở đầu góc nhìn thứ nhất (First-Person POV Intro)
+ * Màn hình tương tác mở thông báo điện thoại (Interactive Phone Notification)
  *
- * Flow 6-8s:
- * 1. idle / vibrate: Phòng trọ sáng sớm, điện thoại nằm thấp rung nhẹ
- * 2. handIn: Bàn tay góc nhìn thứ nhất trượt lên cầm điện thoại
- * 3. screenOn: Điện thoại dừng giữa màn hình, nghiêng 6°, màn hình sáng, thông báo trượt xuống
- * 4. zoom: Điện thoại phóng to (scale 1 -> 2.2), nền phòng tăng blur
- * 5. chat: Tin nhắn mở ra, chữ hiện nguyên văn noiDungCauHoi
- * 6. input: Khung tin nhắn thu lên đầu làm khung mẫu, ô nhập trượt lên từ dưới và autoFocus -> Bắt đầu Game 1
+ * Flow:
+ * 1. waiting: Điện thoại rung trên bàn phòng trọ, có sóng rung và hướng dẫn "Chạm vào điện thoại để nhận thông báo".
+ * 2. opened: Người dùng chạm vào -> Điện thoại mở sáng, hiện đầy đủ CÂU HỎI và ĐÁP ÁN CHUẨN.
+ * 3. Bấm "Bắt đầu học" -> Chuyển sang Game 1 (hoặc callback onStartGame1).
  */
 export default function FirstPersonIntro({
   tenNhanVat = 'Minh',
@@ -21,55 +18,26 @@ export default function FirstPersonIntro({
   onStartGame1,
   onSkip
 }) {
-  // State machine: 'vibrate' -> 'handIn' -> 'screenOn' -> 'zoom' -> 'chat' -> 'input'
-  const [animState, setAnimState] = useState('vibrate');
-  const [userInput, setUserInput] = useState('');
-  const inputRef = useRef(null);
-  const timerRef = useRef([]);
+  // Trạng thái: 'waiting' (đang rung chờ bấm) | 'opened' (đã mở xem câu hỏi & đáp án)
+  const [isOpened, setIsOpened] = useState(false);
 
-  const clearAllTimers = () => {
-    timerRef.current.forEach(t => clearTimeout(t));
-    timerRef.current = [];
+  // Xử lý chạm vào điện thoại để mở thông báo
+  const handleOpenPhone = () => {
+    if (!isOpened) {
+      setIsOpened(true);
+    }
   };
 
-  useEffect(() => {
-    // Sequence tự động chuyển state
-    const t1 = setTimeout(() => setAnimState('handIn'), 1200);
-    const t2 = setTimeout(() => setAnimState('screenOn'), 2400);
-    const t3 = setTimeout(() => setAnimState('zoom'), 3800);
-    const t4 = setTimeout(() => setAnimState('chat'), 4800);
-    const t5 = setTimeout(() => setAnimState('input'), 6600);
-
-    timerRef.current = [t1, t2, t3, t4, t5];
-
-    return () => clearAllTimers();
-  }, []);
-
-  // Khi chuyển sang state input: tự động focus ô gõ
-  useEffect(() => {
-    if (animState === 'input') {
-      const focusTimer = setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
-      }, 300);
-      return () => clearTimeout(focusTimer);
-    }
-  }, [animState]);
-
-  // Nút Bỏ qua: nhảy thẳng đến state input
   const handleSkip = () => {
-    clearAllTimers();
-    setAnimState('input');
+    setIsOpened(true);
     if (onSkip) onSkip();
   };
 
-  const handleStartTyping = e => {
-    e.preventDefault();
+  const handleStartPractice = () => {
     if (onStartGame1) {
       onStartGame1({
         soCau,
-        userInput,
+        noiDungCauHoi,
         dapAnMau
       });
     }
@@ -77,174 +45,144 @@ export default function FirstPersonIntro({
 
   return (
     <div
-      className={`fp-intro-container stage-${chang} state-${animState}`}
-      data-state={animState}
+      className={`fp-interactive-container stage-${chang} ${isOpened ? 'is-opened' : 'is-waiting'}`}
+      data-opened={isOpened}
     >
-      {/* Nút Bỏ qua luôn có sẵn, touch target >= 44px */}
-      {animState !== 'input' && (
-        <button
-          type="button"
-          className="fp-skip-btn"
-          onClick={handleSkip}
-          aria-label="Bỏ qua cảnh mở đầu"
-        >
-          Bỏ qua ❯❯
-        </button>
-      )}
-
-      {/* 1. Nền phòng trọ buổi sáng + ô cửa sổ ánh sáng hắt */}
+      {/* 1. Nền phòng trọ buổi sáng */}
       <div className="fp-room-background">
         <div className="fp-window-light" />
         <div className="fp-dust-motes" />
         <div className="fp-desk-surface" />
       </div>
 
-      {/* 2. Cánh tay & Điện thoại góc nhìn thứ nhất */}
-      <div className="fp-first-person-rig">
-        {/* Bàn tay SVG flat vươn từ dưới cổ tay lên */}
-        <div className="fp-hand-wrapper">
-          <svg
-            className="fp-hand-svg"
-            viewBox="0 0 320 400"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient id="fpSkin" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#ffedd5" />
-                <stop offset="60%" stopColor="#fed7aa" />
-                <stop offset="100%" stopColor="#fdba74" />
-              </linearGradient>
-              <linearGradient id="fpShadow" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#ea580c" stopOpacity="0.25" />
-                <stop offset="100%" stopColor="#c2410c" stopOpacity="0.4" />
-              </linearGradient>
-            </defs>
+      {/* Nút Bỏ qua để mở ngay */}
+      {!isOpened && (
+        <button
+          type="button"
+          className="fp-skip-btn"
+          onClick={handleSkip}
+          aria-label="Bỏ qua và xem ngay"
+        >
+          Mở nhanh ❯❯
+        </button>
+      )}
 
-            {/* Cổ tay và cẳng tay vươn lên */}
-            <path
-              d="M 60 400 L 90 260 C 95 240, 110 220, 130 210 L 150 200 L 190 210 C 210 220, 225 240, 230 260 L 260 400 Z"
-              fill="url(#fpSkin)"
-            />
-            {/* Lòng bàn tay & bóng cel-shading */}
-            <path
-              d="M 90 260 C 95 230, 115 210, 140 205 L 180 205 C 205 210, 225 230, 230 260 Z"
-              fill="url(#fpShadow)"
-            />
+      {/* 2. Điện thoại tương tác (không dùng tay) */}
+      <div className="fp-phone-stage">
+        {/* Chỉ báo hướng dẫn chạm khi chưa mở */}
+        {!isOpened && (
+          <div className="fp-tap-guide-bubble" onClick={handleOpenPhone}>
+            <span className="fp-tap-finger">👆</span>
+            <span className="fp-tap-text">Nhấn vào điện thoại để nhận thông báo</span>
+          </div>
+        )}
 
-            {/* Các ngón tay ôm viền sau điện thoại */}
-            {/* Ngón út */}
-            <path
-              d="M 75 250 C 65 240, 60 210, 75 195 C 85 185, 100 190, 105 210 L 95 255 Z"
-              fill="url(#fpSkin)"
-              stroke="#fb923c"
-              strokeWidth="1.5"
-            />
-            {/* Ngón áp út */}
-            <path
-              d="M 85 220 C 75 200, 70 170, 85 155 C 95 145, 110 150, 115 175 L 105 225 Z"
-              fill="url(#fpSkin)"
-              stroke="#fb923c"
-              strokeWidth="1.5"
-            />
-            {/* Ngón giữa */}
-            <path
-              d="M 105 190 C 95 170, 95 135, 110 120 C 122 110, 135 118, 138 145 L 125 195 Z"
-              fill="url(#fpSkin)"
-              stroke="#fb923c"
-              strokeWidth="1.5"
-            />
-            {/* Ngón trỏ */}
-            <path
-              d="M 130 170 C 125 150, 128 120, 145 108 C 158 100, 170 108, 170 135 L 155 180 Z"
-              fill="url(#fpSkin)"
-              stroke="#fb923c"
-              strokeWidth="1.5"
-            />
+        {/* Khung điện thoại */}
+        <div
+          className={`fp-phone-body ${!isOpened ? 'phone-vibrating' : 'phone-active'}`}
+          onClick={handleOpenPhone}
+          role="button"
+          tabIndex={0}
+          aria-label="Điện thoại đang rung thông báo, nhấn để mở"
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') handleOpenPhone();
+          }}
+        >
+          {/* Hiệu ứng sóng rung tỏa ra khi chưa mở */}
+          {!isOpened && (
+            <div className="fp-vibe-ripples">
+              <span className="fp-ripple r1" />
+              <span className="fp-ripple r2" />
+              <span className="fp-ripple r3" />
+            </div>
+          )}
 
-            {/* Ngón cái đặt ở mép phải/trước điện thoại */}
-            <path
-              d="M 220 250 C 235 230, 248 190, 238 170 C 228 152, 210 160, 205 185 L 198 230 Z"
-              fill="url(#fpSkin)"
-              stroke="#fb923c"
-              strokeWidth="1.5"
-            />
-          </svg>
-        </div>
-
-        {/* Thân điện thoại Smartphone */}
-        <div className="fp-phone-device">
-          <div className="fp-phone-speaker" />
-          <div className="fp-phone-camera" />
+          {/* Cụm loa và camera trước */}
+          <div className="fp-notch-bar">
+            <span className="fp-speaker" />
+            <span className="fp-camera" />
+          </div>
 
           {/* Màn hình điện thoại */}
-          <div className="fp-phone-screen">
-            {/* Thanh trạng thái đỉnh máy */}
-            <div className="fp-status-bar">
-              <span className="fp-status-time">06:00</span>
-              <div className="fp-status-icons">
-                <span className="fp-icon-wifi">📶</span>
-                <span className="fp-icon-battery">🔋 98%</span>
-              </div>
+          <div className="fp-screen-content">
+            {/* Header thanh trạng thái */}
+            <div className="fp-phone-header">
+              <span className="fp-clock">06:00</span>
+              <span className="fp-carrier">✦ Sống Mỗi Ngày</span>
+              <span className="fp-battery">🔋 98%</span>
             </div>
 
-            {/* 3. Banner thông báo trượt xuống */}
-            <div className="fp-notification-card">
-              <div className="fp-noti-header">
-                <span className="fp-noti-badge">🔔 LỜI SỐNG HÔM NAY</span>
-                <span className="fp-noti-time">Vừa xong</span>
-              </div>
-              <div className="fp-noti-title">
-                Chào {tenNhanVat}, câu kinh hôm nay: <strong>Câu {soCau}</strong>
-              </div>
-              <div className="fp-noti-hint">Chạm để mở nguyên văn bài học</div>
-            </div>
+            {/* TRẠNG THÁI 1: MÀN HÌNH KHÓA RUNG CHỜ CHẠM */}
+            {!isOpened && (
+              <div className="fp-lock-screen">
+                <div className="fp-lock-icon">🔒</div>
+                <div className="fp-lock-time">06:00</div>
+                <div className="fp-lock-date">Sáng sớm phòng trọ</div>
 
-            {/* 4 & 5. Khung tin nhắn chat hiện nguyên văn noiDungCauHoi */}
-            <div className="fp-chat-view">
-              <div className="fp-chat-bubble">
-                <div className="fp-chat-sender">
-                  <span>✦ Thầy gửi {tenNhanVat} • Câu {soCau}</span>
-                </div>
-                <div className="fp-chat-text">
-                  {noiDungCauHoi}
+                {/* Banner thông báo nhấp nháy */}
+                <div className="fp-lock-banner">
+                  <div className="fp-banner-badge">
+                    <span>🔔 THÔNG BÁO MỚI</span>
+                    <span className="fp-badge-live">Vừa xong</span>
+                  </div>
+                  <div className="fp-banner-main">
+                    Câu kinh hôm nay: <strong>Câu {soCau}</strong>
+                  </div>
+                  <div className="fp-banner-callaction">
+                    👉 Chạm để mở câu hỏi & đáp án
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+
+            {/* TRẠNG THÁI 2: ĐÃ MỞ - HIỆN CẢ CÂU HỎI VÀ ĐÁP ÁN */}
+            {isOpened && (
+              <div className="fp-opened-content">
+                {/* Tiêu đề thông báo */}
+                <div className="fp-opened-banner">
+                  <div className="fp-opened-tag">📖 LỜI SỐNG HÔM NAY • CÂU {soCau}</div>
+                  <div className="fp-opened-subtitle">Gửi {tenNhanVat} bắt đầu ngày mới</div>
+                </div>
+
+                {/* Phần 1: NỘI DUNG CÂU HỎI */}
+                <div className="fp-section-card question-card">
+                  <div className="fp-card-title">
+                    <span className="fp-card-icon">❓</span>
+                    <strong>NỘI DUNG CÂU HỎI</strong>
+                  </div>
+                  <div className="fp-card-body question-text">
+                    {noiDungCauHoi}
+                  </div>
+                </div>
+
+                {/* Phần 2: ĐÁP ÁN CHUẨN */}
+                <div className="fp-section-card answer-card">
+                  <div className="fp-card-title answer-title">
+                    <span className="fp-card-icon">✦</span>
+                    <strong>ĐÁP ÁN CHUẨN CẦN NHỚ</strong>
+                  </div>
+                  <div className="fp-card-body answer-text">
+                    {dapAnMau}
+                  </div>
+                </div>
+
+                {/* Nút bắt đầu thực hành Game 1 */}
+                <div className="fp-action-footer">
+                  <button
+                    type="button"
+                    className="fp-start-btn"
+                    onClick={e => {
+                      e.stopPropagation();
+                      handleStartPractice();
+                    }}
+                  >
+                    Bắt đầu học câu này (Game 1: Chép lại) →
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      </div>
-
-      {/* 6. Chế độ Input / Bắt đầu Game 1 (Chép lại) */}
-      <div className="fp-game1-panel">
-        {/* Khung mẫu thu nhỏ cố định ở trên đỉnh */}
-        <div className="fp-reference-card">
-          <div className="fp-ref-badge">MẪU CÂU {soCau} • ĐÁP ÁN CHUẨN</div>
-          <div className="fp-ref-text">{dapAnMau}</div>
-        </div>
-
-        {/* Form nhập liệu trượt từ dưới lên */}
-        <form className="fp-input-form" onSubmit={handleStartTyping}>
-          <div className="fp-input-label">
-            <span>✍️ Hãy nhẩm lại và gõ chính xác:</span>
-          </div>
-
-          <textarea
-            ref={inputRef}
-            className="fp-textarea"
-            rows={3}
-            value={userInput}
-            onChange={e => setUserInput(e.target.value)}
-            placeholder="Gõ đáp án chuẩn vào đây..."
-            autoCapitalize="none"
-            autoCorrect="off"
-            spellCheck="false"
-          />
-
-          <button type="submit" className="fp-submit-btn">
-            Bắt đầu kiểm tra Game 1 →
-          </button>
-        </form>
       </div>
     </div>
   );
