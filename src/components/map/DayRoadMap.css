@@ -1,0 +1,1192 @@
+/**
+ * DayRoadMap.css - Giao diện Bản đồ một ngày (Mobile-first 360-430px)
+ * Điều khiển độ rực rỡ qua biến CSS --do-thuoc (0 -> 1)
+ */
+
+/* ==========================================================================
+   1. Root Container & Variables
+   ========================================================================== */
+.day-roadmap-root {
+  --do-thuoc: 0; /* Giá trị mặc định 0 -> 1 */
+  --road-glow-color: rgba(245, 158, 11, calc(0.2 + 0.8 * var(--do-thuoc)));
+  --road-stroke-color: rgba(251, 191, 36, calc(0.3 + 0.7 * var(--do-thuoc)));
+  --heaven-aura-intensity: calc(0.35 + 0.65 * var(--do-thuoc));
+
+  max-width: 430px;
+  min-width: 320px;
+  margin: 0 auto;
+  min-height: 100vh;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #f1f5f9;
+  position: relative;
+  overflow-x: hidden;
+
+  /* Nền chuyển dịch: sáng dần theo tổng độ thuộc */
+  background:
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(245, 158, 11, calc(0.15 + 0.45 * var(--do-thuoc))) 0%,
+      rgba(30, 27, 75, 0.95) 50%,
+      rgba(15, 23, 42, 1) 100%
+    ),
+    #0f172a;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+.day-roadmap-root * {
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   2. Header Thanh Thông Tin (Sticky Top)
+   ========================================================================== */
+.day-roadmap-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(251, 191, 36, calc(0.15 + 0.35 * var(--do-thuoc)));
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.header-character-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-avatar-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.character-name-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.character-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.character-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fef08a;
+}
+
+.header-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-left: 1px solid rgba(148, 163, 184, 0.25);
+  padding-left: 0.75rem;
+}
+
+.metric-box {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.metric-title {
+  font-size: 0.68rem;
+  color: #94a3b8;
+}
+
+.metric-bar-wrap {
+  width: 54px;
+  height: 6px;
+  background: rgba(51, 65, 85, 0.7);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.metric-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24, #fef08a);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.8);
+}
+
+.metric-value {
+  font-size: 0.78rem;
+  color: #fbbf24;
+}
+
+.slot-count-box {
+  font-size: 0.72rem;
+  color: #cbd5e1;
+}
+
+.count-highlight {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+/* Nút Sổ Tiếc Nuối */
+.btn-mistake-book {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.65rem;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(185, 28, 28, 0.35));
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 8px;
+  color: #fecaca;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-mistake-book:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(185, 28, 28, 0.5));
+  border-color: #ef4444;
+  transform: translateY(-1px);
+}
+
+.btn-mistake-book:active {
+  transform: translateY(0);
+}
+
+.mistake-icon {
+  font-size: 0.9rem;
+}
+
+.mistake-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+  border: 1.5px solid #0f172a;
+}
+
+/* ==========================================================================
+   3. Main Body & Bản đồ dọc
+   ========================================================================== */
+.day-roadmap-main {
+  position: relative;
+  padding: 1.25rem 1rem 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ==========================================================================
+   4. Điểm đầu: Sáng phòng trọ (Start Node)
+   ========================================================================== */
+.map-start-node {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.start-node-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.start-icon-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.start-icon {
+  font-size: 1.8rem;
+}
+
+.time-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.start-node-info {
+  flex: 1;
+}
+
+.start-node-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fef08a;
+}
+
+.start-node-desc {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #94a3b8;
+}
+
+.start-trail-connector {
+  width: 4px;
+  height: 24px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.6), rgba(251, 191, 36, 0.3));
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   5. Chặng (Stages) & Con đường uốn lượn
+   ========================================================================== */
+.stage-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.stage-banner {
+  background: rgba(30, 41, 59, 0.7);
+  border-left: 4px solid var(--stage-color, #f59e0b);
+  border-radius: 0 10px 10px 0;
+  padding: 0.65rem 0.85rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.stage-banner-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.stage-icon-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  color: var(--stage-accent, #fbbf24);
+  font-weight: 600;
+}
+
+.stage-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.stage-desc {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+/* Vùng đường track */
+.stage-road-track {
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+/* SVG con đường chạy ngầm */
+.road-svg-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.road-svg-base {
+  fill: none;
+  stroke: rgba(100, 116, 139, 0.25);
+  stroke-width: 16;
+  stroke-linecap: round;
+  stroke-dasharray: 6 6;
+}
+
+.road-svg-glow {
+  fill: none;
+  stroke: var(--road-stroke-color);
+  stroke-width: 8;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 calc(2px + 10px * var(--do-thuoc)) var(--road-glow-color));
+  transition: stroke 0.4s ease, filter 0.4s ease;
+}
+
+/* Luồng các câu hỏi */
+.question-nodes-flow {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.question-step-node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+/* Căn chỉnh zic-zac tạo dáng uốn lượn */
+.question-step-node.align-center {
+  align-items: center;
+}
+
+.question-step-node.align-left {
+  align-items: flex-start;
+  padding-left: 0.5rem;
+}
+
+.question-step-node.align-right {
+  align-items: flex-end;
+  padding-right: 0.5rem;
+}
+
+/* ==========================================================================
+   6. Avatar Minh & Pin định vị
+   ========================================================================== */
+.minh-avatar-container {
+  display: inline-block;
+  user-select: none;
+}
+
+.minh-avatar-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.floating-anim {
+  animation: minhBobbing 2.4s ease-in-out infinite;
+}
+
+@keyframes minhBobbing {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.minh-locator-pin {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: -6px;
+  z-index: 10;
+}
+
+.minh-pin-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #0284c7;
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.6);
+  margin-bottom: 2px;
+}
+
+.pin-pulse {
+  width: 6px;
+  height: 6px;
+  background: #fef08a;
+  border-radius: 999px;
+  animation: pinPulse 1.2s infinite ease-out;
+}
+
+@keyframes pinPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+}
+
+.pin-text {
+  letter-spacing: 0.02em;
+}
+
+.pin-pointer {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #0284c7;
+  margin-top: -2px;
+}
+
+/* ==========================================================================
+   7. Card Câu hỏi & Hàng các ô tròn
+   ========================================================================== */
+.question-card {
+  width: 82%;
+  max-width: 320px;
+  background: rgba(30, 41, 59, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 14px;
+  padding: 0.75rem 0.85rem;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.question-card:hover,
+.question-card:focus-visible {
+  border-color: rgba(251, 191, 36, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.is-current-minh-node .question-card {
+  border-color: #38bdf8;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.4), 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.question-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+
+.question-number-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+}
+
+.question-slot-count {
+  font-size: 0.68rem;
+  color: #94a3b8;
+}
+
+.question-snippet {
+  margin: 0 0 0.6rem 0;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: #cbd5e1;
+}
+
+/* Hàng các ô tròn ① ② ③ */
+.slots-round-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.slot-circle-button {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 1.5px solid transparent;
+  transition: all 0.25s ease;
+  user-select: none;
+  outline: none;
+  padding: 0;
+}
+
+.slot-circle-button:hover {
+  transform: scale(1.12);
+}
+
+.slot-circle-button:active {
+  transform: scale(0.96);
+}
+
+.slot-symbol {
+  line-height: 1;
+}
+
+/* 4 Mức độ phát sáng ấm dần */
+
+/* 1. Level 0: Xám mờ (chưa học) */
+.slot-glow-0 {
+  background: rgba(71, 85, 105, 0.4);
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #94a3b8;
+  box-shadow: none;
+}
+
+/* 2. Level 1 - 2: Vàng nhạt (bước đầu nhớ) */
+.slot-glow-1-2 {
+  background: rgba(234, 179, 8, 0.25);
+  border-color: #eab308;
+  color: #fef08a;
+  box-shadow: 0 0 8px rgba(234, 179, 8, 0.45);
+}
+
+/* 3. Level 3 - 4: Vàng rực (nhớ chắc) */
+.slot-glow-3-4 {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-color: #fbbf24;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.8), 0 0 4px #fbbf24;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* 4. Level 5: Hào quang sáng chói (đại thành) */
+.slot-glow-5 {
+  background: linear-gradient(135deg, #ffffff 0%, #fef08a 40%, #f59e0b 100%);
+  border-color: #ffffff;
+  color: #78350f;
+  font-weight: 900;
+  box-shadow: 0 0 20px rgba(254, 240, 138, 0.95), 0 0 35px rgba(245, 158, 11, 0.9), inset 0 0 6px #ffffff;
+  animation: divineAuraPulse 2s ease-in-out infinite;
+}
+
+@keyframes divineAuraPulse {
+  0%, 100% {
+    box-shadow: 0 0 14px rgba(254, 240, 138, 0.8), 0 0 24px rgba(245, 158, 11, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(254, 240, 138, 1), 0 0 40px rgba(245, 158, 11, 0.95), 0 0 60px rgba(251, 191, 36, 0.6);
+    transform: scale(1.05);
+  }
+}
+
+.divine-sparkle {
+  position: absolute;
+  top: -4px;
+  right: -3px;
+  font-size: 0.6rem;
+  color: #ffffff;
+  text-shadow: 0 0 4px #fbbf24;
+  animation: sparkleTwinkle 1.4s infinite;
+}
+
+@keyframes sparkleTwinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.2) rotate(45deg); }
+}
+
+/* ==========================================================================
+   8. Điểm cuối: Cổng Thiên Đàng / Vầng sáng chân trời
+   ========================================================================== */
+.map-heaven-gate-node {
+  position: relative;
+  margin-top: 1rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(30, 27, 75, 0.7) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(251, 191, 36, calc(0.2 + 0.6 * var(--do-thuoc)));
+}
+
+/* Hào quang cực quang & tia sáng */
+.heaven-aurora-glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 260px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    rgba(254, 240, 138, var(--heaven-aura-intensity)) 0%,
+    rgba(245, 158, 11, calc(var(--heaven-aura-intensity) * 0.75)) 40%,
+    rgba(217, 119, 6, 0) 70%
+  );
+  filter: blur(24px);
+  pointer-events: none;
+  animation: auraFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes auraFloat {
+  0% { transform: translateX(-50%) scale(0.9); }
+  100% { transform: translateX(-50%) scale(1.1); }
+}
+
+.heaven-rays-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-conic-gradient(
+    from 0deg at 50% 20%,
+    transparent 0deg 20deg,
+    rgba(254, 240, 138, calc(0.04 * var(--do-thuoc))) 20deg 40deg
+  );
+  pointer-events: none;
+}
+
+.heaven-gate-card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heaven-crown-icon {
+  width: 80px;
+  height: 64px;
+  margin-bottom: 0.5rem;
+}
+
+.heaven-gate-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 calc(8px + 16px * var(--do-thuoc)) rgba(245, 158, 11, 0.8));
+}
+
+.heaven-gate-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, #ffffff 0%, #fef08a 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heaven-sub-badge {
+  display: inline-block;
+  margin: 0.25rem 0 0.6rem 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #fde68a;
+  background: rgba(245, 158, 11, 0.2);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.heaven-gate-desc {
+  margin: 0 0 1rem 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #cbd5e1;
+  max-width: 320px;
+}
+
+.heaven-progress-card {
+  width: 100%;
+  max-width: 280px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 10px;
+  padding: 0.55rem 0.8rem;
+}
+
+.heaven-progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: #fef08a;
+  margin-bottom: 0.35rem;
+}
+
+.heaven-bar-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(51, 65, 85, 0.6);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.heaven-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24, #ffffff);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px rgba(254, 240, 138, 0.8);
+}
+
+/* ==========================================================================
+   9. Popup Modal Chọn Chế Độ (Học theo bậc / Thi)
+   ========================================================================== */
+.roadmap-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: flex-end; /* Mobile: trượt từ đáy lên */
+  justify-content: center;
+  padding: 0;
+  animation: overlayFadeIn 0.2s ease-out;
+}
+
+@media (min-width: 480px) {
+  .roadmap-modal-overlay {
+    align-items: center;
+    padding: 1rem;
+  }
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.roadmap-modal-sheet {
+  width: 100%;
+  max-width: 430px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: #1e293b;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 20px 20px 0 0;
+  padding: 1.25rem 1rem;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.6);
+  animation: sheetSlideUp 0.25s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 480px) {
+  .roadmap-modal-sheet {
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+  }
+}
+
+@keyframes sheetSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.modal-stage-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #38bdf8;
+  letter-spacing: 0.04em;
+}
+
+.modal-title {
+  margin: 0.15rem 0 0 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fef08a;
+}
+
+.modal-close-btn {
+  background: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #94a3b8;
+  font-size: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+.modal-question-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+}
+
+.modal-question-text {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #e2e8f0;
+}
+
+/* Tabs chọn ô trong câu */
+.modal-slot-tabs-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.modal-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.modal-slot-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.modal-slot-tab-btn {
+  flex: 1;
+  min-width: 80px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(30, 41, 59, 0.8);
+  color: #cbd5e1;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.modal-slot-tab-btn.active {
+  border-color: #fbbf24;
+  background: rgba(245, 158, 11, 0.2);
+  color: #fef08a;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+}
+
+.tab-symbol {
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.tab-title-short {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tab-lvl-badge {
+  font-size: 0.62rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Active Slot Card */
+.active-slot-card {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.active-slot-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.active-slot-pill {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.active-slot-level-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.level-stars {
+  color: #f59e0b;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.level-text-label {
+  font-size: 0.7rem;
+  color: #cbd5e1;
+}
+
+.active-slot-progress-memo {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.active-slot-progress-memo strong {
+  color: #38bdf8;
+}
+
+/* Mode Groups (Học theo bậc & Thi) */
+.modal-actions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.action-mode-group {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 14px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mode-group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.mode-icon {
+  font-size: 1.3rem;
+}
+
+.mode-heading {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.mode-sub {
+  margin: 0;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* Grid 6 bậc học */
+.learning-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.btn-step-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  color: #cbd5e1;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-step-item:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.btn-step-item.step-passed {
+  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.btn-step-item.step-recommended {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.step-number {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #fbbf24;
+  min-width: 16px;
+}
+
+.step-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.step-name {
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #f1f5f9;
+}
+
+.step-desc-short {
+  font-size: 0.62rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.step-check {
+  color: #22c55e;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+/* Nút Học Bậc Đề Xuất */
+.btn-primary-action {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-learn-now {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+}
+
+.btn-learn-now:hover {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+}
+
+/* Nhóm Thi */
+.exam-mode-group {
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.exam-buttons-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.btn-exam-action {
+  padding: 0.65rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.btn-exam-slot {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+.btn-exam-slot:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.btn-exam-full-q {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.4);
+  color: #d8b4fe;
+}
+
+.btn-exam-full-q:hover {
+  background: rgba(168, 85, 247, 0.3);
+  border-color: #a855f7;
+  color: #ffffff;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.btn-close-modal {
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  background: rgba(51, 65, 85, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-close-modal:hover {
+  background: rgba(71, 85, 105, 0.8);
+  color: #ffffff;
+}

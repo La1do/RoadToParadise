@@ -1,0 +1,159 @@
+/* ==========================================================================
+   Hệ Thống Theme CSS - Một Đời Người, Một Con Đường
+   Hỗ trợ 4 chặng kịch bản, font tiếng Việt tối ưu & prefers-reduced-motion
+   ========================================================================== */
+
+:root {
+  /* Biến chuẩn mặc định */
+  --touch-target-size: 44px;
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans',
+    'Helvetica Neue', Arial, sans-serif;
+  --font-family-serif: 'Be Vietnam Pro', 'Merriweather', 'Lora', Georgia, serif;
+
+  /* Theme gốc / Stage 1 default */
+  --bg-gradient: linear-gradient(135deg, #fefae0 0%, #fff7ed 40%, #fed7aa 100%);
+  --text-primary: #372516;
+  --text-secondary: #7c5836;
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --accent-warm: #d97706;
+  --road-glow: rgba(245, 158, 11, 0.4);
+  --light-intensity: 0.95;
+
+  /* Bổ sung các biến hỗ trợ UI */
+  --border-color: rgba(0, 0, 0, 0.08);
+  --button-primary-bg: #d97706;
+  --button-primary-text: #ffffff;
+  --button-secondary-bg: rgba(255, 255, 255, 0.8);
+  --button-secondary-text: #372516;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --transition-speed: 0.3s;
+}
+
+/* ==========================================================================
+   CHẶNG 1 (.theme-stage-1)
+   Sáng sớm phòng trọ: Vàng nhạt, ấm áp, ánh nắng ban mai rọi qua cửa sổ
+   ========================================================================== */
+.theme-stage-1 {
+  --bg-gradient: linear-gradient(135deg, #fffbeb 0%, #fef3c7 45%, #fed7aa 100%);
+  --text-primary: #3d240f;
+  --text-secondary: #784a1e;
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --accent-warm: #f59e0b;
+  --road-glow: rgba(245, 158, 11, 0.45);
+  --light-intensity: 0.95;
+  --border-color: rgba(245, 158, 11, 0.25);
+  --button-primary-bg: #d97706;
+  --button-primary-text: #ffffff;
+  --button-secondary-bg: #fef3c7;
+  --button-secondary-text: #78350f;
+}
+
+/* ==========================================================================
+   CHẶNG 2 (.theme-stage-2)
+   Đường đi & giảng đường: Trời xanh nắng nhẹ, năng động, thanh xuân tri thức
+   ========================================================================== */
+.theme-stage-2 {
+  --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 45%, #e0e7ff 100%);
+  --text-primary: #0f2744;
+  --text-secondary: #274b73;
+  --card-bg: rgba(255, 255, 255, 0.94);
+  --accent-warm: #0284c7;
+  --road-glow: rgba(14, 165, 233, 0.4);
+  --light-intensity: 0.88;
+  --border-color: rgba(2, 132, 199, 0.25);
+  --button-primary-bg: #0284c7;
+  --button-primary-text: #ffffff;
+  --button-secondary-bg: #e0f2fe;
+  --button-secondary-text: #0369a1;
+}
+
+/* ==========================================================================
+   CHẶNG 3 (.theme-stage-3)
+   Chiều tối chỗ làm thêm: Hoàng hôn cam ấm, hơi mệt mỏi nhưng kiên trì
+   ========================================================================== */
+.theme-stage-3 {
+  --bg-gradient: linear-gradient(135deg, #2b1108 0%, #5c1d06 35%, #882b09 70%, #b45309 100%);
+  --text-primary: #fff7ed;
+  --text-secondary: #fdba74;
+  --card-bg: rgba(43, 17, 8, 0.82);
+  --accent-warm: #f97316;
+  --road-glow: rgba(249, 115, 22, 0.5);
+  --light-intensity: 0.65;
+  --border-color: rgba(249, 115, 22, 0.35);
+  --button-primary-bg: #ea580c;
+  --button-primary-text: #ffffff;
+  --button-secondary-bg: rgba(124, 45, 18, 0.8);
+  --button-secondary-text: #fed7aa;
+}
+
+/* ==========================================================================
+   CHẶNG 4 (.theme-stage-4)
+   Đêm về phòng trọ & Cổng phán xét: Xanh tím đêm, ánh sáng thiên đàng ở xa
+   ========================================================================== */
+.theme-stage-4 {
+  --bg-gradient: linear-gradient(135deg, #070714 0%, #110d29 35%, #23124d 70%, #43166b 100%);
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --card-bg: rgba(17, 13, 41, 0.84);
+  --accent-warm: #c084fc;
+  --road-glow: rgba(192, 132, 252, 0.55);
+  --light-intensity: 0.5;
+  --border-color: rgba(192, 132, 252, 0.3);
+  --button-primary-bg: #9333ea;
+  --button-primary-text: #ffffff;
+  --button-secondary-bg: rgba(46, 16, 101, 0.8);
+  --button-secondary-text: #e9d5ff;
+}
+
+/* ==========================================================================
+   Tối ưu hiển thị Font Tiếng Việt có dấu
+   - Khử răng cưa, tối ưu rendering chữ có dấu (ã, ả, ơ, ư,...)
+   - Cân bằng chiều cao dòng chống cắt dấu mũ, dấu thanh
+   ========================================================================== */
+html,
+body {
+  font-family: var(--font-family-base);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  font-size: 16px;
+  color: var(--text-primary);
+  background: var(--bg-gradient);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+/* Touch targets tối thiểu 44px */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"] {
+  min-height: var(--touch-target-size);
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Hỗ trợ prefers-reduced-motion
+   Người dùng nhạy cảm chuyển động hoặc cấu hình tiết kiệm pin
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

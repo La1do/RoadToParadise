@@ -1,0 +1,676 @@
+/* ========================================================
+   MINH CHARACTER SYSTEM - CSS
+   Nhân vật: Minh, sinh viên 21 tuổi
+   Tỉ lệ cơ thể người thật 1/7, phong cách anime flat nhẹ nhàng
+   ======================================================== */
+
+:root,
+.minh-character-root {
+  /* Biến màu trang phục cơ bản */
+  --mau-ao: #FFFFFF;
+  --mau-ao-vien: #CBD5E1;
+  --mau-ao-bong: #F1F5F9;
+  --mau-quan: #2B4C7E;
+  --mau-quan-vien: #1E3A5F;
+  --mau-quan-bong: #1E3A5F;
+  --mau-giay: #F8FAFC;
+  --mau-giay-vien: #64748B;
+  --mau-toc: #1E232A;
+  --mau-toc-bong: #12161C;
+  --mau-toc-highlight: rgba(255, 255, 255, 0.28);
+  --phu-kien: #2563EB;
+  --phu-kien-balo: #334155;
+  --phu-kien-kim-loai: #94A3B8;
+
+  /* Màu da và giải phẫu anime flat */
+  --mau-da: #FCE9D8;
+  --mau-da-bong: #F3C7B0;
+  --mau-da-nhan: #E4A88D;
+  --mau-ma-hong: rgba(244, 114, 182, 0.45);
+  --mau-mat: #2D231E;
+  --mau-mat-sang: #78350F;
+  --mau-mat-vien: #18181B;
+
+  /* Cường độ hào quang ánh sáng ấm (0 -> 1) */
+  --do-thuoc: 0;
+}
+
+/* ========================================================
+   4 PRESET TRANG PHỤC (CSS VARIABLES)
+   ======================================================== */
+
+/* 1. Đi học: Áo sơ mi/thun trắng sinh viên, quần jeans xanh denim, sneaker trắng, thẻ SV xanh, balo xám than */
+.minh-character-root.di-hoc,
+.minh-character-root.trang-phuc-di-hoc {
+  --mau-ao: #FFFFFF;
+  --mau-ao-vien: #CBD5E1;
+  --mau-ao-bong: #E2E8F0;
+  --mau-quan: #2B4C7E;
+  --mau-quan-vien: #1E3A5F;
+  --mau-quan-bong: #1A3252;
+  --mau-giay: #F8FAFC;
+  --mau-giay-vien: #64748B;
+  --mau-toc: #1E232A;
+  --phu-kien: #2563EB;
+  --phu-kien-balo: #334155;
+}
+
+/* 2. Làm thêm: Áo polo nâu mocha / cà phê, quần âu đen, giày tối màu, thẻ/tạp dề cam */
+.minh-character-root.lam-them,
+.minh-character-root.trang-phuc-lam-them {
+  --mau-ao: #4E342E;
+  --mau-ao-vien: #3E2723;
+  --mau-ao-bong: #321F1B;
+  --mau-quan: #212121;
+  --mau-quan-vien: #141414;
+  --mau-quan-bong: #121212;
+  --mau-giay: #37474F;
+  --mau-giay-vien: #263238;
+  --mau-toc: #1A202C;
+  --phu-kien: #F97316;
+  --phu-kien-balo: #2D3748;
+}
+
+/* 3. Ở nhà: Áo thun cotton xám nhạt oversize, quần lửng xám xanh mềm mại, dép đi trong nhà, tai nghe */
+.minh-character-root.o-nha,
+.minh-character-root.trang-phuc-o-nha {
+  --mau-ao: #E2E8F0;
+  --mau-ao-vien: #CBD5E1;
+  --mau-ao-bong: #CBD5E1;
+  --mau-quan: #64748B;
+  --mau-quan-vien: #475569;
+  --mau-quan-bong: #334155;
+  --mau-giay: #CBD5E1;
+  --mau-giay-vien: #94A3B8;
+  --mau-toc: #27272A;
+  --phu-kien: #94A3B8;
+  --phu-kien-balo: #475569;
+}
+
+/* 4. Cổng phán xét: Trang phục mang tính biểu tượng triết lý, áo khoác đen tối giản sâu thẳm, quần âu phẳng phiu, huy hiệu vàng ánh kim */
+.minh-character-root.cong-phan-xet,
+.minh-character-root.trang-phuc-cong-phan-xet {
+  --mau-ao: #0F172A;
+  --mau-ao-vien: #1E293B;
+  --mau-ao-bong: #020617;
+  --mau-quan: #1E293B;
+  --mau-quan-vien: #0F172A;
+  --mau-quan-bong: #090D16;
+  --mau-giay: #090D16;
+  --mau-giay-vien: #1E293B;
+  --mau-toc: #0B0F19;
+  --phu-kien: #F59E0B;
+  --phu-kien-balo: #0B0F19;
+}
+
+/* ========================================================
+   CONTAINER VÀ HIỆU ỨNG HÀO QUANG DROP-SHADOW
+   ======================================================== */
+
+.minh-character-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  user-select: none;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.minh-character-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  /* Hào quang drop-shadow ánh sáng ấm tỉ lệ trực tiếp với --do-thuoc (0 -> 1) */
+  filter: drop-shadow(0 0 calc(var(--do-thuoc, 0) * 14px) rgba(251, 191, 36, calc(var(--do-thuoc, 0) * 0.85)))
+          drop-shadow(0 0 calc(var(--do-thuoc, 0) * 28px) rgba(245, 158, 11, calc(var(--do-thuoc, 0) * 0.6)))
+          drop-shadow(0 0 calc(var(--do-thuoc, 0) * 50px) rgba(254, 240, 138, calc(var(--do-thuoc, 0) * 0.35)));
+  transition: filter 0.4s ease;
+}
+
+/* Đĩa hào quang ánh sáng ấm phía sau nhân vật */
+.minh-character-svg .halo-aura-bg {
+  opacity: calc(var(--do-thuoc, 0) * 0.95);
+  transform-origin: 150px 230px;
+  animation: xoay-hao-quang 30s linear infinite;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+@keyframes xoay-hao-quang {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================================
+   CÁC KHỚP VÀ TRANSFORM ORIGIN
+   ======================================================== */
+
+/* Khớp đầu & cổ */
+.minh-character-svg .dau-co-group {
+  transform-origin: 150px 145px;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Khớp thân trên (ngực + vai) */
+.minh-character-svg .than-group {
+  transform-origin: 150px 290px;
+  transition: transform 0.45s ease;
+}
+
+/* Khớp vai trái */
+.minh-character-svg .tay-trai {
+  transform-origin: 108px 162px;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Khớp khuỷu tay trái */
+.minh-character-svg .tay-trai .khuyu-tay-trai {
+  transform-origin: 100px 222px;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Khớp vai phải */
+.minh-character-svg .tay-phai {
+  transform-origin: 192px 162px;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Khớp khuỷu tay phải */
+.minh-character-svg .tay-phai .khuyu-tay-phai {
+  transform-origin: 198px 222px;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Khớp hông trái */
+.minh-character-svg .chan-trai {
+  transform-origin: 132px 308px;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Khớp gối trái */
+.minh-character-svg .chan-trai .goi-trai {
+  transform-origin: 130px 415px;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Khớp hông phải */
+.minh-character-svg .chan-phai {
+  transform-origin: 168px 308px;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Khớp gối phải */
+.minh-character-svg .chan-phai .goi-phai {
+  transform-origin: 170px 415px;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ========================================================
+   ANIMATION CƠ BẢN: THỞ, CHỚP MẮT, TÓC ĐUNG ĐƯA
+   ======================================================== */
+
+/* 1. Thở: thân phình xẹp nhẹ nhàng chu kỳ 3.6s */
+@keyframes tho-nguc {
+  0%, 100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.018, 1.012) translateY(-1.2px);
+  }
+}
+
+.minh-character-svg .nhom-tho-than {
+  animation: tho-nguc 3.6s ease-in-out infinite;
+  transform-origin: 150px 290px;
+}
+
+/* 2. Tóc đung đưa nhẹ */
+@keyframes toc-rung-truoc {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  35% {
+    transform: rotate(1.2deg) skewX(0.8deg);
+  }
+  75% {
+    transform: rotate(-0.9deg) skewX(-0.5deg);
+  }
+}
+
+@keyframes toc-rung-sau {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(-1deg);
+  }
+  80% {
+    transform: rotate(1deg);
+  }
+}
+
+.minh-character-svg .toc-truoc {
+  animation: toc-rung-truoc 4.2s ease-in-out infinite;
+  transform-origin: 150px 75px;
+}
+
+.minh-character-svg .toc-sau {
+  animation: toc-rung-sau 5s ease-in-out infinite;
+  transform-origin: 150px 75px;
+}
+
+/* 3. Chớp mắt mỗi 3.8s */
+@keyframes chop-mat {
+  0%, 93%, 97%, 100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.08);
+  }
+}
+
+/* Tự động chớp mắt khi đang ở trạng thái thường, đứng yên, suy nghĩ, bất ngờ */
+.minh-character-root:not(.vui) .mat-trai .trong-mat-chop,
+.minh-character-root:not(.vui) .mat-phai .trong-mat-chop {
+  animation: chop-mat 3.8s ease-in-out infinite;
+  transform-origin: 150px 105px;
+}
+
+/* ========================================================
+   BIỂU CẢM (EXPRESSIONS)
+   Classes: .dung-yen, .vui, .buon, .suy-nghi, .met, .bat-ngo
+   ======================================================== */
+
+/* Mặc định ẩn các đạo cụ biểu cảm phụ */
+.minh-character-svg .bieu-cam-mo-hoi,
+.minh-character-svg .bieu-cam-dau-hoi,
+.minh-character-svg .bieu-cam-bat-ngo,
+.minh-character-svg .mat-cuoi,
+.minh-character-svg .mi-mat-met,
+.minh-character-svg .mi-mat-buon,
+.minh-character-svg .quang-tham-met {
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+/* Các path miệng: hiển thị path phù hợp */
+.minh-character-svg .mieng-path {
+  display: none;
+}
+
+/* 1. ĐỨNG YÊN (dung-yen) - Nét mặt hiền, ấm, hơi mệt nhẹ sinh viên */
+.minh-character-root.dung-yen .mieng-path.mieng-dung-yen,
+.minh-character-root:not(.vui):not(.buon):not(.suy-nghi):not(.met):not(.bat-ngo) .mieng-path.mieng-dung-yen {
+  display: block;
+}
+
+/* 2. VUI (vui) - Mắt cười híp cong lưỡi liềm, miệng cười tươi ấm áp, má hồng ửng cam đào */
+.minh-character-root.vui .mat-thuong {
+  opacity: 0;
+}
+.minh-character-root.vui .mat-cuoi {
+  opacity: 1;
+}
+.minh-character-root.vui .mieng-path.mieng-vui {
+  display: block;
+}
+.minh-character-root.vui .long-may-trai {
+  transform: translate(0, -2px) rotate(-4deg);
+}
+.minh-character-root.vui .long-may-phai {
+  transform: translate(0, -2px) rotate(4deg);
+}
+.minh-character-root.vui .dau .ma-hong {
+  opacity: 0.85;
+}
+
+/* 3. BUỒN (buon) - Lông mày cau chếch cụp xuống, mí mắt trĩu, miệng hơi trễ xuống */
+.minh-character-root.buon .mieng-path.mieng-buon {
+  display: block;
+}
+.minh-character-root.buon .mi-mat-buon {
+  opacity: 1;
+}
+.minh-character-root.buon .long-may-trai {
+  transform: translate(1px, -1px) rotate(9deg);
+}
+.minh-character-root.buon .long-may-phai {
+  transform: translate(-1px, -1px) rotate(-9deg);
+}
+.minh-character-root.buon .mat-trai .trong-mat-chop,
+.minh-character-root.buon .mat-phai .trong-mat-chop {
+  transform: translateY(1.5px);
+}
+
+/* 4. SUY NGHĨ (suy-nghi) - Một bên mày nhướng cao một bên nhíu, đồng tử liếc lên, miệng mím lệch, dấu hỏi trên đầu */
+.minh-character-root.suy-nghi .mieng-path.mieng-suy-nghi {
+  display: block;
+}
+.minh-character-root.suy-nghi .long-may-trai {
+  transform: translate(0, -4px) rotate(-6deg);
+}
+.minh-character-root.suy-nghi .long-may-phai {
+  transform: translate(0, 1px) rotate(4deg);
+}
+.minh-character-root.suy-nghi .mat-trai .trong-mat-chop,
+.minh-character-root.suy-nghi .mat-phai .trong-mat-chop {
+  transform: translate(1.5px, -1.8px);
+}
+.minh-character-root.suy-nghi .bieu-cam-dau-hoi {
+  opacity: 1;
+  animation: bay-dau-hoi 2.4s ease-in-out infinite;
+}
+
+@keyframes bay-dau-hoi {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(6deg);
+  }
+}
+
+/* 5. MỆT (met) - Mí mắt sụp 50%, quầng thâm nhẹ mệt mỏi, miệng thở dài, giọt mồ hôi bên thái dương */
+.minh-character-root.met .mieng-path.mieng-met {
+  display: block;
+}
+.minh-character-root.met .mi-mat-met,
+.minh-character-root.met .quang-tham-met {
+  opacity: 0.9;
+}
+.minh-character-root.met .long-may-trai {
+  transform: translate(0, 2px) rotate(4deg);
+}
+.minh-character-root.met .long-may-phai {
+  transform: translate(0, 2px) rotate(-4deg);
+}
+.minh-character-root.met .bieu-cam-mo-hoi {
+  opacity: 1;
+  animation: roi-mo-hoi 2.2s ease-in-out infinite;
+}
+
+@keyframes roi-mo-hoi {
+  0% {
+    transform: translateY(0) scale(0.9);
+    opacity: 0.3;
+  }
+  40% {
+    transform: translateY(3px) scale(1.1);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(7px) scale(0.9);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(10px) scale(0.7);
+    opacity: 0;
+  }
+}
+
+/* 6. BẤT NGỜ (bat-ngo) - Mắt mở to tròn, con ngươi co lại, lông mày nhướng vút cao, miệng chữ O nhỏ, vệt giật mình */
+.minh-character-root.bat-ngo .mieng-path.mieng-bat-ngo {
+  display: block;
+}
+.minh-character-root.bat-ngo .long-may-trai {
+  transform: translate(0, -6px) rotate(-5deg);
+}
+.minh-character-root.bat-ngo .long-may-phai {
+  transform: translate(0, -6px) rotate(5deg);
+}
+.minh-character-root.bat-ngo .mat-trai .trong-mat-chop,
+.minh-character-root.bat-ngo .mat-phai .trong-mat-chop {
+  transform: scale(0.85);
+}
+.minh-character-root.bat-ngo .bieu-cam-bat-ngo {
+  opacity: 1;
+  animation: giat-minh 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes giat-minh {
+  from { transform: scale(0.95); }
+  to { transform: scale(1.1); }
+}
+
+/* ========================================================
+   TƯ THẾ (POSES)
+   Classes: .dung, .di-bo, .ngoi-chay-xe, .ngoi-ban-hoc, .cui-nhin-dien-thoai
+   ======================================================== */
+
+/* Mặc định ẩn đạo cụ của các tư thế khác */
+.minh-character-svg .dao-cu-xe-may,
+.minh-character-svg .dao-cu-ban-hoc,
+.minh-character-svg .dao-cu-dien-thoai {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* --- 1. ĐỨNG (.dung) --- */
+.minh-character-root.dung .tay-trai {
+  transform: rotate(2deg);
+}
+.minh-character-root.dung .tay-phai {
+  transform: rotate(-2deg);
+}
+
+/* --- 2. ĐI BỘ (.di-bo) --- */
+@keyframes buoc-chan-trai {
+  0%, 100% {
+    transform: rotate(-16deg);
+  }
+  50% {
+    transform: rotate(18deg);
+  }
+}
+
+@keyframes buoc-chan-phai {
+  0%, 100% {
+    transform: rotate(18deg);
+  }
+  50% {
+    transform: rotate(-16deg);
+  }
+}
+
+@keyframes buoc-khuyu-chan-trai {
+  0%, 100% {
+    transform: rotate(8deg);
+  }
+  30% {
+    transform: rotate(24deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes buoc-khuyu-chan-phai {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+  80% {
+    transform: rotate(24deg);
+  }
+}
+
+@keyframes vung-tay-trai {
+  0%, 100% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+}
+
+@keyframes vung-tay-phai {
+  0%, 100% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+}
+
+@keyframes buoc-nhap-nho {
+  0%, 50%, 100% {
+    transform: translateY(0);
+  }
+  25%, 75% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes the-sv-lac-lu {
+  0%, 100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+.minh-character-root.di-bo .chan-trai {
+  animation: buoc-chan-trai 1.1s ease-in-out infinite;
+}
+.minh-character-root.di-bo .chan-trai .goi-trai {
+  animation: buoc-khuyu-chan-trai 1.1s ease-in-out infinite;
+}
+.minh-character-root.di-bo .chan-phai {
+  animation: buoc-chan-phai 1.1s ease-in-out infinite;
+}
+.minh-character-root.di-bo .chan-phai .goi-phai {
+  animation: buoc-khuyu-chan-phai 1.1s ease-in-out infinite;
+}
+.minh-character-root.di-bo .tay-trai {
+  animation: vung-tay-trai 1.1s ease-in-out infinite;
+}
+.minh-character-root.di-bo .tay-phai {
+  animation: vung-tay-phai 1.1s ease-in-out infinite;
+}
+.minh-character-root.di-bo .nhom-than-tong {
+  animation: buoc-nhap-nho 1.1s ease-in-out infinite;
+}
+.minh-character-root.di-bo .the-sinh-vien-group {
+  animation: the-sv-lac-lu 1.1s ease-in-out infinite;
+  transform-origin: 150px 175px;
+}
+
+/* --- 3. NGỒI CHẠY XE (.ngoi-chay-xe) --- */
+.minh-character-root.ngoi-chay-xe .nhom-than-tong {
+  transform: translateY(18px);
+}
+.minh-character-root.ngoi-chay-xe .than-group {
+  transform: rotate(10deg);
+}
+.minh-character-root.ngoi-chay-xe .dau-co-group {
+  transform: rotate(-8deg) translateY(-2px);
+}
+.minh-character-root.ngoi-chay-xe .chan-trai {
+  transform: rotate(-62deg);
+}
+.minh-character-root.ngoi-chay-xe .chan-trai .goi-trai {
+  transform: rotate(82deg);
+}
+.minh-character-root.ngoi-chay-xe .chan-phai {
+  transform: rotate(-58deg);
+}
+.minh-character-root.ngoi-chay-xe .chan-phai .goi-phai {
+  transform: rotate(80deg);
+}
+.minh-character-root.ngoi-chay-xe .tay-trai {
+  transform: rotate(-38deg);
+}
+.minh-character-root.ngoi-chay-xe .tay-trai .khuyu-tay-trai {
+  transform: rotate(28deg);
+}
+.minh-character-root.ngoi-chay-xe .tay-phai {
+  transform: rotate(-30deg);
+}
+.minh-character-root.ngoi-chay-xe .tay-phai .khuyu-tay-phai {
+  transform: rotate(26deg);
+}
+.minh-character-root.ngoi-chay-xe .dao-cu-xe-may {
+  opacity: 1;
+}
+
+/* --- 4. NGỒI BÀN HỌC (.ngoi-ban-hoc) --- */
+.minh-character-root.ngoi-ban-hoc .nhom-than-tong {
+  transform: translateY(28px);
+}
+.minh-character-root.ngoi-ban-hoc .than-group {
+  transform: rotate(4deg);
+}
+.minh-character-root.ngoi-ban-hoc .dau-co-group {
+  transform: rotate(12deg) translateY(4px);
+}
+.minh-character-root.ngoi-ban-hoc .chan-trai {
+  transform: rotate(-72deg);
+}
+.minh-character-root.ngoi-ban-hoc .chan-trai .goi-trai {
+  transform: rotate(88deg);
+}
+.minh-character-root.ngoi-ban-hoc .chan-phai {
+  transform: rotate(-68deg);
+}
+.minh-character-root.ngoi-ban-hoc .chan-phai .goi-phai {
+  transform: rotate(86deg);
+}
+.minh-character-root.ngoi-ban-hoc .tay-trai {
+  transform: rotate(-34deg);
+}
+.minh-character-root.ngoi-ban-hoc .tay-trai .khuyu-tay-trai {
+  transform: rotate(45deg);
+}
+.minh-character-root.ngoi-ban-hoc .tay-phai {
+  transform: rotate(-44deg);
+}
+.minh-character-root.ngoi-ban-hoc .tay-phai .khuyu-tay-phai {
+  transform: rotate(50deg);
+}
+.minh-character-root.ngoi-ban-hoc .dao-cu-ban-hoc {
+  opacity: 1;
+}
+
+/* --- 5. CÚI NHÌN ĐIỆN THOẠI (.cui-nhin-dien-thoai) --- */
+.minh-character-root.cui-nhin-dien-thoai .dau-co-group {
+  transform: rotate(20deg) translateY(6px);
+}
+.minh-character-root.cui-nhin-dien-thoai .mat-trai .trong-mat-chop,
+.minh-character-root.cui-nhin-dien-thoai .mat-phai .trong-mat-chop {
+  transform: translateY(2.5px);
+}
+.minh-character-root.cui-nhin-dien-thoai .tay-trai {
+  transform: rotate(-35deg);
+}
+.minh-character-root.cui-nhin-dien-thoai .tay-trai .khuyu-tay-trai {
+  transform: rotate(68deg);
+}
+.minh-character-root.cui-nhin-dien-thoai .tay-phai {
+  transform: rotate(-45deg);
+}
+.minh-character-root.cui-nhin-dien-thoai .tay-phai .khuyu-tay-phai {
+  transform: rotate(72deg);
+}
+.minh-character-root.cui-nhin-dien-thoai .dao-cu-dien-thoai {
+  opacity: 1;
+}
+
+/* ========================================================
+   HỖ TRỢ PREFERS-REDUCED-MOTION
+   ======================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .minh-character-svg *,
+  .minh-character-svg *::before,
+  .minh-character-svg *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

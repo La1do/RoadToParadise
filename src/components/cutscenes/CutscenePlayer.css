@@ -1,0 +1,345 @@
+/* ==========================================================================
+   CutscenePlayer Styles
+   Giao diện cảnh dẫn truyện (Cutscene) 4 chặng
+   ========================================================================== */
+
+.cutscene-overlay {
+  position: relative;
+  width: 100%;
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  border-radius: var(--radius-lg, 16px);
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg, 0 12px 32px rgba(0, 0, 0, 0.15));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Thanh điều hướng trên cùng (Tiêu đề chặng & Nút Bỏ qua) */
+.cutscene-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cutscene-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full, 9999px);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+}
+
+.cutscene-skip-btn {
+  min-height: var(--touch-target-size, 44px);
+  min-width: 96px;
+  padding: 0.6rem 1.25rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-full, 9999px);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  outline: none;
+}
+
+.cutscene-skip-btn:hover,
+.cutscene-skip-btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: var(--accent-warm);
+  box-shadow: 0 4px 12px var(--road-glow);
+}
+
+.cutscene-skip-btn:active {
+  transform: translateY(0);
+}
+
+/* Khung hình minh họa SVG */
+.cutscene-illustration-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 12px);
+  overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.cutscene-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Thanh tiến độ cảnh */
+.cutscene-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.cutscene-progress-bar {
+  height: 100%;
+  background: var(--accent-warm);
+  border-radius: 3px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--road-glow);
+}
+
+/* Khung lời dẫn truyện */
+.cutscene-content {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 12px);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.cutscene-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cutscene-setting {
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.cutscene-narrative-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 110px;
+}
+
+.cutscene-line {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0;
+  position: relative;
+  padding-left: 1.2rem;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: cutsceneFadeIn 0.5s forwards ease-out;
+}
+
+.cutscene-line::before {
+  content: '✦';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent-warm);
+  font-size: 0.8rem;
+}
+
+.cutscene-line.active {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cutscene-line.past {
+  opacity: 0.75;
+  font-weight: normal;
+}
+
+/* Nút Bắt đầu chặng khi kết thúc */
+.cutscene-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.cutscene-start-btn {
+  min-height: var(--touch-target-size, 48px);
+  padding: 0.75rem 2rem;
+  background: var(--button-primary-bg, var(--accent-warm));
+  color: var(--button-primary-text, #ffffff);
+  border: none;
+  border-radius: var(--radius-md, 10px);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px var(--road-glow);
+  transition: all 0.25s ease;
+  animation: cutscenePulse 2s infinite ease-in-out;
+}
+
+.cutscene-start-btn:hover,
+.cutscene-start-btn:focus-visible {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px var(--road-glow);
+}
+
+.cutscene-start-btn:active {
+  transform: translateY(0) scale(0.99);
+}
+
+/* Nút phát lại / Xem lại */
+.cutscene-replay-btn {
+  min-height: var(--touch-target-size, 44px);
+  padding: 0.6rem 1.2rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md, 10px);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cutscene-replay-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-warm);
+}
+
+/* Animations */
+@keyframes cutsceneFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cutscenePulse {
+  0%, 100% {
+    box-shadow: 0 4px 14px var(--road-glow);
+  }
+  50% {
+    box-shadow: 0 6px 22px var(--road-glow);
+  }
+}
+
+/* Sunbeam & Sky glowing SVG animations */
+@keyframes sunBeamGlow {
+  0%, 100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes starTwinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes gateRay {
+  0%, 100% {
+    transform: scale(0.98);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+}
+
+.animate-sunbeam {
+  animation: sunBeamGlow 3s ease-in-out infinite;
+}
+
+.animate-star {
+  animation: starTwinkle 2.5s ease-in-out infinite;
+}
+
+.animate-gate {
+  transform-origin: center;
+  animation: gateRay 3.5s ease-in-out infinite;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  .cutscene-line {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .cutscene-start-btn {
+    animation: none !important;
+  }
+  .animate-sunbeam,
+  .animate-star,
+  .animate-gate {
+    animation: none !important;
+  }
+}
+
+/* Responsive cho mobile */
+@media (max-width: 640px) {
+  .cutscene-overlay {
+    padding: 1rem;
+    gap: 0.85rem;
+    border-radius: var(--radius-md, 12px);
+  }
+
+  .cutscene-title {
+    font-size: 1.15rem;
+  }
+
+  .cutscene-line {
+    font-size: 0.95rem;
+    padding-left: 1rem;
+  }
+
+  .cutscene-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .cutscene-start-btn,
+  .cutscene-replay-btn {
+    width: 100%;
+  }
+}

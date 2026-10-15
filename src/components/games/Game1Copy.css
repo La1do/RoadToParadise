@@ -1,0 +1,347 @@
+/* Game1Copy.css - Giao diện Game 1: Chép lại */
+
+.game1-container {
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #1e293b;
+}
+
+.game1-header {
+  margin-bottom: 12px;
+}
+
+.game1-slot-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.game1-slot-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  background-color: #2563eb;
+  color: #ffffff;
+  border-radius: 14px;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.game1-slot-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.game1-guide {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0 0 12px 0;
+}
+
+/* Khung mẫu hiển thị đáp án chuẩn */
+.game1-model-card {
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s ease;
+}
+
+.game1-model-card.has-missing {
+  border-color: #f59e0b;
+  background: #fffdf5;
+}
+
+.game1-model-card.all-correct {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.game1-model-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.game1-model-text {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  font-weight: 600;
+  color: #1e293b;
+  word-break: break-word;
+}
+
+.game1-tokens-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Các token trong khung mẫu */
+.game1-target-token {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.game1-target-token.missing {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1.5px dashed #f59e0b;
+  font-weight: 700;
+  transform: scale(1.04);
+  box-shadow: 0 1px 4px rgba(245, 158, 11, 0.2);
+}
+
+.game1-target-token.correct {
+  color: #047857;
+  background: #ecfdf5;
+}
+
+/* Khung nhập liệu */
+.game1-input-card {
+  margin-bottom: 14px;
+}
+
+.game1-input-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.game1-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 96px;
+  padding: 12px;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  font-family: inherit;
+  color: #0f172a;
+  background-color: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game1-textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.game1-textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* Hàng nút bấm - touch target >= 44px */
+.game1-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.game1-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 0.15s ease, transform 0.05s active;
+}
+
+.game1-btn:active {
+  transform: scale(0.98);
+}
+
+.game1-btn-primary {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.game1-btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.game1-btn-hint {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+.game1-btn-hint:hover {
+  background-color: #d97706;
+}
+
+.game1-btn-next {
+  width: 100%;
+  min-height: 44px;
+  background-color: #10b981;
+  color: #ffffff;
+  margin-top: 12px;
+}
+
+.game1-btn-next:hover {
+  background-color: #059669;
+}
+
+/* Khu vực gợi ý */
+.game1-hint-box {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+  color: #92400e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.game1-hint-badge {
+  display: inline-block;
+  background: #fef3c7;
+  color: #78350f;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid #fcd34d;
+}
+
+.game1-btn-insert {
+  background: #f59e0b;
+  color: #ffffff;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 32px;
+}
+
+/* Khu vực kết quả tức thì */
+.game1-result-box {
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 12px;
+  border: 1.5px solid;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.game1-result-box.correct {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.game1-result-box.wrong {
+  background: #fff5f5;
+  border-color: #fecaca;
+}
+
+.game1-result-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.game1-status-badge {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.game1-status-badge.correct {
+  color: #15803d;
+}
+
+.game1-status-badge.wrong {
+  color: #b91c1c;
+}
+
+.game1-accuracy-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.game1-analysis-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.game1-user-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+/* Từ sai: tô đỏ nền nhạt (#f8d7da) */
+.game1-user-token.wrong {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+/* Từ đúng: màu xanh lá */
+.game1-user-token.correct {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.game1-missing-notice {
+  font-size: 0.85rem;
+  color: #b45309;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
