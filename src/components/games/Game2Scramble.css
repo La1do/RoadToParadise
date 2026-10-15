@@ -46,6 +46,13 @@
   font-weight: 600;
 }
 
+.game2-instruction-note {
+  margin: 8px 0 0 0;
+  font-size: 0.88rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
 /* Danh sách các ý — mỗi ý một card */
 .game2-slots-list {
   display: flex;
@@ -176,8 +183,38 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #475569;
+  color: #94a3b8;
   margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.game2-tray-actions-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.game2-reset-inline-btn {
+  background: #334155;
+  color: #cbd5e1;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.game2-reset-inline-btn:hover {
+  background: #475569;
+  color: #ffffff;
+}
+
+.game2-slot-card .badge-wrong {
+  background-color: #ef4444;
+  color: #ffffff;
 }
 
 .game2-tray-box {
