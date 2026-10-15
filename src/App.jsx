@@ -9,7 +9,7 @@ import {
 import { Game1Copy, Game2Scramble, GameResultModal } from './components/games';
 import CharacterDemo from './components/character/CharacterDemo';
 import DayRoadMap from './components/map/DayRoadMap';
-import { CutscenePlayer, CUTSCENES } from './components/cutscenes';
+import { CutscenePlayer, FirstPersonIntro, CUTSCENES } from './components/cutscenes';
 
 export default function App() {
   const [viewMode, setViewMode] = useState('map'); // 'map' | 'cutscene' | 'game1' | 'game2' | 'character' | 'bench'
@@ -39,6 +39,7 @@ export default function App() {
 
   const navItems = [
     { id: 'map', label: '🗺️ Bản đồ' },
+    { id: 'pov', label: '📱 Cảnh mở đầu (POV)' },
     { id: 'cutscene', label: '🎬 Kịch bản' },
     { id: 'game1', label: '✍️ Chép lại' },
     { id: 'game2', label: '🧩 Xáo từ' },
@@ -108,6 +109,24 @@ export default function App() {
                   setViewMode('game1');
                 }
               }}
+            />
+          </div>
+        )}
+
+        {/* 1.5. Cảnh mở đầu góc nhìn thứ nhất (POV Intro) */}
+        {viewMode === 'pov' && (
+          <div style={{ width: '100%', maxWidth: 430, margin: '1rem auto' }}>
+            <FirstPersonIntro
+              tenNhanVat="Minh"
+              soCau={selectedQuestion.id}
+              noiDungCauHoi={selectedQuestion.question}
+              dapAnMau={slot.answer}
+              chang={selectedQuestion.stageId}
+              onStartGame1={({ userInput: typed }) => {
+                setUserInput(typed);
+                setViewMode('game1');
+              }}
+              onSkip={() => {}}
             />
           </div>
         )}
