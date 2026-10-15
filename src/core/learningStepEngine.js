@@ -40,10 +40,11 @@ function shuffle(array) {
  * Sinh dữ liệu bài tập cho Bậc 1: Chép lại
  */
 export function generateStep1Copy(slot) {
+  const targetAnswer = slot.fullAnswer || slot.answer || '';
   return {
     stepId: 1,
     stepKey: 'COPY',
-    targetAnswer: slot.answer,
+    targetAnswer,
     guide: 'Đọc kỹ và gõ lại chính xác từng từ dưới đây'
   };
 }
@@ -52,11 +53,12 @@ export function generateStep1Copy(slot) {
  * Sinh dữ liệu bài tập cho Bậc 2: Xếp cụm
  */
 export function generateStep2Arrange(slot) {
-  let phrases = slot.phrases && slot.phrases.length > 0 ? [...slot.phrases] : [];
+  const targetAnswer = slot.fullAnswer || slot.answer || '';
+  let phrases = slot.fullPhrases || (slot.phrases && slot.phrases.length > 0 ? [...slot.phrases] : []);
 
   // Nếu chỉ có 1 cụm, tự động tách đôi để vẫn có cụm sắp xếp
   if (phrases.length <= 1) {
-    const tokens = tokenize(slot.answer);
+    const tokens = tokenize(targetAnswer);
     if (tokens.length >= 2) {
       const mid = Math.ceil(tokens.length / 2);
       phrases = [
@@ -64,7 +66,7 @@ export function generateStep2Arrange(slot) {
         tokens.slice(mid).join(' ')
       ];
     } else {
-      phrases = [slot.answer];
+      phrases = [targetAnswer];
     }
   }
 
@@ -126,7 +128,8 @@ export function evaluateStep2Arrange(selectedIds, correctOrderIds) {
  * @param {number} percentage - 30 hoặc 60
  */
 export function generateClozeStep(slot, percentage = 30) {
-  const tokens = tokenize(slot.answer);
+  const targetAnswer = slot.fullAnswer || slot.answer || '';
+  const tokens = tokenize(targetAnswer);
   const n = tokens.length;
 
   if (n === 0) {
@@ -173,7 +176,8 @@ export function generateClozeStep(slot, percentage = 30) {
  * Sinh dữ liệu Bậc 5: Chữ cái đầu
  */
 export function generateStep5FirstLetters(slot) {
-  const tokens = tokenize(slot.answer);
+  const targetAnswer = slot.fullAnswer || slot.answer || '';
+  const tokens = tokenize(targetAnswer);
 
   // Tạo chuỗi gợi ý: chữ cái đầu kèm gạch dưới độ dài từ
   const hints = tokens.map(t => {
@@ -191,7 +195,7 @@ export function generateStep5FirstLetters(slot) {
     hints,
     hintText: hints.join(' '),
     compactLetters,
-    targetAnswer: slot.answer
+    targetAnswer
   };
 }
 
@@ -199,11 +203,12 @@ export function generateStep5FirstLetters(slot) {
  * Sinh dữ liệu Bậc 6: Gõ hoàn toàn
  */
 export function generateStep6FullTyping(slot) {
+  const targetAnswer = slot.fullAnswer || slot.answer || '';
   return {
     stepId: 6,
     stepKey: 'FULL_TYPING',
-    targetAnswer: slot.answer,
-    guide: 'Gõ đầy đủ chính xác nội dung của ô không có gợi ý'
+    targetAnswer,
+    guide: 'Gõ đầy đủ chính xác nội dung của câu không có gợi ý'
   };
 }
 
@@ -262,7 +267,8 @@ export function evaluateStepSubmission(stepId, submission, slot, exercise) {
     textToGrade = filledTokens.join(' ');
   }
 
-  const gradeResult = compareAnswer(textToGrade, slot.answer);
+  const targetAnswer = slot.fullAnswer || slot.answer;
+  const gradeResult = compareAnswer(textToGrade, targetAnswer);
   return {
     stepId,
     isPassed: gradeResult.isExact,

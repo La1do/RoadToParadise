@@ -524,12 +524,78 @@ export default function DayRoadMap({
 
             {/* Trích dẫn câu hỏi */}
             <div className="modal-question-box">
+              <span className="modal-section-label" style={{ color: '#38bdf8', fontWeight: 'bold', display: 'block', marginBottom: 4 }}>
+                ❓ NỘI DUNG CÂU HỎI:
+              </span>
               <p className="modal-question-text">{activeModalData.question}</p>
             </div>
 
-            {/* Chọn ô trong câu */}
-            <div className="modal-slot-tabs-wrap">
-              <label className="modal-section-label">Chọn ô thực hành:</label>
+            {/* Đáp án chuẩn cả câu */}
+            <div className="modal-question-box" style={{ background: '#1e293b', borderLeft: '4px solid #f59e0b', marginTop: 10 }}>
+              <span className="modal-section-label" style={{ color: '#fbbf24', fontWeight: 'bold', display: 'block', marginBottom: 4 }}>
+                ✦ ĐÁP ÁN CHUẨN CẢ CÂU:
+              </span>
+              <div style={{ color: '#f8fafc', fontSize: '0.92rem', lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
+                {activeModalData.fullAnswer || activeModalData.slots.map(s => `${s.label} ${s.answer}`).join('\n')}
+              </div>
+            </div>
+
+            {/* Các nút hành động chính: Học cả câu */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12 }}>
+              <button
+                type="button"
+                onClick={() => triggerAction('learn', 1)}
+                style={{
+                  padding: '12px 14px',
+                  borderRadius: 10,
+                  border: 'none',
+                  background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  fontSize: '0.95rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  boxShadow: '0 4px 12px rgba(2, 132, 199, 0.4)'
+                }}
+              >
+                <span style={{ fontSize: '1.2rem' }}>✍️</span>
+                <div style={{ textAlign: 'left' }}>
+                  <div>Học cả câu: Game 1 (Chép lại)</div>
+                  <div style={{ fontSize: '0.78rem', opacity: 0.85, fontWeight: 'normal' }}>Gõ lại toàn bộ câu theo mẫu</div>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => triggerAction('learn', 2)}
+                style={{
+                  padding: '12px 14px',
+                  borderRadius: 10,
+                  border: 'none',
+                  background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                  color: '#000',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  fontSize: '0.95rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  boxShadow: '0 4px 12px rgba(245, 158, 11, 0.35)'
+                }}
+              >
+                <span style={{ fontSize: '1.2rem' }}>🧩</span>
+                <div style={{ textAlign: 'left' }}>
+                  <div>Học cả câu: Game 2 (Xáo từ)</div>
+                  <div style={{ fontSize: '0.78rem', opacity: 0.85, fontWeight: 'normal' }}>Sắp xếp các cụm từ cả câu</div>
+                </div>
+              </button>
+            </div>
+
+            {/* Chọn ô trong câu (Tùy chọn) */}
+            <div className="modal-slot-tabs-wrap" style={{ marginTop: 16 }}>
+              <label className="modal-section-label">Hoặc chọn chi tiết từng ô nếu muốn:</label>
               <div className="modal-slot-tabs">
                 {activeModalData.slots.map((s, idx) => {
                   const sKey = `q${activeModalData.id}_s${s.slotIndex}`;

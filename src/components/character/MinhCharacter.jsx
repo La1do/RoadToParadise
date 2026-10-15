@@ -9,6 +9,7 @@ import './MinhCharacter.css';
  * @param {string} bieuCam - 'dung-yen' | 'vui' | 'buon' | 'suy-nghi' | 'met' | 'bat-ngo' (mặc định: 'dung-yen')
  * @param {string} tuThe - 'dung' | 'di-bo' | 'ngoi-chay-xe' | 'ngoi-ban-hoc' | 'cui-nhin-dien-thoai' (mặc định: 'dung')
  * @param {string} trangPhuc - 'di-hoc' | 'lam-them' | 'o-nha' | 'cong-phan-xet' (mặc định: 'di-hoc')
+ * @param {string} gocNhin - '3-4' | 'side' | 'chinh-dien' (mặc định: '3-4' góc nghiêng 45 độ)
  * @param {number} doThuoc - Cường độ ánh sáng ấm hào quang (0.0 đến 1.0, mặc định: 0)
  * @param {object} customColors - Tùy chỉnh màu sắc CSS variables (mauAo, mauQuan, mauGiay, mauToc, phuKien)
  * @param {boolean} showBackpack - Bật/tắt balo đeo một bên vai (mặc định: true)
@@ -23,6 +24,7 @@ export default function MinhCharacter({
   bieuCam = 'dung-yen',
   tuThe = 'dung',
   trangPhuc = 'di-hoc',
+  gocNhin = '3-4',
   doThuoc = 0,
   customColors = {},
   showBackpack = true,
@@ -44,6 +46,7 @@ export default function MinhCharacter({
     tuThe,
     trangPhuc,
     `trang-phuc-${trangPhuc}`,
+    `goc-${gocNhin || '3-4'}`,
     className,
   ]
     .filter(Boolean)
@@ -179,31 +182,30 @@ export default function MinhCharacter({
         )}
 
         {/* ========================================================
-            2. TÓC SAU (toc-sau): Lớp tóc ôm sau gáy và quanh tai
+            2. TÓC SAU (toc-sau): Cắt ngắn gọn gàng, gáy cao ôm sát sọ
             ======================================================== */}
         <g className="toc-sau">
-          {/* Khối tóc sau gáy */}
+          {/* Khối tóc sau gáy cắt ngắn cao chân gáy (high fade / crop) */}
           <path
-            d="M 115 78 C 112 60, 130 52, 150 52 C 170 52, 188 60, 185 78 C 187 100, 184 125, 178 138 C 170 144, 160 145, 150 145 C 140 145, 130 144, 122 138 C 116 125, 113 100, 115 78 Z"
+            d="M 122 75 C 118 58, 132 50, 150 50 C 168 50, 182 58, 178 75 C 178 88, 174 102, 166 108 C 158 112, 142 112, 134 108 C 126 102, 122 88, 122 75 Z"
             fill="var(--mau-toc, #1E232A)"
           />
-          {/* Các lọn tóc tỉa sau gáy lấp ló hai bên cổ */}
+          {/* Đường chân tóc gáy tỉa sạch sẽ, không xòe dài */}
           <path
-            d="M 120 128 L 116 138 L 124 135 L 122 143 L 130 138 L 132 145 L 138 141"
-            fill="var(--mau-toc, #1E232A)"
-          />
-          <path
-            d="M 180 128 L 184 138 L 176 135 L 178 143 L 170 138 L 168 145 L 162 141"
-            fill="var(--mau-toc, #1E232A)"
+            d="M 134 108 Q 150 110 166 108"
+            fill="none"
+            stroke="var(--mau-toc, #1E232A)"
+            strokeWidth="2"
           />
         </g>
 
         {/* ========================================================
-            3. CHÂN VÀ QUẦN (chan): Khớp hông và gối
-            Tỉ lệ người thật anime flat: chân dài ~240px
+            3. CHÂN VÀ QUẦN (chan) & 4. GIÀY (giay): Khớp hông, gối, cổ chân
+            Giày được lồng trực tiếp vào cẳng chân (goi) để khóa cứng khớp,
+            loại bỏ hoàn toàn tình trạng giày bị rớt khỏi cẳng chân khi đi bộ.
             ======================================================== */}
         <g className="chan">
-          {/* Chân trái (chan-trai) */}
+          {/* Chân trái (chan-trai) - Chân phía xa ở góc 3/4 */}
           <g className="chan-trai" style={{ transformOrigin: '132px 308px' }}>
             {/* Đùi trái */}
             <path
@@ -233,10 +235,35 @@ export default function MinhCharacter({
                 strokeWidth="1.2"
                 opacity="0.6"
               />
+
+              {/* Giày trái (giay giay-trai) - Khóa trực tiếp vào cẳng chân */}
+              <g className="giay giay-trai">
+                {/* Thân giày */}
+                <path
+                  d="M 119 514 L 115 534 C 114 540, 126 544, 143 544 C 147 544, 147 534, 143 526 L 142 514 Z"
+                  fill="var(--mau-giay, #F8FAFC)"
+                  stroke="var(--mau-giay-vien, #64748B)"
+                  strokeWidth="1.2"
+                />
+                {/* Đế giày sneaker cao su */}
+                <path
+                  d="M 114 538 L 113 546 C 113 549, 125 551, 144 551 C 148 551, 148 544, 145 538 Z"
+                  fill="#E2E8F0"
+                  stroke="var(--mau-giay-vien, #64748B)"
+                  strokeWidth="1"
+                />
+                {/* Chi tiết dây giày / sọc thể thao */}
+                <path
+                  d="M 124 524 L 136 524 M 125 529 L 138 529 M 122 537 L 142 537"
+                  stroke="#94A3B8"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                />
+              </g>
             </g>
           </g>
 
-          {/* Chân phải (chan-phai) */}
+          {/* Chân phải (chan-phai) - Chân phía gần ở góc 3/4 */}
           <g className="chan-phai" style={{ transformOrigin: '168px 308px' }}>
             {/* Đùi phải */}
             <path
@@ -266,6 +293,31 @@ export default function MinhCharacter({
                 strokeWidth="1.2"
                 opacity="0.6"
               />
+
+              {/* Giày phải (giay giay-phai) - Khóa trực tiếp vào cẳng chân */}
+              <g className="giay giay-phai">
+                {/* Thân giày */}
+                <path
+                  d="M 158 514 L 157 526 C 153 534, 153 544, 157 544 C 174 544, 186 540, 185 534 L 181 514 Z"
+                  fill="var(--mau-giay, #F8FAFC)"
+                  stroke="var(--mau-giay-vien, #64748B)"
+                  strokeWidth="1.2"
+                />
+                {/* Đế giày sneaker cao su */}
+                <path
+                  d="M 155 538 C 152 544, 152 551, 156 551 C 175 551, 187 549, 187 546 L 186 538 Z"
+                  fill="#E2E8F0"
+                  stroke="var(--mau-giay-vien, #64748B)"
+                  strokeWidth="1"
+                />
+                {/* Chi tiết dây giày */}
+                <path
+                  d="M 164 524 L 176 524 M 162 529 L 175 529 M 158 537 L 178 537"
+                  stroke="#94A3B8"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                />
+              </g>
             </g>
           </g>
 
@@ -274,61 +326,6 @@ export default function MinhCharacter({
             d="M 120 290 Q 150 298 180 290 L 176 312 Q 150 324 124 312 Z"
             fill="var(--mau-quan-bong, #1E3A5F)"
           />
-        </g>
-
-        {/* ========================================================
-            4. GIÀY (giay): Sneaker thể thao sinh viên / giày da
-            ======================================================== */}
-        <g className="giay">
-          {/* Giày trái (giay-trai) */}
-          <g className="giay-trai">
-            {/* Thân giày */}
-            <path
-              d="M 119 514 L 115 534 C 114 540, 126 544, 143 544 C 147 544, 147 534, 143 526 L 142 514 Z"
-              fill="var(--mau-giay, #F8FAFC)"
-              stroke="var(--mau-giay-vien, #64748B)"
-              strokeWidth="1.2"
-            />
-            {/* Đế giày sneaker cao su */}
-            <path
-              d="M 114 538 L 113 546 C 113 549, 125 551, 144 551 C 148 551, 148 544, 145 538 Z"
-              fill="#E2E8F0"
-              stroke="var(--mau-giay-vien, #64748B)"
-              strokeWidth="1"
-            />
-            {/* Chi tiết dây giày / sọc thể thao */}
-            <path
-              d="M 124 524 L 136 524 M 125 529 L 138 529 M 122 537 L 142 537"
-              stroke="#94A3B8"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-            />
-          </g>
-
-          {/* Giày phải (giay-phai) */}
-          <g className="giay-phai">
-            {/* Thân giày */}
-            <path
-              d="M 158 514 L 157 526 C 153 534, 153 544, 157 544 C 174 544, 186 540, 185 534 L 181 514 Z"
-              fill="var(--mau-giay, #F8FAFC)"
-              stroke="var(--mau-giay-vien, #64748B)"
-              strokeWidth="1.2"
-            />
-            {/* Đế giày sneaker cao su */}
-            <path
-              d="M 155 538 C 152 544, 152 551, 156 551 C 175 551, 187 549, 187 546 L 186 538 Z"
-              fill="#E2E8F0"
-              stroke="var(--mau-giay-vien, #64748B)"
-              strokeWidth="1"
-            />
-            {/* Chi tiết dây giày */}
-            <path
-              d="M 164 524 L 176 524 M 162 529 L 175 529 M 158 537 L 178 537"
-              stroke="#94A3B8"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-            />
-          </g>
         </g>
 
         {/* ========================================================
@@ -763,30 +760,25 @@ export default function MinhCharacter({
                 />
               </g>
 
-              {/* TÓC TRƯỚC (toc-truoc): Mái layer tự nhiên, có vài lọn nổi */}
+              {/* TÓC TRƯỚC (toc-truoc): Mái ngắn layer hiện đại, thanh niên gọn gàng */}
               <g className="toc-truoc">
-                {/* Khối tóc chính che trán và thái dương */}
+                {/* Mái ngắn tỉa layer texture che 1/3 trán, đường nét dứt khoát */}
                 <path
-                  d="M 115 78 C 114 62, 128 50, 150 50 C 172 50, 186 62, 185 78 L 184 92 C 182 86, 178 84, 175 80 L 175 106 C 173 98, 170 94, 168 88 L 166 102 C 163 94, 158 90, 155 84 L 152 98 C 150 88, 146 82, 143 80 L 140 102 C 137 92, 133 86, 130 82 L 126 106 C 124 96, 122 90, 118 90 Z"
+                  d="M 121 76 C 119 60, 132 48, 150 48 C 168 48, 181 60, 179 76 L 178 82 C 174 78, 170 78, 166 84 C 162 78, 158 77, 154 85 C 150 78, 146 77, 142 85 C 138 78, 134 78, 130 84 C 126 78, 123 79, 121 82 Z"
                   fill="var(--mau-toc, #1E232A)"
                 />
-                {/* Lọn tóc vểnh tự nhiên trên đỉnh đầu (wisps/tufts) */}
+                {/* Tóc mai ngắn gọn gàng hai bên thái dương, không rủ dài */}
                 <path
-                  d="M 146 51 Q 148 42 156 46 Q 150 49 149 53 Z"
+                  d="M 121 76 L 122 86 C 123 90, 125 92, 126 90 L 125 80 Z"
                   fill="var(--mau-toc, #1E232A)"
                 />
                 <path
-                  d="M 136 54 Q 132 46 128 50 Q 132 53 134 56 Z"
+                  d="M 179 76 L 178 86 C 177 90, 175 92, 174 90 L 175 80 Z"
                   fill="var(--mau-toc, #1E232A)"
                 />
-                {/* Lọn tóc mai dài che má trái */}
+                {/* Lọn tóc ngắn tự nhiên trên đỉnh đầu */}
                 <path
-                  d="M 117 84 C 116 94, 118 108, 122 116 C 122 108, 123 98, 122 88 Z"
-                  fill="var(--mau-toc, #1E232A)"
-                />
-                {/* Lọn tóc mai dài che má phải */}
-                <path
-                  d="M 183 84 C 184 94, 182 108, 178 116 C 178 108, 177 98, 178 88 Z"
+                  d="M 147 48 Q 150 42 155 45 Q 151 47 149 49 Z"
                   fill="var(--mau-toc, #1E232A)"
                 />
                 {/* Dải sáng highlight phản chiếu ánh sáng anime flat trên mái tóc */}

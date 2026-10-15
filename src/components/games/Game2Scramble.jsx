@@ -18,9 +18,9 @@ export default function Game2Scramble({
   onComplete,
   onNext
 }) {
-  const targetAnswer = slot?.answer || slot?.targetAnswer || '';
-  const slotLabel = slot?.label || (slot?.slotIndex ? `Ô ${slot.slotIndex}` : '');
-  const slotTitle = slot?.title || slot?.slotTitle || '';
+  const targetAnswer = slot?.fullAnswer || slot?.answer || slot?.targetAnswer || '';
+  const slotLabel = slot?.id ? `Câu ${slot.id}` : (slot?.label || (slot?.slotIndex ? `Ô ${slot.slotIndex}` : ''));
+  const slotTitle = slot?.question || slot?.title || slot?.slotTitle || '';
 
   // Dữ liệu sắp xếp cụm sinh ra từ slot
   const [exerciseData, setExerciseData] = useState(() => generateStep2Arrange(slot || { answer: '' }));
@@ -35,7 +35,7 @@ export default function Game2Scramble({
 
   // Khởi tạo lại bài tập khi slot thay đổi
   useEffect(() => {
-    if (slot && (slot.answer || slot.targetAnswer)) {
+    if (slot && (slot.fullAnswer || slot.answer || slot.targetAnswer)) {
       const ex = generateStep2Arrange(slot);
       setExerciseData(ex);
       setTrayItems([]);

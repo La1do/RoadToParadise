@@ -20,9 +20,9 @@ export default function Game1Copy({
   onNext,
   onHintUsed
 }) {
-  const targetAnswer = slot?.answer || slot?.targetAnswer || '';
-  const slotLabel = slot?.label || (slot?.slotIndex ? `Ô ${slot.slotIndex}` : '');
-  const slotTitle = slot?.title || slot?.slotTitle || '';
+  const targetAnswer = slot?.fullAnswer || slot?.answer || slot?.targetAnswer || '';
+  const slotLabel = slot?.id ? `Câu ${slot.id}` : (slot?.label || (slot?.slotIndex ? `Ô ${slot.slotIndex}` : ''));
+  const slotTitle = slot?.question || slot?.title || slot?.slotTitle || '';
 
   const [userInput, setUserInput] = useState('');
   const [gradeResult, setGradeResult] = useState(null);

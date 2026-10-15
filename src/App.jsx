@@ -120,10 +120,10 @@ export default function App() {
               tenNhanVat="Minh"
               soCau={selectedQuestion.id}
               noiDungCauHoi={selectedQuestion.question}
-              dapAnMau={slot.answer}
+              dapAnMau={selectedQuestion.fullAnswer || slot.answer}
               chang={selectedQuestion.stageId}
               onStartGame1={({ userInput: typed }) => {
-                setUserInput(typed);
+                setUserInput(typed || '');
                 setViewMode('game1');
               }}
               onSkip={() => {}}
@@ -164,7 +164,7 @@ export default function App() {
           </div>
         )}
 
-        {/* 3. Game 1: Chép lại */}
+        {/* 3. Game 1: Chép lại (Học cả câu) */}
         {viewMode === 'game1' && (
           <div style={{ width: '100%', maxWidth: 430, padding: '1rem', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
@@ -174,13 +174,13 @@ export default function App() {
               >
                 ← Trở về bản đồ
               </button>
-              <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
-                Câu {selectedQuestion.id} - Ô {slot.label}
+              <span style={{ fontSize: '0.85rem', color: '#f59e0b', fontWeight: 'bold' }}>
+                Học cả câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId})
               </span>
             </div>
 
             <Game1Copy
-              slot={slot}
+              slot={selectedQuestion}
               questionText={selectedQuestion.question}
               onComplete={res => setModalResult(res.gradeResult)}
               onNext={() => setViewMode('game2')}
@@ -188,7 +188,7 @@ export default function App() {
           </div>
         )}
 
-        {/* 4. Game 2: Xáo từ */}
+        {/* 4. Game 2: Xáo từ (Học cả câu) */}
         {viewMode === 'game2' && (
           <div style={{ width: '100%', maxWidth: 430, padding: '1rem', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
@@ -198,13 +198,13 @@ export default function App() {
               >
                 ← Trở về bản đồ
               </button>
-              <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
-                Câu {selectedQuestion.id} - Ô {slot.label}
+              <span style={{ fontSize: '0.85rem', color: '#f59e0b', fontWeight: 'bold' }}>
+                Học cả câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId})
               </span>
             </div>
 
             <Game2Scramble
-              slot={slot}
+              slot={selectedQuestion}
               questionText={selectedQuestion.question}
               onComplete={res => setModalResult(res.reinforceGrade)}
               onNext={() => setViewMode('map')}
