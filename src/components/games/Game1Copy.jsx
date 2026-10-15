@@ -16,6 +16,8 @@ export default function Game1Copy({
   question,
   slot,
   questionText,
+  initialInputs,
+  onStateChange,
   onComplete,
   onNext
 }) {
@@ -31,7 +33,9 @@ export default function Game1Copy({
     : [{ slotIndex: 1, label: '①', title: '', answer: targetQuestion?.fullAnswer || targetQuestion?.answer || '' }];
 
   // State: lưu giá trị gõ của từng ý { [slotIndex]: text }
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState(() => initialInputs || {});
+  // State: ẩn / hiện đáp án tham khảo
+  const [showReference, setShowReference] = useState(true);
   // State: kết quả chấm điểm từng ý { [slotIndex]: GradeResult }
   const [gradeResults, setGradeResults] = useState({});
   // State: gợi ý từng ý { [slotIndex]: Hint }
@@ -41,17 +45,23 @@ export default function Game1Copy({
   // Tổng kết sau khi kiểm tra
   const [summary, setSummary] = useState(null);
 
-  // Reset state khi đổi câu hỏi
+  // Reset state khi đổi câu hỏi (nếu không có initialInputs lưu trước)
   useEffect(() => {
-    setInputs({});
+    setInputs(initialInputs || {});
     setGradeResults({});
     setHints({});
     setUsedHints({});
     setSummary(null);
-  }, [targetQuestion?.id]);
+  }, [targetQuestion?.id, initialInputs]);
 
   const handleInputChange = (slotIndex, value) => {
-    setInputs(prev => ({ ...prev, [slotIndex]: value }));
+    setInputs(prev => {
+      const next = { ...prev, [slotIndex]: value };
+      if (typeof onStateChange === 'function') {
+        onStateChange(next);
+      }
+      return next;
+    });
     // Xóa kết quả chấm cũ của ô này khi người dùng gõ lại
     if (gradeResults[slotIndex]) {
       setGradeResults(prev => {
@@ -134,6 +144,14 @@ export default function Game1Copy({
         <div className="game1-badge-row">
           <span className="game1-chapter-badge">CHẶNG {targetQuestion.stageId || 1}</span>
           <span className="game1-question-pill">CÂU HỎI {targetQuestion.id} ({slots.length} Ý CẦN GÕ)</span>
+          <button
+            type="button"
+            className="game1-toggle-reference-btn"
+            onClick={() => setShowReference(prev => !prev)}
+            title={showReference ? "Ẩn đáp án tham khảo để tự gõ từ trí nhớ" : "Hiện đáp án tham khảo để xem mẫu"}
+          >
+            {showReference ? '🙈 Ẩn đáp án tham khảo' : '👁️ Hiện đáp án tham khảo'}
+          </button>
         </div>
         <h2 className="game1-question-title">{targetQuestion.question}</h2>
       </header>
@@ -165,11 +183,33 @@ export default function Game1Copy({
                 )}
               </div>
 
-              {/* Mẫu đáp án chuẩn của ý này (Bậc 1: Chép lại) */}
-              <div className="slot-sample-box">
-                <span className="sample-mini-label">Mẫu đáp án chuẩn:</span>
-                <p className="sample-text-content">{s.answer}</p>
-              </div>
+              {/* Mẫu đáp án chuẩn của ý này (Bậc 1: Chép lại) - có thể ẩn/hiện */}
+              {showReference ? (
+                <div className="slot-sample-box">
+                  <div className="sample-box-header">
+                    <span className="sample-mini-label">Mẫu đáp án chuẩn:</span>
+                    <button
+                      type="button"
+                      className="sample-hide-inline-btn"
+                      onClick={() => setShowReference(false)}
+                      title="Tạm ẩn đáp án này để tự gõ"
+                    >
+                      Ẩn mẫu
+                    </button>
+                  </div>
+                  <p className="sample-text-content">{s.answer}</p>
+                </div>
+              ) : (
+                <div
+                  className="slot-sample-box sample-hidden-box"
+                  onClick={() => setShowReference(true)}
+                  title="Bấm vào đây để hiện đáp án tham khảo"
+                >
+                  <span className="sample-hidden-msg">
+                    🙈 Đáp án tham khảo đang ẩn (Chạm vào đây để xem mẫu)
+                  </span>
+                </div>
+              )}
 
               {/* Ô gõ riêng cho ý này */}
               <div className="slot-input-wrap">

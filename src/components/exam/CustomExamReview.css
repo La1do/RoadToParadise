@@ -110,6 +110,9 @@
   .mode-toggle-grid {
     grid-template-columns: 1fr 1fr;
   }
+  .mode-toggle-grid.three-modes {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .mode-toggle-btn {
@@ -128,6 +131,12 @@
 
 .mode-toggle-btn:hover {
   border-color: #64748b;
+}
+
+.mode-toggle-btn.active-copy {
+  border-color: #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, #0f172a 100%);
+  color: #ffffff;
 }
 
 .mode-toggle-btn.active-scramble {
@@ -379,6 +388,103 @@
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.04em;
+}
+
+.toggle-ref-action-btn {
+  background: #334155;
+  border: 1px solid #475569;
+  color: #fbbf24;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.toggle-ref-action-btn:hover {
+  background: #475569;
+  color: #ffffff;
+}
+
+/* Hộp đáp án tham khảo linh hoạt */
+.floating-ref-drawer {
+  background: #1e293b;
+  border: 1.5px solid #f59e0b;
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-top: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  animation: fadeIn 0.2s ease-in;
+}
+
+.floating-ref-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 6px;
+}
+
+.floating-ref-tag {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #fbbf24;
+  letter-spacing: 0.04em;
+}
+
+.floating-ref-close-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.floating-ref-close-btn:hover {
+  color: #ffffff;
+}
+
+.floating-ref-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.floating-ref-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.ref-slot-pill {
+  background: #0284c7;
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.ref-slot-title {
+  color: #e2e8f0;
+}
+
+.ref-slot-answer {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.action-btn.switch-copy {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
 }
 
 .session-header-center {

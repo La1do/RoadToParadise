@@ -99,6 +99,10 @@ test('Game 2: Yêu cầu giao diện và logic (Game2Scramble)', () => {
   assert.match(jsxContent, /onDrop/, 'Phải có vùng thả (drop zone)');
   assert.match(jsxContent, /slots\.map/, 'Phải tách riêng từng ý thành từng card');
 
+  // Hỗ trợ lưu trữ trạng thái khi đổi câu (initialState và onStateChange)
+  assert.match(jsxContent, /initialState/, 'Game2Scramble phải hỗ trợ prop initialState');
+  assert.match(jsxContent, /onStateChange/, 'Game2Scramble phải hỗ trợ prop onStateChange');
+
   // Kiểm tra CSS: thẻ bo tròn, chiều cao >= 44px
   assert.match(cssContent, /min-height:\s*44px/, 'Thẻ từ và nút phải có chiều cao >= 44px');
   assert.match(cssContent, /border-radius:\s*22px/, 'Thẻ bo tròn');

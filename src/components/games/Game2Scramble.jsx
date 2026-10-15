@@ -17,6 +17,8 @@ import './Game2Scramble.css';
  * @param {object} [props.question] - Câu hỏi đầy đủ ({ id, stageId, question, slots })
  * @param {object} [props.slot] - Tương thích ngược: truyền 1 slot lẻ
  * @param {string} [props.questionText] - Nội dung câu hỏi lớn (khi truyền slot lẻ)
+ * @param {object} [props.initialState] - Dữ liệu đã làm trước đó ({ slotStates, summary }) để không mất đáp án khi chuyển câu
+ * @param {function} [props.onStateChange] - Callback báo cho component cha mỗi khi người dùng thay đổi trạng thái ghép/kiểm tra
  * @param {function} [props.onComplete] - Callback khi hoàn thành đúng toàn bộ các ý
  * @param {function} [props.onNext] - Callback chuyển sang câu tiếp theo
  */
@@ -24,6 +26,8 @@ export default function Game2Scramble({
   question,
   slot,
   questionText,
+  initialState,
+  onStateChange,
   onComplete,
   onNext
 }) {
@@ -45,40 +49,72 @@ export default function Game2Scramble({
       }];
 
   // State từng ý: { [slotIndex]: { exerciseData, trayItems, poolItems, result } }
-  const [slotStates, setSlotStates] = useState({});
-  const [summary, setSummary] = useState(null);
+  const [slotStates, setSlotStates] = useState(() => {
+    const saved = initialState?.slotStates;
+    const init = {};
+    slots.forEach(s => {
+      if (saved && saved[s.slotIndex]) {
+        init[s.slotIndex] = saved[s.slotIndex];
+      } else {
+        const ex = generateStep2Arrange({
+          ...s,
+          answer: s.fullAnswer || s.answer || s.targetAnswer || ''
+        });
+        init[s.slotIndex] = {
+          exerciseData: ex,
+          trayItems: [],
+          poolItems: ex.shuffledItems || [],
+          result: null
+        };
+      }
+    });
+    return init;
+  });
+
+  const [summary, setSummary] = useState(() => initialState?.summary || null);
 
   // Kéo thả: { slotIndex, item, source: 'pool' | 'tray', fromIndex?: number }
   const dragRef = useRef(null);
   const [dragInfo, setDragInfo] = useState(null);
   const [dropTarget, setDropTarget] = useState(null);
 
-  // Khởi tạo lại khi đổi câu hỏi
+  // Khởi tạo lại khi đổi câu hỏi hoặc khi initialState được cung cấp
   useEffect(() => {
+    const saved = initialState?.slotStates;
     const next = {};
     slots.forEach(s => {
-      const ex = generateStep2Arrange({
-        ...s,
-        answer: s.fullAnswer || s.answer || s.targetAnswer || ''
-      });
-      next[s.slotIndex] = {
-        exerciseData: ex,
-        trayItems: [],
-        poolItems: ex.shuffledItems || [],
-        result: null // null | { isCorrect: boolean, error?: string, posResults: boolean[] }
-      };
+      if (saved && saved[s.slotIndex]) {
+        next[s.slotIndex] = saved[s.slotIndex];
+      } else {
+        const ex = generateStep2Arrange({
+          ...s,
+          answer: s.fullAnswer || s.answer || s.targetAnswer || ''
+        });
+        next[s.slotIndex] = {
+          exerciseData: ex,
+          trayItems: [],
+          poolItems: ex.shuffledItems || [],
+          result: null // null | { isCorrect: boolean, error?: string, posResults: boolean[] }
+        };
+      }
     });
     setSlotStates(next);
-    setSummary(null);
+    setSummary(initialState?.summary || null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [targetQuestion?.id]);
+  }, [targetQuestion?.id, initialState]);
 
   const updateSlot = (slotIndex, updater) => {
     setSlotStates(prev => {
       const cur = prev[slotIndex];
       if (!cur) return prev;
-      return { ...prev, [slotIndex]: updater(cur) };
+      const updatedSlot = updater(cur);
+      const nextStates = { ...prev, [slotIndex]: updatedSlot };
+      if (typeof onStateChange === 'function') {
+        onStateChange({ slotStates: nextStates, summary: null });
+      }
+      return nextStates;
     });
+    setSummary(null);
   };
 
   // --- KÉO THẢ VÀO Ô LƯỚI ---
@@ -233,8 +269,16 @@ export default function Game2Scramble({
     };
     setSummary(sumData);
 
+    if (typeof onStateChange === 'function') {
+      onStateChange({
+        slotStates: newStates,
+        summary: sumData
+      });
+    }
+
     if (isAllExact && typeof onComplete === 'function') {
       onComplete({
+        questionId: targetQuestion.id,
         isPassed: true,
         isExact: true,
         summary: sumData,

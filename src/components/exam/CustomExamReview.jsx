@@ -1,19 +1,23 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import questionsData from '../../data/questions.json';
 import { compareAnswer } from '../../core/gradeEngine.js';
 import { loadMistakeBook, addExamRecord } from '../../core/storageEngine.js';
+import Game1Copy from '../games/Game1Copy.jsx';
 import Game2Scramble from '../games/Game2Scramble.jsx';
 import './CustomExamReview.css';
 
 /**
- * CustomExamReview - Chế độ Ôn tập Xáo từ & Thi riêng tự chọn
+ * CustomExamReview - Chế độ Ôn tập & Thi riêng tự chọn
  *
- * Cho phép người dùng:
- * 1. Tùy chọn chế độ: Ôn tập Xáo từ (Scramble) hoặc Thi tính điểm (Exam).
- * 2. Tùy chọn phạm vi câu hỏi: Toàn bộ, theo chặng, ngẫu nhiên N câu, sổ tiếc nuối, hoặc tick chọn từng câu 1..20.
- * 3. Tùy chọn xáo trộn thứ tự và đếm giờ làm bài.
- * 4. Chấm điểm chi tiết từng câu, từng ý (tô đỏ từ sai), thống kê tổng kết.
- * 5. Nút thi lại ngay các câu chưa đúng.
+ * Hỗ trợ 3 chế độ:
+ * 1. ✍️ Ôn tập Chép lại (Copy): Gõ từng ý theo mẫu, có nút ẩn/hiện đáp án tham khảo để tự nhớ.
+ * 2. 🧩 Ôn tập Xáo từ (Scramble): Kéo thả/chạm ghép cụm từ lưới 2x2.
+ * 3. 📝 Chế độ Thi riêng (Real Exam): Thi tính điểm, có đồng hồ đếm giờ, lưu lịch sử.
+ *
+ * Tính năng nổi bật:
+ * - Chế độ ẩn / hiện đáp án tham khảo linh hoạt (nút toggle 👁️ / 🙈).
+ * - Lưu bài làm khi nhảy qua lại giữa các câu hỏi, không bị mất dữ liệu.
+ * - Tự do chọn phạm vi câu hỏi: Toàn bộ 20 câu, theo chặng, ngẫu nhiên hoặc tick chọn thủ công.
  */
 export default function CustomExamReview({ onBackToMap }) {
   const allQuestions = questionsData.questions;
@@ -22,16 +26,23 @@ export default function CustomExamReview({ onBackToMap }) {
   const [viewState, setViewState] = useState('setup');
 
   // Cấu hình đợt ôn thi:
-  const [mode, setMode] = useState('scramble'); // 'scramble' | 'exam'
+  const [mode, setMode] = useState('copy'); // 'copy' | 'scramble' | 'exam'
   const [selectedQuestionIds, setSelectedQuestionIds] = useState([1, 2, 3, 4, 5]);
   const [isShuffle, setIsShuffle] = useState(false);
   const [timeLimitMinutes, setTimeLimitMinutes] = useState(0); // 0 = Không giới hạn
+  const [showReferenceAnswer, setShowReferenceAnswer] = useState(true); // Ẩn / hiện đáp án tham khảo
 
   // Session state:
   const [sessionQuestions, setSessionQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Lưu câu trả lời theo từng chế độ để chuyển câu không mất bài:
+  // Copy answers: { [questionId]: { [slotIndex]: text } }
+  const [copyAnswers, setCopyAnswers] = useState({});
   // Exam inputs: { [questionId]: { [slotIndex]: text } }
   const [examAnswers, setExamAnswers] = useState({});
+  // Scramble states: { [questionId]: { slotStates, summary } }
+  const [scrambleProgress, setScrambleProgress] = useState({});
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   // Result state:
@@ -134,12 +145,22 @@ export default function CustomExamReview({ onBackToMap }) {
 
     setSessionQuestions(qList);
     setCurrentIndex(0);
+    setCopyAnswers({});
     setExamAnswers({});
+    setScrambleProgress({});
     setElapsedSeconds(0);
     setViewState('session');
   };
 
-  // Cập nhật câu trả lời của một ý trong chế độ thi
+  // Lưu câu trả lời chế độ Chép lại
+  const handleCopyStateChange = (qId, inputs) => {
+    setCopyAnswers(prev => ({
+      ...prev,
+      [qId]: inputs
+    }));
+  };
+
+  // Cập nhật câu trả lời chế độ Thi
   const handleExamInputChange = (qId, slotIndex, value) => {
     setExamAnswers(prev => ({
       ...prev,
@@ -148,6 +169,123 @@ export default function CustomExamReview({ onBackToMap }) {
         [slotIndex]: value
       }
     }));
+  };
+
+  // Cập nhật trạng thái chế độ Xáo từ
+  const handleScrambleStateChange = (qId, state) => {
+    setScrambleProgress(prev => ({
+      ...prev,
+      [qId]: state
+    }));
+  };
+
+  // Nộp bài và tổng kết cho chế độ Chép lại
+  const handleSubmitCopy = () => {
+    const results = [];
+    let totalScore = 0;
+    let perfectQuestionsCount = 0;
+
+    sessionQuestions.forEach(q => {
+      const qAnswers = copyAnswers[q.id] || {};
+      const slotResults = [];
+      let qCorrectSlots = 0;
+
+      q.slots.forEach(s => {
+        const userText = qAnswers[s.slotIndex] || '';
+        const grade = compareAnswer(userText, s.answer);
+        slotResults.push({
+          slot: s,
+          userInput: userText,
+          grade
+        });
+        if (grade.isExact) qCorrectSlots++;
+      });
+
+      const isQuestionPerfect = qCorrectSlots === q.slots.length;
+      if (isQuestionPerfect) perfectQuestionsCount++;
+
+      const questionAccuracy = Math.round(
+        slotResults.reduce((acc, curr) => acc + curr.grade.accuracy, 0) / q.slots.length
+      );
+      totalScore += questionAccuracy;
+
+      results.push({
+        question: q,
+        isPerfect: isQuestionPerfect,
+        accuracy: questionAccuracy,
+        slotResults
+      });
+    });
+
+    const overallAccuracy = Math.round(totalScore / sessionQuestions.length);
+
+    setExamResultData({
+      mode: 'copy',
+      totalQuestions: sessionQuestions.length,
+      perfectQuestionsCount,
+      overallAccuracy,
+      elapsedSeconds,
+      results,
+      completedAt: new Date().toISOString()
+    });
+    setViewState('result');
+  };
+
+  // Hoàn thành đợt ôn xáo từ và tổng kết
+  const handleSubmitScramble = () => {
+    const results = [];
+    let totalScore = 0;
+    let perfectQuestionsCount = 0;
+
+    sessionQuestions.forEach(q => {
+      const qState = scrambleProgress[q.id];
+      const slotResults = [];
+      let qCorrectSlots = 0;
+
+      q.slots.forEach(s => {
+        const sState = qState?.slotStates?.[s.slotIndex];
+        const isCorrect = sState?.result?.isCorrect || false;
+        if (isCorrect) qCorrectSlots++;
+
+        const userArrangedText = sState?.trayItems?.map(it => it.text).join(' ') || '';
+        slotResults.push({
+          slot: s,
+          userInput: userArrangedText,
+          grade: {
+            isExact: isCorrect,
+            accuracy: isCorrect ? 100 : 0,
+            userTokensResult: userArrangedText.split(' ').map(t => ({ text: t, status: isCorrect ? 'correct' : 'wrong' })),
+            targetTokensResult: s.answer.split(' ').map(t => ({ text: t, status: isCorrect ? 'correct' : 'missing' }))
+          }
+        });
+      });
+
+      const isQuestionPerfect = qCorrectSlots === q.slots.length;
+      if (isQuestionPerfect) perfectQuestionsCount++;
+
+      const questionAccuracy = Math.round((qCorrectSlots / q.slots.length) * 100);
+      totalScore += questionAccuracy;
+
+      results.push({
+        question: q,
+        isPerfect: isQuestionPerfect,
+        accuracy: questionAccuracy,
+        slotResults
+      });
+    });
+
+    const overallAccuracy = Math.round(totalScore / sessionQuestions.length);
+
+    setExamResultData({
+      mode: 'scramble',
+      totalQuestions: sessionQuestions.length,
+      perfectQuestionsCount,
+      overallAccuracy,
+      elapsedSeconds,
+      results,
+      completedAt: new Date().toISOString()
+    });
+    setViewState('result');
   };
 
   // Nộp bài thi và tính điểm
@@ -233,6 +371,15 @@ export default function CustomExamReview({ onBackToMap }) {
     setViewState('setup');
   };
 
+  // Chuyển sang ôn chép lại các câu này
+  const handleSwitchToCopyForThese = () => {
+    if (!examResultData) return;
+    const ids = examResultData.results.map(r => r.question.id);
+    setSelectedQuestionIds(ids);
+    setMode('copy');
+    setViewState('setup');
+  };
+
   // Câu hỏi hiện tại trong session
   const currentQ = sessionQuestions[currentIndex] || sessionQuestions[0];
 
@@ -243,16 +390,28 @@ export default function CustomExamReview({ onBackToMap }) {
         <div className="setup-view">
           <header className="setup-header">
             <div className="header-badge">✦ KHÔNG GIAN HỌC TỰ CHỌN</div>
-            <h1 className="header-title">Chế Độ Ôn Tập Xáo Từ & Thi Riêng</h1>
+            <h1 className="header-title">Chế Độ Ôn Tập & Thi Riêng</h1>
             <p className="header-desc">
-              Tự do cấu hình bài ôn ghép cụm từ hoặc thi thử tính điểm theo danh sách câu bạn muốn rèn luyện.
+              Tự do cấu hình bài ôn chép lại, ôn ghép cụm từ hoặc thi thử tính điểm theo danh sách câu bạn muốn rèn luyện.
             </p>
           </header>
 
-          {/* Chọn chế độ: Xáo từ vs Thi */}
+          {/* Chọn 1 trong 3 hình thức: Chép lại / Xáo từ / Thi */}
           <section className="setup-section">
             <label className="section-label">1. Chọn hình thức luyện tập:</label>
-            <div className="mode-toggle-grid">
+            <div className="mode-toggle-grid three-modes">
+              <button
+                type="button"
+                className={`mode-toggle-btn ${mode === 'copy' ? 'active-copy' : ''}`}
+                onClick={() => setMode('copy')}
+              >
+                <span className="mode-icon">✍️</span>
+                <div>
+                  <strong>Ôn tập Chép lại (Copy)</strong>
+                  <p>Hiển thị từng ý để gõ lại, có chế độ ẩn/hiện đáp án tham khảo</p>
+                </div>
+              </button>
+
               <button
                 type="button"
                 className={`mode-toggle-btn ${mode === 'scramble' ? 'active-scramble' : ''}`}
@@ -261,7 +420,7 @@ export default function CustomExamReview({ onBackToMap }) {
                 <span className="mode-icon">🧩</span>
                 <div>
                   <strong>Ôn tập Xáo từ (Scramble)</strong>
-                  <p>Luyện kéo thả / chạm ghép các cụm từ theo đúng thứ tự câu</p>
+                  <p>Luyện kéo thả / chạm ghép các cụm từ theo lưới 2x2</p>
                 </div>
               </button>
 
@@ -338,6 +497,17 @@ export default function CustomExamReview({ onBackToMap }) {
               </label>
             </div>
 
+            <div className="checkbox-option">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showReferenceAnswer}
+                  onChange={e => setShowReferenceAnswer(e.target.checked)}
+                />
+                <span>👁️ Mở sẵn đáp án tham khảo (có thể ẩn/hiện bất cứ lúc nào)</span>
+              </label>
+            </div>
+
             {mode === 'exam' && (
               <div className="timer-select-wrap">
                 <span>⏱️ Giới hạn thời gian:</span>
@@ -364,9 +534,9 @@ export default function CustomExamReview({ onBackToMap }) {
               onClick={handleStartSession}
               disabled={selectedQuestionIds.length === 0}
             >
-              {mode === 'scramble'
-                ? `🚀 Bắt đầu Ôn xáo từ (${selectedQuestionIds.length} câu) →`
-                : `🏁 Bắt đầu Bài thi (${selectedQuestionIds.length} câu) →`}
+              {mode === 'copy' && `✍️ Bắt đầu Ôn chép lại (${selectedQuestionIds.length} câu) →`}
+              {mode === 'scramble' && `🧩 Bắt đầu Ôn xáo từ (${selectedQuestionIds.length} câu) →`}
+              {mode === 'exam' && `🏁 Bắt đầu Bài thi (${selectedQuestionIds.length} câu) →`}
             </button>
           </div>
         </div>
@@ -386,8 +556,20 @@ export default function CustomExamReview({ onBackToMap }) {
                 ✕ Thoát
               </button>
               <span className="session-mode-badge">
-                {mode === 'scramble' ? '🧩 ÔN XÁO TỪ' : '📝 BÀI THI RIÊNG'}
+                {mode === 'copy' && '✍️ ÔN CHÉP LẠI'}
+                {mode === 'scramble' && '🧩 ÔN XÁO TỪ'}
+                {mode === 'exam' && '📝 BÀI THI RIÊNG'}
               </span>
+
+              {/* Nút ẩn/hiện đáp án tham khảo tiện lợi */}
+              <button
+                type="button"
+                className="toggle-ref-action-btn"
+                onClick={() => setShowReferenceAnswer(prev => !prev)}
+                title={showReferenceAnswer ? "Ẩn đáp án tham khảo để tự nhớ" : "Hiện đáp án tham khảo"}
+              >
+                {showReferenceAnswer ? '🙈 Ẩn đáp án' : '👁️ Hiện đáp án'}
+              </button>
             </div>
 
             <div className="session-header-center">
@@ -407,6 +589,24 @@ export default function CustomExamReview({ onBackToMap }) {
                   Nộp bài thi 🏁
                 </button>
               )}
+              {mode === 'scramble' && (
+                <button
+                  type="button"
+                  className="submit-exam-quick-btn"
+                  onClick={handleSubmitScramble}
+                >
+                  Hoàn thành đợt ôn 🏁
+                </button>
+              )}
+              {mode === 'copy' && (
+                <button
+                  type="button"
+                  className="submit-exam-quick-btn"
+                  onClick={handleSubmitCopy}
+                >
+                  Tổng kết đợt ôn 🏁
+                </button>
+              )}
             </div>
           </header>
 
@@ -414,7 +614,16 @@ export default function CustomExamReview({ onBackToMap }) {
           <div className="question-nav-strip">
             {sessionQuestions.map((q, idx) => {
               const isCurrent = idx === currentIndex;
-              const hasAnswered = mode === 'exam' && examAnswers[q.id] && Object.values(examAnswers[q.id]).some(txt => txt.trim());
+              let hasAnswered = false;
+              if (mode === 'exam') {
+                hasAnswered = examAnswers[q.id] && Object.values(examAnswers[q.id]).some(txt => txt && txt.trim());
+              } else if (mode === 'copy') {
+                hasAnswered = copyAnswers[q.id] && Object.values(copyAnswers[q.id]).some(txt => txt && txt.trim());
+              } else if (mode === 'scramble') {
+                hasAnswered = scrambleProgress[q.id]?.summary?.isAllExact ||
+                  (scrambleProgress[q.id]?.slotStates &&
+                   Object.values(scrambleProgress[q.id].slotStates).some(st => st.trayItems?.length > 0));
+              }
 
               return (
                 <button
@@ -429,18 +638,45 @@ export default function CustomExamReview({ onBackToMap }) {
             })}
           </div>
 
-          {/* NỘI DUNG 1: CHẾ ĐỘ ÔN TẬP XÁO TỪ (SCRAMBLE) */}
-          {mode === 'scramble' && (
-            <div className="scramble-session-body">
-              <Game2Scramble
+          {/* Hộp đáp án tham khảo (khi người dùng bật nút Hiện đáp án) */}
+          {showReferenceAnswer && (
+            <div className="floating-ref-drawer">
+              <div className="floating-ref-header">
+                <span className="floating-ref-tag">👁️ ĐÁP ÁN THAM KHẢO (CÂU #{currentQ.id})</span>
+                <button
+                  type="button"
+                  className="floating-ref-close-btn"
+                  onClick={() => setShowReferenceAnswer(false)}
+                  title="Ẩn"
+                >
+                  ✕ Ẩn
+                </button>
+              </div>
+              <div className="floating-ref-body">
+                {currentQ.slots.map(s => (
+                  <div key={s.slotIndex} className="floating-ref-row">
+                    <span className="ref-slot-pill">{s.label}</span>
+                    <strong className="ref-slot-title">{s.title || `Ý ${s.slotIndex}`}:</strong>
+                    <span className="ref-slot-answer">{s.answer}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ================= CHẾ ĐỘ 1: ÔN TẬP CHÉP LẠI (COPY) ================= */}
+          {mode === 'copy' && (
+            <div className="copy-session-body">
+              <Game1Copy
                 key={currentQ.id}
                 question={currentQ}
+                initialInputs={copyAnswers[currentQ.id]}
+                onStateChange={inputs => handleCopyStateChange(currentQ.id, inputs)}
                 onNext={() => {
                   if (currentIndex < sessionQuestions.length - 1) {
                     setCurrentIndex(prev => prev + 1);
                   } else {
-                    alert('Chúc mừng bạn đã hoàn thành tất cả các câu xáo từ trong đợt ôn này!');
-                    setViewState('setup');
+                    handleSubmitCopy();
                   }
                 }}
               />
@@ -463,7 +699,52 @@ export default function CustomExamReview({ onBackToMap }) {
                     if (currentIndex < sessionQuestions.length - 1) {
                       setCurrentIndex(prev => prev + 1);
                     } else {
-                      setViewState('setup');
+                      handleSubmitCopy();
+                    }
+                  }}
+                >
+                  {currentIndex < sessionQuestions.length - 1 ? 'Câu tiếp theo →' : 'Tổng kết đợt ôn ✓'}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ================= CHẾ ĐỘ 2: ÔN TẬP XÁO TỪ (SCRAMBLE) ================= */}
+          {mode === 'scramble' && (
+            <div className="scramble-session-body">
+              <Game2Scramble
+                key={currentQ.id}
+                question={currentQ}
+                initialState={scrambleProgress[currentQ.id]}
+                onStateChange={state => handleScrambleStateChange(currentQ.id, state)}
+                onNext={() => {
+                  if (currentIndex < sessionQuestions.length - 1) {
+                    setCurrentIndex(prev => prev + 1);
+                  } else {
+                    handleSubmitScramble();
+                  }
+                }}
+              />
+
+              {/* Điều hướng câu trước / câu sau */}
+              <div className="session-nav-footer">
+                <button
+                  type="button"
+                  className="nav-btn prev"
+                  disabled={currentIndex === 0}
+                  onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
+                >
+                  ← Câu trước
+                </button>
+
+                <button
+                  type="button"
+                  className="nav-btn next"
+                  onClick={() => {
+                    if (currentIndex < sessionQuestions.length - 1) {
+                      setCurrentIndex(prev => prev + 1);
+                    } else {
+                      handleSubmitScramble();
                     }
                   }}
                 >
@@ -473,7 +754,7 @@ export default function CustomExamReview({ onBackToMap }) {
             </div>
           )}
 
-          {/* NỘI DUNG 2: CHẾ ĐỘ THI RIÊNG (EXAM) */}
+          {/* ================= CHẾ ĐỘ 3: THI RIÊNG (EXAM) ================= */}
           {mode === 'exam' && (
             <div className="exam-session-body">
               <div className="exam-question-card">
@@ -557,7 +838,7 @@ export default function CustomExamReview({ onBackToMap }) {
             <h2 className="result-title">
               {examResultData.overallAccuracy === 100
                 ? 'Xuất Sắc! Bạn Đã Thuộc Lòng 100%!'
-                : `Hoàn Thành Bài Thi (${examResultData.perfectQuestionsCount}/${examResultData.totalQuestions} câu đạt 100%)`}
+                : `Hoàn Thành Đợt Luyện (${examResultData.perfectQuestionsCount}/${examResultData.totalQuestions} câu đạt 100%)`}
             </h2>
 
             <div className="result-stats-row">
@@ -583,10 +864,18 @@ export default function CustomExamReview({ onBackToMap }) {
 
             <button
               type="button"
+              className="action-btn switch-copy"
+              onClick={handleSwitchToCopyForThese}
+            >
+              ✍️ Ôn chép lại các câu này
+            </button>
+
+            <button
+              type="button"
               className="action-btn switch-scramble"
               onClick={handleSwitchToScrambleForThese}
             >
-              🧩 Chuyển sang Ôn xáo từ các câu này
+              🧩 Ôn xáo từ các câu này
             </button>
 
             <button
@@ -594,7 +883,7 @@ export default function CustomExamReview({ onBackToMap }) {
               className="action-btn new-setup"
               onClick={() => setViewState('setup')}
             >
-              ⚙️ Thiết lập đợt ôn thi mới
+              ⚙️ Thiết lập đợt mới
             </button>
           </div>
 
@@ -631,9 +920,9 @@ export default function CustomExamReview({ onBackToMap }) {
                         {/* Đáp án bạn gõ */}
                         <div className="diff-content-box">
                           <div className="diff-line">
-                            <span className="line-label">Bạn đã gõ:</span>
+                            <span className="line-label">Bài làm của bạn:</span>
                             <div className="tokens-display">
-                              {sr.grade.userTokensResult.length > 0 ? (
+                              {sr.grade.userTokensResult && sr.grade.userTokensResult.length > 0 ? (
                                 sr.grade.userTokensResult.map((tok, tIdx) => (
                                   <span
                                     key={tIdx}
@@ -653,14 +942,18 @@ export default function CustomExamReview({ onBackToMap }) {
                             <div className="diff-line target">
                               <span className="line-label">Đáp án chuẩn:</span>
                               <div className="tokens-display">
-                                {sr.grade.targetTokensResult.map((tok, tIdx) => (
-                                  <span
-                                    key={tIdx}
-                                    className={`token ${tok.status === 'correct' ? 'tok-target-ok' : 'tok-missing'}`}
-                                  >
-                                    {tok.text}
-                                  </span>
-                                ))}
+                                {sr.grade.targetTokensResult && sr.grade.targetTokensResult.length > 0 ? (
+                                  sr.grade.targetTokensResult.map((tok, tIdx) => (
+                                    <span
+                                      key={tIdx}
+                                      className={`token ${tok.status === 'correct' ? 'tok-target-ok' : 'tok-missing'}`}
+                                    >
+                                      {tok.text}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span>{sr.slot.answer}</span>
+                                )}
                               </div>
                             </div>
                           )}

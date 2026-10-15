@@ -19,6 +19,8 @@ export default function App() {
   const [selectedStep, setSelectedStep] = useState(1);
   const [cutsceneStageId, setCutsceneStageId] = useState(1);
   const [modalResult, setModalResult] = useState(null);
+  // Lưu trạng thái làm bài Game 2 để chuyển câu không bị mất đáp án
+  const [game2Progress, setGame2Progress] = useState({});
 
   // Bench mode state
   const [userInput, setUserInput] = useState('');
@@ -201,12 +203,61 @@ export default function App() {
         {viewMode === 'game2' && (
           <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-              <button
-                onClick={() => setViewMode('map')}
-                style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                ← Trở về bản đồ
-              </button>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <button
+                  onClick={() => setViewMode('map')}
+                  style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
+                >
+                  ← Trở về bản đồ
+                </button>
+
+                {/* Điều hướng nhanh câu trước / câu sau */}
+                <button
+                  disabled={selectedQuestion.id <= 1}
+                  onClick={() => {
+                    const prevQ = questionsData.questions.find(q => q.id === selectedQuestion.id - 1);
+                    if (prevQ) {
+                      setSelectedQuestion(prevQ);
+                      setSelectedSlotIndex(0);
+                    }
+                  }}
+                  style={{
+                    background: selectedQuestion.id <= 1 ? '#1e293b' : '#334155',
+                    color: selectedQuestion.id <= 1 ? '#64748b' : '#fff',
+                    border: '1px solid #475569',
+                    padding: '0.5rem 0.8rem',
+                    borderRadius: 6,
+                    cursor: selectedQuestion.id <= 1 ? 'not-allowed' : 'pointer',
+                    fontWeight: 600,
+                    fontSize: '0.85rem'
+                  }}
+                >
+                  ← Câu trước
+                </button>
+
+                <button
+                  disabled={selectedQuestion.id >= questionsData.questions.length}
+                  onClick={() => {
+                    const nextQ = questionsData.questions.find(q => q.id === selectedQuestion.id + 1);
+                    if (nextQ) {
+                      setSelectedQuestion(nextQ);
+                      setSelectedSlotIndex(0);
+                    }
+                  }}
+                  style={{
+                    background: selectedQuestion.id >= questionsData.questions.length ? '#1e293b' : '#334155',
+                    color: selectedQuestion.id >= questionsData.questions.length ? '#64748b' : '#fff',
+                    border: '1px solid #475569',
+                    padding: '0.5rem 0.8rem',
+                    borderRadius: 6,
+                    cursor: selectedQuestion.id >= questionsData.questions.length ? 'not-allowed' : 'pointer',
+                    fontWeight: 600,
+                    fontSize: '0.85rem'
+                  }}
+                >
+                  Câu sau →
+                </button>
+              </div>
 
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <span style={{ fontSize: '1rem', color: '#f59e0b', fontWeight: 'bold' }}>
@@ -222,11 +273,27 @@ export default function App() {
             </div>
 
             <Game2Scramble
+              key={selectedQuestion.id}
               question={selectedQuestion}
               slot={selectedQuestion}
               questionText={selectedQuestion.question}
+              initialState={game2Progress[selectedQuestion.id]}
+              onStateChange={state => {
+                setGame2Progress(prev => ({
+                  ...prev,
+                  [selectedQuestion.id]: state
+                }));
+              }}
               onComplete={res => setModalResult(res.summary ? { isExact: res.isExact, accuracy: res.summary.avgAccuracy } : res.reinforceGrade)}
-              onNext={() => setViewMode('map')}
+              onNext={() => {
+                const nextQ = questionsData.questions.find(q => q.id === selectedQuestion.id + 1);
+                if (nextQ) {
+                  setSelectedQuestion(nextQ);
+                  setSelectedSlotIndex(0);
+                } else {
+                  setViewMode('map');
+                }
+              }}
             />
           </div>
         )}
