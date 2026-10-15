@@ -6,7 +6,7 @@ import {
   LEARNING_STEPS,
   getNextWordHint
 } from './core';
-import { Game1Copy, Game2Scramble, GameResultModal } from './components/games';
+import { Game1Copy, Game2Scramble, GameResultModal, FirstPersonMotorbikeGame2 } from './components/games';
 import CharacterDemo from './components/character/CharacterDemo';
 import DayRoadMap from './components/map/DayRoadMap';
 import { CutscenePlayer, FirstPersonIntro, CUTSCENES } from './components/cutscenes';
@@ -45,6 +45,7 @@ export default function App() {
     { id: 'cutscene', label: '🎬 Kịch bản' },
     { id: 'game1', label: '✍️ Chép lại' },
     { id: 'game2', label: '🧩 Xáo từ' },
+    { id: 'motorbike', label: '🛵 Xe máy Wave (POV)' },
     { id: 'character', label: '👤 Nhân vật Minh' },
     { id: 'bench', label: '🧪 Core Bench' }
   ];
@@ -99,7 +100,7 @@ export default function App() {
       <main style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
         {/* 1. Bản đồ một ngày */}
         {viewMode === 'map' && (
-          <div style={{ width: '100%', maxWidth: 840, margin: '0 auto', background: '#090d16' }}>
+          <div style={{ width: '100%', maxWidth: 1240, margin: '0 auto', background: '#090d16' }}>
             <DayRoadMap
               onSelectAction={({ mode, question, slotIndex, stepId }) => {
                 setSelectedQuestion(question);
@@ -117,14 +118,14 @@ export default function App() {
 
         {/* 1.2. Chế độ Ôn tập Xáo từ & Thi riêng tự chọn (Tab riêng) */}
         {viewMode === 'custom-practice' && (
-          <div style={{ width: '100%', maxWidth: 1040, padding: '1rem', boxSizing: 'border-box' }}>
+          <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
             <CustomExamReview onBackToMap={() => setViewMode('map')} />
           </div>
         )}
 
         {/* 1.5. Cảnh mở đầu góc nhìn thứ nhất (POV Intro) */}
         {viewMode === 'pov' && (
-          <div style={{ width: '100%', maxWidth: 780, margin: '1rem auto' }}>
+          <div style={{ width: '100%', maxWidth: 1100, margin: '1rem auto' }}>
             <FirstPersonIntro
               tenNhanVat="Minh"
               soCau={selectedQuestion.id}
@@ -142,7 +143,7 @@ export default function App() {
 
         {/* 2. Cảnh Kịch Bản (Cutscene Player) */}
         {viewMode === 'cutscene' && (
-          <div style={{ width: '100%', maxWidth: 680, margin: '1rem auto' }}>
+          <div style={{ width: '100%', maxWidth: 900, margin: '1rem auto' }}>
             <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center', marginBottom: '0.8rem' }}>
               {[1, 2, 3, 4].map(sId => (
                 <button
@@ -175,15 +176,15 @@ export default function App() {
 
         {/* 3. Game 1: Chép lại (Học cả câu - tách từng ô input cho từng ý) */}
         {viewMode === 'game1' && (
-          <div style={{ width: '100%', maxWidth: 960, padding: '1rem', boxSizing: 'border-box' }}>
+          <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
               <button
                 onClick={() => setViewMode('map')}
-                style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: 4, cursor: 'pointer' }}
+                style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
               >
                 ← Trở về bản đồ
               </button>
-              <span style={{ fontSize: '0.9rem', color: '#f59e0b', fontWeight: 'bold' }}>
+              <span style={{ fontSize: '1rem', color: '#f59e0b', fontWeight: 'bold' }}>
                 Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Tách riêng từng ý
               </span>
             </div>
@@ -198,17 +199,26 @@ export default function App() {
 
         {/* 4. Game 2: Xáo từ (Học cả câu - tách từng ô theo từng ý) */}
         {viewMode === 'game2' && (
-          <div style={{ width: '100%', maxWidth: 960, padding: '1rem', boxSizing: 'border-box' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
+          <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <button
                 onClick={() => setViewMode('map')}
-                style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: 4, cursor: 'pointer' }}
+                style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
               >
                 ← Trở về bản đồ
               </button>
-              <span style={{ fontSize: '0.9rem', color: '#f59e0b', fontWeight: 'bold' }}>
-                Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Xáo từ theo từng ý
-              </span>
+
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <span style={{ fontSize: '1rem', color: '#f59e0b', fontWeight: 'bold' }}>
+                  Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Xáo từ
+                </span>
+                <button
+                  onClick={() => setViewMode('motorbike')}
+                  style={{ background: '#0284c7', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}
+                >
+                  🛵 Chuyển sang góc nhìn xe máy
+                </button>
+              </div>
             </div>
 
             <Game2Scramble
@@ -216,6 +226,44 @@ export default function App() {
               slot={selectedQuestion}
               questionText={selectedQuestion.question}
               onComplete={res => setModalResult(res.summary ? { isExact: res.isExact, accuracy: res.summary.avgAccuracy } : res.reinforceGrade)}
+              onNext={() => setViewMode('map')}
+            />
+          </div>
+        )}
+
+        {/* 4.5. Game 2: Cảnh chạy xe máy góc nhìn thứ nhất (Motorbike POV) */}
+        {viewMode === 'motorbike' && (
+          <div style={{ width: '100%', maxWidth: 1440, padding: '1rem', boxSizing: 'border-box' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <button
+                onClick={() => setViewMode('map')}
+                style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                ← Trở về bản đồ
+              </button>
+
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <span style={{ fontSize: '1rem', color: '#38bdf8', fontWeight: 'bold' }}>
+                  🛵 Minh (21 tuổi) lái xe Wave đi học • Xáo từ góc nhìn thứ nhất
+                </span>
+                <button
+                  onClick={() => setViewMode('game2')}
+                  style={{ background: '#334155', border: 'none', color: '#cbd5e1', padding: '0.4rem 0.8rem', borderRadius: 6, cursor: 'pointer', fontSize: '0.85rem' }}
+                >
+                  🧩 Xem dạng danh sách
+                </button>
+              </div>
+            </div>
+
+            <FirstPersonMotorbikeGame2
+              tenNhanVat="Minh"
+              soCau={selectedQuestion.id}
+              questionText={selectedQuestion.question}
+              dapAnChuan={selectedQuestion.fullAnswer || slot.answer}
+              cumTu={selectedQuestion.fullPhrases || slot.phrases}
+              theNhieu={['Lời giả dối', 'Kh 22:15', 'sách đóng']}
+              chang={selectedQuestion.stageId || 1}
+              onComplete={res => setModalResult({ isExact: res.isPassed, accuracy: res.accuracy })}
               onNext={() => setViewMode('map')}
             />
           </div>

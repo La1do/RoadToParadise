@@ -5,7 +5,7 @@
 
 .game1-container {
   width: 100%;
-  max-width: 980px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 16px;
   box-sizing: border-box;
@@ -425,5 +425,46 @@
   .slot-textarea {
     font-size: 1.05rem;
     min-height: 70px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .game1-container {
+    padding: 30px;
+  }
+
+  .game1-header {
+    padding: 24px 30px;
+  }
+
+  .game1-question-title {
+    font-size: 1.55rem;
+    line-height: 1.6;
+  }
+
+  .game1-slots-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  /* Nếu số ý là số lẻ, ý cuối cùng trải dài 2 cột */
+  .game1-slot-card:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+
+  .sample-text-content {
+    font-size: 1.15rem;
+    line-height: 1.6;
+  }
+
+  .slot-textarea {
+    font-size: 1.12rem;
+    min-height: 90px;
+  }
+
+  .game1-check-all-btn {
+    min-height: 54px;
+    font-size: 1.15rem;
   }
 }

@@ -2,7 +2,7 @@
 
 .game2-container {
   width: 100%;
-  max-width: 430px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 16px;
   box-sizing: border-box;
@@ -595,6 +595,70 @@
 
 .game2-btn-next-step:hover {
   background-color: #1d4ed8;
+}
+
+/* ================= RESPONSIVE: LAPTOP & IPAD ================= */
+@media (max-width: 480px) {
+  .game2-container {
+    max-width: 430px;
+    padding: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .game2-container {
+    padding: 24px;
+  }
+
+  .game2-question-title {
+    font-size: 1.35rem;
+  }
+
+  .game2-grid-cell {
+    min-height: 80px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .game2-container {
+    padding: 30px;
+  }
+
+  .game2-header {
+    padding: 24px 30px;
+  }
+
+  .game2-question-title {
+    font-size: 1.55rem;
+    line-height: 1.6;
+  }
+
+  .game2-slots-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .game2-slot-card:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+
+  .game2-grid-cell {
+    min-height: 88px;
+    padding: 12px 14px;
+  }
+
+  .game2-placed-card,
+  .game2-pool-card {
+    min-height: 52px;
+    font-size: 1.05rem;
+    padding: 10px 16px;
+  }
+
+  .game2-check-all-btn {
+    min-height: 54px;
+    font-size: 1.15rem;
+  }
 }
 
 /* Kéo thả */

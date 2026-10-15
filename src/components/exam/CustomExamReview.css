@@ -5,12 +5,18 @@
 
 .custom-practice-container {
   width: 100%;
-  max-width: 1040px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 16px;
   box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: #f8fafc;
+}
+
+@media (max-width: 1200px) {
+  .custom-practice-container {
+    max-width: 1040px;
+  }
 }
 
 /* ================= 1. SETUP VIEW ================= */

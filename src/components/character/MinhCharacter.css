@@ -451,35 +451,35 @@
 
 /* --- 1. ĐỨNG (.dung) --- */
 .minh-character-root.dung .tay-trai {
-  transform: rotate(2deg);
+  transform: none;
 }
 .minh-character-root.dung .tay-phai {
-  transform: rotate(-2deg);
+  transform: none;
 }
 
 /* --- 2. ĐI BỘ (.di-bo) --- */
 /* Bước đi sole phối cảnh trước-sau, tự nhiên, không choạc compa */
 @keyframes buoc-chan-trai {
   0%, 100% {
-    transform: rotate(-14deg) scale(0.96);
+    transform: rotate(-12deg);
   }
   50% {
-    transform: rotate(14deg) scale(1.02);
+    transform: rotate(12deg);
   }
 }
 
 @keyframes buoc-chan-phai {
   0%, 100% {
-    transform: rotate(14deg) scale(1.02);
+    transform: rotate(12deg);
   }
   50% {
-    transform: rotate(-14deg) scale(0.96);
+    transform: rotate(-12deg);
   }
 }
 
 @keyframes buoc-khuyu-chan-trai {
   0%, 100% {
-    transform: rotate(18deg);
+    transform: rotate(14deg);
   }
   35% {
     transform: rotate(4deg);
@@ -494,7 +494,7 @@
     transform: rotate(0deg);
   }
   35% {
-    transform: rotate(18deg);
+    transform: rotate(14deg);
   }
   65% {
     transform: rotate(4deg);
@@ -504,19 +504,19 @@
 /* Vung tay trước-sau theo hướng đi, không chụm vào giữa */
 @keyframes vung-tay-trai {
   0%, 100% {
-    transform: rotate(18deg);
+    transform: rotate(14deg);
   }
   50% {
-    transform: rotate(-14deg);
+    transform: rotate(-12deg);
   }
 }
 
 @keyframes vung-tay-phai {
   0%, 100% {
-    transform: rotate(-14deg);
+    transform: rotate(-12deg);
   }
   50% {
-    transform: rotate(18deg);
+    transform: rotate(14deg);
   }
 }
 
@@ -671,8 +671,7 @@
    .goc-chinh-dien (Chính diện)
    ======================================================== */
 .minh-character-root.goc-3-4 .minh-character-svg {
-  transform: perspective(900px) rotateY(-5deg);
-  transition: transform 0.35s ease;
+  transform: none;
 }
 
 .minh-character-root.goc-3-4 .chan-trai,
@@ -686,7 +685,7 @@
 }
 
 .minh-character-root.goc-side .minh-character-svg {
-  transform: perspective(900px) rotateY(-22deg) scaleX(0.92);
+  transform: scaleX(0.92);
   transition: transform 0.35s ease;
 }
 
