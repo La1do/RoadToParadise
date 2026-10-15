@@ -1,258 +1,298 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { compareAnswer } from '../../core/gradeEngine.js';
 import { getNextWordHint } from '../../core/hintEngine.js';
 import './Game1Copy.css';
 
 /**
- * Game 1: "Chép lại" (Copy)
+ * Game 1: "Chép lại" (Copy) - Tách riêng từng ô input cho từng ý của câu hỏi
  *
  * @param {object} props
- * @param {object} props.slot - Ô câu hỏi { slotIndex, label, title, answer, phrases }
- * @param {string} [props.questionText] - Nội dung câu hỏi lớn
- * @param {function} [props.onComplete] - Callback khi hoàn thành đúng hoặc nộp ({ isExact, gradeResult, usedHint, userInput })
- * @param {function} [props.onNext] - Callback chuyển sang bài tiếp theo
- * @param {function} [props.onHintUsed] - Callback khi người dùng bấm lấy gợi ý
+ * @param {object} props.question - Đối tượng câu hỏi đầy đủ ({ id, stageId, question, slots, fullAnswer })
+ * @param {object} [props.slot] - Tương thích ngược nếu truyền slot lẻ
+ * @param {function} [props.onComplete] - Callback khi hoàn thành đúng toàn bộ các ý
+ * @param {function} [props.onNext] - Callback chuyển sang câu tiếp theo
  */
 export default function Game1Copy({
+  question,
   slot,
   questionText,
   onComplete,
-  onNext,
-  onHintUsed
+  onNext
 }) {
-  const targetAnswer = slot?.fullAnswer || slot?.answer || slot?.targetAnswer || '';
-  const slotLabel = slot?.id ? `Câu ${slot.id}` : (slot?.label || (slot?.slotIndex ? `Ô ${slot.slotIndex}` : ''));
-  const slotTitle = slot?.question || slot?.title || slot?.slotTitle || '';
+  // Chuẩn hóa dữ liệu: Lấy danh sách các ý (slots)
+  const targetQuestion = question || (slot ? {
+    id: slot.questionId || 1,
+    question: questionText || slot.questionText || '',
+    slots: [slot]
+  } : null);
 
-  const [userInput, setUserInput] = useState('');
-  const [gradeResult, setGradeResult] = useState(null);
-  const [hint, setHint] = useState(null);
-  const [usedHint, setUsedHint] = useState(false);
-  const textareaRef = useRef(null);
+  const slots = targetQuestion?.slots && targetQuestion.slots.length > 0
+    ? targetQuestion.slots
+    : [{ slotIndex: 1, label: '①', title: '', answer: targetQuestion?.fullAnswer || targetQuestion?.answer || '' }];
 
-  // Reset state khi đổi slot
+  // State: lưu giá trị gõ của từng ý { [slotIndex]: text }
+  const [inputs, setInputs] = useState({});
+  // State: kết quả chấm điểm từng ý { [slotIndex]: GradeResult }
+  const [gradeResults, setGradeResults] = useState({});
+  // State: gợi ý từng ý { [slotIndex]: Hint }
+  const [hints, setHints] = useState({});
+  // State: đánh dấu đã dùng gợi ý ở ý nào
+  const [usedHints, setUsedHints] = useState({});
+  // Tổng kết sau khi kiểm tra
+  const [summary, setSummary] = useState(null);
+
+  // Reset state khi đổi câu hỏi
   useEffect(() => {
-    setUserInput('');
-    setGradeResult(null);
-    setHint(null);
-    setUsedHint(false);
-  }, [slot?.slotIndex, targetAnswer]);
+    setInputs({});
+    setGradeResults({});
+    setHints({});
+    setUsedHints({});
+    setSummary(null);
+  }, [targetQuestion?.id]);
 
-  // Xử lý kiểm tra bài làm
-  const handleCheck = () => {
-    if (!targetAnswer) return;
-    const result = compareAnswer(userInput, targetAnswer);
-    setGradeResult(result);
-
-    if (result.isExact && typeof onComplete === 'function') {
-      onComplete({
-        isExact: true,
-        gradeResult: result,
-        usedHint,
-        userInput
+  const handleInputChange = (slotIndex, value) => {
+    setInputs(prev => ({ ...prev, [slotIndex]: value }));
+    // Xóa kết quả chấm cũ của ô này khi người dùng gõ lại
+    if (gradeResults[slotIndex]) {
+      setGradeResults(prev => {
+        const next = { ...prev };
+        delete next[slotIndex];
+        return next;
       });
     }
   };
 
-  // Xử lý lấy gợi ý 1 từ
-  const handleGetHint = () => {
-    if (!targetAnswer) return;
-    const h = getNextWordHint(userInput, targetAnswer);
-    setHint(h);
-    setUsedHint(true);
-    if (typeof onHintUsed === 'function') {
-      onHintUsed();
+  // Lấy gợi ý cho một ý cụ thể
+  const handleGetHintForSlot = (slotItem) => {
+    const currentText = inputs[slotItem.slotIndex] || '';
+    const h = getNextWordHint(currentText, slotItem.answer);
+    setHints(prev => ({ ...prev, [slotItem.slotIndex]: h }));
+    setUsedHints(prev => ({ ...prev, [slotItem.slotIndex]: true }));
+  };
+
+  // Điền từ gợi ý vào ô
+  const handleInsertHint = (slotItem) => {
+    const h = hints[slotItem.slotIndex];
+    if (!h?.hintWord) return;
+    const currentText = inputs[slotItem.slotIndex] || '';
+    const newText = currentText ? `${currentText.trim()} ${h.hintWord}` : h.hintWord;
+    handleInputChange(slotItem.slotIndex, newText);
+    setHints(prev => ({ ...prev, [slotItem.slotIndex]: null }));
+  };
+
+  // Chấm điểm riêng một ý
+  const handleCheckSingleSlot = (slotItem) => {
+    const text = inputs[slotItem.slotIndex] || '';
+    const result = compareAnswer(text, slotItem.answer);
+    setGradeResults(prev => ({ ...prev, [slotItem.slotIndex]: result }));
+  };
+
+  // Chấm điểm TOÀN BỘ các ý của câu hỏi
+  const handleCheckAll = () => {
+    const newResults = {};
+    let correctCount = 0;
+    let totalAccuracy = 0;
+
+    slots.forEach(s => {
+      const text = inputs[s.slotIndex] || '';
+      const result = compareAnswer(text, s.answer);
+      newResults[s.slotIndex] = result;
+      if (result.isExact) correctCount++;
+      totalAccuracy += result.accuracy;
+    });
+
+    setGradeResults(newResults);
+
+    const isAllExact = correctCount === slots.length;
+    const avgAccuracy = Math.round(totalAccuracy / slots.length);
+
+    const sumData = {
+      isAllExact,
+      correctCount,
+      totalCount: slots.length,
+      avgAccuracy
+    };
+    setSummary(sumData);
+
+    if (isAllExact && typeof onComplete === 'function') {
+      onComplete({
+        isExact: true,
+        summary: sumData,
+        gradeResults: newResults
+      });
     }
   };
 
-  // Thêm từ gợi ý vào ô nhập nếu người dùng muốn
-  const handleInsertHint = () => {
-    if (!hint?.hintWord) return;
-    const trimmed = userInput.trim();
-    const updated = trimmed ? `${trimmed} ${hint.hintWord}` : hint.hintWord;
-    setUserInput(updated);
-    setHint(null);
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  };
-
-  // Đếm số từ thiếu từ targetTokensResult nếu đã chấm
-  const missingCount = gradeResult
-    ? gradeResult.targetTokensResult.filter(t => t.status === 'missing').length
-    : 0;
+  if (!targetQuestion) {
+    return <div className="game1-container">Không tìm thấy câu hỏi</div>;
+  }
 
   return (
-    <div className="game1-container">
-      {/* Tiêu đề & Thông tin ô */}
-      <div className="game1-header">
-        <div className="game1-slot-info">
-          {slotLabel && <span className="game1-slot-badge">{slotLabel}</span>}
-          {slotTitle && <span className="game1-slot-title">{slotTitle}</span>}
+    <div className="game1-container responsive-view">
+      {/* 1. Header câu hỏi */}
+      <header className="game1-header">
+        <div className="game1-badge-row">
+          <span className="game1-chapter-badge">CHẶNG {targetQuestion.stageId || 1}</span>
+          <span className="game1-question-pill">CÂU HỎI {targetQuestion.id} ({slots.length} Ý CẦN GÕ)</span>
         </div>
-        {questionText && <p className="game1-guide">{questionText}</p>}
-      </div>
+        <h2 className="game1-question-title">{targetQuestion.question}</h2>
+      </header>
 
-      {/* Khung mẫu hiển thị đáp án chuẩn ở trên - Kiểu chữ to, rõ ràng */}
-      <div
-        className={`game1-model-card ${
-          gradeResult
-            ? gradeResult.isExact
-              ? 'all-correct'
-              : missingCount > 0
-              ? 'has-missing'
-              : ''
-            : ''
-        }`}
-      >
-        <div className="game1-model-label">Đáp án mẫu (Chép lại chính xác):</div>
-        <div className="game1-model-text">
-          {gradeResult ? (
-            <div className="game1-tokens-wrap">
-              {gradeResult.targetTokensResult.map((tok, idx) => (
-                <span
-                  key={idx}
-                  className={`game1-target-token ${
-                    tok.status === 'missing' ? 'missing' : 'correct'
-                  }`}
-                  title={tok.status === 'missing' ? 'Từ còn thiếu trong bài làm' : 'Từ đã gõ đúng'}
-                >
-                  {tok.text}
-                </span>
-              ))}
-            </div>
-          ) : (
-            <span>{targetAnswer}</span>
-          )}
-        </div>
-      </div>
+      {/* 2. Danh sách các ý cần gõ - Mỗi ý có một ô input riêng */}
+      <div className="game1-slots-list">
+        {slots.map((s, index) => {
+          const sIndex = s.slotIndex;
+          const currentVal = inputs[sIndex] || '';
+          const result = gradeResults[sIndex];
+          const slotHint = hints[sIndex];
 
-      {/* Ô nhập câu trả lời - Mobile-first (360-430px), hỗ trợ Telex/VNI */}
-      <div className="game1-input-card">
-        <label htmlFor="game1-input" className="game1-input-label">
-          Ô nhập câu trả lời:
-        </label>
-        <textarea
-          ref={textareaRef}
-          id="game1-input"
-          className="game1-textarea"
-          value={userInput}
-          onChange={e => setUserInput(e.target.value)}
-          placeholder="Nhập lại chính xác câu trên..."
-          autoCapitalize="none"
-          autoCorrect="off"
-          spellCheck="false"
-          autoComplete="off"
-          rows={3}
-        />
-      </div>
+          return (
+            <div
+              key={sIndex}
+              className={`game1-slot-card ${result ? (result.isExact ? 'slot-passed' : 'slot-failed') : ''}`}
+            >
+              {/* Header của từng ý */}
+              <div className="slot-card-header">
+                <div className="slot-label-group">
+                  <span className="slot-tag-pill">{s.label || `Ý ${index + 1}`}</span>
+                  <strong className="slot-title-text">{s.title || `Ý số ${index + 1}`}</strong>
+                </div>
 
-      {/* Hàng nút bấm */}
-      <div className="game1-actions">
-        <button
-          type="button"
-          className="game1-btn game1-btn-primary"
-          onClick={handleCheck}
-        >
-          Kiểm tra
-        </button>
-
-        <button
-          type="button"
-          className="game1-btn game1-btn-hint"
-          onClick={handleGetHint}
-        >
-          Gợi ý 1 từ
-        </button>
-      </div>
-
-      {/* Hộp gợi ý từ tiếp theo */}
-      {hint && (
-        <div className="game1-hint-box">
-          <div>
-            {hint.hintWord ? (
-              <>
-                Từ tiếp theo: <span className="game1-hint-badge">{hint.hintWord}</span>
-                {hint.remainingWordCount > 0 && (
-                  <span style={{ marginLeft: 6, fontSize: '0.8rem' }}>
-                    (còn {hint.remainingWordCount} từ)
+                {result && (
+                  <span className={`slot-status-badge ${result.isExact ? 'badge-exact' : 'badge-wrong'}`}>
+                    {result.isExact ? '✓ Chính xác' : `✕ Chưa đúng (${result.accuracy}%)`}
                   </span>
                 )}
-              </>
-            ) : (
-              <span>Bạn đã gõ đủ các từ!</span>
-            )}
-          </div>
-          {hint.hintWord && (
-            <button
-              type="button"
-              className="game1-btn-insert"
-              onClick={handleInsertHint}
-            >
-              Chèn từ
-            </button>
-          )}
-        </div>
-      )}
+              </div>
 
-      {/* Hiển thị kết quả kiểm tra tức thì */}
-      {gradeResult && (
-        <div className={`game1-result-box ${gradeResult.isExact ? 'correct' : 'wrong'}`}>
-          <div className="game1-result-status">
-            <span
-              className={`game1-status-badge ${
-                gradeResult.isExact ? 'correct' : 'wrong'
-              }`}
-            >
-              {gradeResult.isExact ? 'Chính xác 100%!' : 'Chưa đúng hoàn toàn'}
-            </span>
-            <span className="game1-accuracy-badge">
-              Độ chính xác: {gradeResult.accuracy}%
-            </span>
-          </div>
+              {/* Mẫu đáp án chuẩn của ý này (Bậc 1: Chép lại) */}
+              <div className="slot-sample-box">
+                <span className="sample-mini-label">Mẫu đáp án chuẩn:</span>
+                <p className="sample-text-content">{s.answer}</p>
+              </div>
 
-          {/* Phân tích bài làm: từ sai tô đỏ nền nhạt (#f8d7da), từ đúng màu xanh lá */}
-          <div>
-            <div className="game1-analysis-label">Bài làm của bạn:</div>
-            <div className="game1-user-tokens">
-              {gradeResult.userTokensResult.length > 0 ? (
-                gradeResult.userTokensResult.map((tok, idx) => (
-                  <span
-                    key={idx}
-                    className={`game1-user-token ${
-                      tok.status === 'correct' ? 'correct' : 'wrong'
-                    }`}
+              {/* Ô gõ riêng cho ý này */}
+              <div className="slot-input-wrap">
+                <textarea
+                  className={`slot-textarea ${result ? (result.isExact ? 'border-success' : 'border-error') : ''}`}
+                  rows={2}
+                  value={currentVal}
+                  onChange={e => handleInputChange(sIndex, e.target.value)}
+                  placeholder={`Gõ lại chính xác nội dung ý ${s.label || index + 1}...`}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck="false"
+                />
+
+                {/* Thanh công cụ phụ trợ cho từng ý */}
+                <div className="slot-tools-bar">
+                  <button
+                    type="button"
+                    className="slot-hint-btn"
+                    onClick={() => handleGetHintForSlot(s)}
                   >
-                    {tok.text}
-                  </span>
-                ))
-              ) : (
-                <span style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '0.85rem' }}>
-                  (Chưa nhập từ nào)
-                </span>
+                    💡 Gợi ý 1 từ
+                  </button>
+
+                  <button
+                    type="button"
+                    className="slot-single-check-btn"
+                    onClick={() => handleCheckSingleSlot(s)}
+                  >
+                    Kiểm tra ý này
+                  </button>
+                </div>
+              </div>
+
+              {/* Hiển thị gợi ý nếu có */}
+              {slotHint && (
+                <div className="slot-hint-box">
+                  <div className="hint-message">
+                    💡 Từ tiếp theo: <strong>"{slotHint.hintWord}"</strong> (Còn {slotHint.remainingWordCount} từ)
+                  </div>
+                  <button
+                    type="button"
+                    className="hint-fill-btn"
+                    onClick={() => handleInsertHint(s)}
+                  >
+                    Chèn từ này vào ô
+                  </button>
+                </div>
+              )}
+
+              {/* Phân tích kết quả chấm điểm từng ý (Tô đỏ từ sai, tô vàng từ thiếu) */}
+              {result && !result.isExact && (
+                <div className="slot-diff-box">
+                  <div className="diff-section">
+                    <span className="diff-label">Từ bạn đã gõ (tô đỏ chỗ sai):</span>
+                    <div className="diff-tokens-row">
+                      {result.userTokensResult.map((tok, idx) => (
+                        <span
+                          key={idx}
+                          className={`token-chip ${tok.status === 'correct' ? 'token-correct' : 'token-wrong'}`}
+                        >
+                          {tok.text}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="diff-section">
+                    <span className="diff-label">Từ còn thiếu trong đáp án chuẩn:</span>
+                    <div className="diff-tokens-row">
+                      {result.targetTokensResult.map((tok, idx) => (
+                        <span
+                          key={idx}
+                          className={`token-chip ${tok.status === 'correct' ? 'token-neutral' : 'token-missing'}`}
+                        >
+                          {tok.text}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
-          </div>
+          );
+        })}
+      </div>
 
-          {/* Nhắc nhở nếu còn thiếu từ */}
-          {!gradeResult.isExact && missingCount > 0 && (
-            <div className="game1-missing-notice">
-              Bạn còn thiếu {missingCount} từ. Hãy chú ý các từ màu vàng ở đáp án mẫu phía trên.
+      {/* 3. Bảng tổng kết & Nút kiểm tra toàn bộ câu */}
+      <footer className="game1-footer">
+        {summary && (
+          <div className={`game1-summary-bar ${summary.isAllExact ? 'summary-passed' : 'summary-pending'}`}>
+            <span className="summary-icon">{summary.isAllExact ? '🎉' : '⚠️'}</span>
+            <div className="summary-text">
+              <strong>
+                {summary.isAllExact
+                  ? `Xuất sắc! Bạn đã gõ đúng toàn bộ ${summary.totalCount}/${summary.totalCount} ý!`
+                  : `Đã đúng ${summary.correctCount}/${summary.totalCount} ý (Độ chính xác: ${summary.avgAccuracy}%)`}
+              </strong>
+              <div>{summary.isAllExact ? 'Có thể tiếp tục sang câu tiếp theo.' : 'Hãy xem lại các từ màu đỏ để sửa lại.'}</div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Nút Tiếp tục nếu đã đúng hoàn toàn */}
-          {gradeResult.isExact && typeof onNext === 'function' && (
+        <div className="game1-main-actions">
+          <button
+            type="button"
+            className="game1-check-all-btn"
+            onClick={handleCheckAll}
+          >
+            ✓ Kiểm tra tất cả các ý
+          </button>
+
+          {summary?.isAllExact && onNext && (
             <button
               type="button"
-              className="game1-btn game1-btn-next"
+              className="game1-next-btn"
               onClick={onNext}
             >
-              Tiếp tục sang bước tiếp theo
+              Tiếp tục bài tiếp theo →
             </button>
           )}
         </div>
-      )}
+      </footer>
     </div>
   );
 }

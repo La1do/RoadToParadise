@@ -97,7 +97,7 @@ export default function App() {
       <main style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
         {/* 1. Bản đồ một ngày */}
         {viewMode === 'map' && (
-          <div style={{ width: '100%', maxWidth: 430, margin: '0 auto', background: '#090d16' }}>
+          <div style={{ width: '100%', maxWidth: 840, margin: '0 auto', background: '#090d16' }}>
             <DayRoadMap
               onSelectAction={({ mode, question, slotIndex, stepId }) => {
                 setSelectedQuestion(question);
@@ -115,7 +115,7 @@ export default function App() {
 
         {/* 1.5. Cảnh mở đầu góc nhìn thứ nhất (POV Intro) */}
         {viewMode === 'pov' && (
-          <div style={{ width: '100%', maxWidth: 430, margin: '1rem auto' }}>
+          <div style={{ width: '100%', maxWidth: 780, margin: '1rem auto' }}>
             <FirstPersonIntro
               tenNhanVat="Minh"
               soCau={selectedQuestion.id}
@@ -133,7 +133,7 @@ export default function App() {
 
         {/* 2. Cảnh Kịch Bản (Cutscene Player) */}
         {viewMode === 'cutscene' && (
-          <div style={{ width: '100%', maxWidth: 430, margin: '1rem auto' }}>
+          <div style={{ width: '100%', maxWidth: 680, margin: '1rem auto' }}>
             <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center', marginBottom: '0.8rem' }}>
               {[1, 2, 3, 4].map(sId => (
                 <button
@@ -164,9 +164,9 @@ export default function App() {
           </div>
         )}
 
-        {/* 3. Game 1: Chép lại (Học cả câu) */}
+        {/* 3. Game 1: Chép lại (Học cả câu - tách từng ô input cho từng ý) */}
         {viewMode === 'game1' && (
-          <div style={{ width: '100%', maxWidth: 430, padding: '1rem', boxSizing: 'border-box' }}>
+          <div style={{ width: '100%', maxWidth: 960, padding: '1rem', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
               <button
                 onClick={() => setViewMode('map')}
@@ -174,15 +174,14 @@ export default function App() {
               >
                 ← Trở về bản đồ
               </button>
-              <span style={{ fontSize: '0.85rem', color: '#f59e0b', fontWeight: 'bold' }}>
-                Học cả câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId})
+              <span style={{ fontSize: '0.9rem', color: '#f59e0b', fontWeight: 'bold' }}>
+                Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Tách riêng từng ý
               </span>
             </div>
 
             <Game1Copy
-              slot={selectedQuestion}
-              questionText={selectedQuestion.question}
-              onComplete={res => setModalResult(res.gradeResult)}
+              question={selectedQuestion}
+              onComplete={res => setModalResult(res.summary ? { isExact: res.isExact, accuracy: res.summary.avgAccuracy } : res.gradeResult)}
               onNext={() => setViewMode('game2')}
             />
           </div>
@@ -190,7 +189,7 @@ export default function App() {
 
         {/* 4. Game 2: Xáo từ (Học cả câu) */}
         {viewMode === 'game2' && (
-          <div style={{ width: '100%', maxWidth: 430, padding: '1rem', boxSizing: 'border-box' }}>
+          <div style={{ width: '100%', maxWidth: 880, padding: '1rem', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
               <button
                 onClick={() => setViewMode('map')}
@@ -198,8 +197,8 @@ export default function App() {
               >
                 ← Trở về bản đồ
               </button>
-              <span style={{ fontSize: '0.85rem', color: '#f59e0b', fontWeight: 'bold' }}>
-                Học cả câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId})
+              <span style={{ fontSize: '0.9rem', color: '#f59e0b', fontWeight: 'bold' }}>
+                Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Xáo từ
               </span>
             </div>
 

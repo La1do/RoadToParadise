@@ -12,8 +12,9 @@
   --road-stroke-color: rgba(251, 191, 36, calc(0.3 + 0.7 * var(--do-thuoc)));
   --heaven-aura-intensity: calc(0.35 + 0.65 * var(--do-thuoc));
 
-  max-width: 430px;
+  max-width: 820px;
   min-width: 320px;
+  width: 100%;
   margin: 0 auto;
   min-height: 100vh;
   box-sizing: border-box;
