@@ -1,0 +1,734 @@
+{
+  "stages": [
+    {
+      "id": 1,
+      "name": "Tuổi thơ",
+      "subtitle": "Chặng 1: Khởi đầu đức tin",
+      "questionIds": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Tuổi trẻ",
+      "subtitle": "Chặng 2: Vượt qua thử thách",
+      "questionIds": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Trưởng thành",
+      "subtitle": "Chặng 3: Chiến đấu và đắc thắng",
+      "questionIds": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Tuổi già",
+      "subtitle": "Chặng 4: Khải hoàn về đích",
+      "questionIds": [
+        16,
+        17,
+        18,
+        19,
+        20
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "stageId": 1,
+      "question": "Đức Chúa Trời ban cho hai loại khải thị ① là gì? trong đó, thời thành đạt khải huyền các đầy tớ của Đức Chúa Trời phải nhận khải thị ② gì? Hãy viết khải thị này ③ được truyền đạt theo quá trình nào?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Hai loại khải thị Đức Chúa Trời ban cho",
+          "answer": "Khải thị khải tượng (lời tiên tri), Khải thị thực thể",
+          "phrases": [
+            "Khải thị khải tượng",
+            "(lời tiên tri),",
+            "Khải thị thực thể"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Khải thị các đầy tớ phải nhận thời thành đạt khải huyền",
+          "answer": "Khải thị thực thể",
+          "phrases": [
+            "Khải thị thực thể"
+          ]
+        },
+        {
+          "slotIndex": 3,
+          "label": "③",
+          "title": "Quá trình truyền đạt khải thị",
+          "answer": "Đức Chúa Trời → Đức Chúa Jesus → Thiên sứ → Giăng Mới → Các đầy tớ",
+          "phrases": [
+            "Đức Chúa Trời",
+            "→ Đức Chúa Jesus",
+            "→ Thiên sứ",
+            "→ Giăng Mới",
+            "→ Các đầy tớ"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "stageId": 1,
+      "question": "Ở Kh 1:3, hãy viết ① ‘Người đọc’ và ② ‘Những người nghe' và ③ ‘Những người vâng giữ' từng đối tượng là ai và chương sách (câu kinh) tương đương đi kèm.",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "‘Người đọc’ là ai và câu kinh tương đương",
+          "answer": "Giăng Mới đã nhận ăn sách mở, Kh 10",
+          "phrases": [
+            "Giăng Mới đã nhận",
+            "ăn sách mở,",
+            "Kh 10"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "‘Những người nghe’ là ai và câu kinh tương đương",
+          "answer": "Dân chúng, các nước, các thứ tiếng, các vua học từ Giăng Mới, Kh 10:11",
+          "phrases": [
+            "Dân chúng, các nước,",
+            "các thứ tiếng, các vua",
+            "học từ Giăng Mới,",
+            "Kh 10:11"
+          ]
+        },
+        {
+          "slotIndex": 3,
+          "label": "③",
+          "title": "‘Những người vâng giữ’ là ai và câu kinh tương đương",
+          "answer": "Bao gồm Giăng Mới và 12 Bộ Tộc 144.000 và những người mặc áo trắng, Kh 7",
+          "phrases": [
+            "Bao gồm Giăng Mới",
+            "và 12 Bộ Tộc 144.000",
+            "và những người mặc áo trắng,",
+            "Kh 7"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "stageId": 1,
+      "question": "Nội dung bức thư đã gửi của Kh 2~3 ① có mấy điều, hãy viết nhân vật xuất hiện ở Kh 2-3 ② ba nhân vật theo thứ tự xuất hiện, từng nhân vật ③ đã làm việc gì?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Nội dung bức thư đã gửi của Kh 2~3 có mấy điều",
+          "answer": "3 điều : Những gì con thấy, những việc hiện có, những việc sắp phải xảy đến",
+          "phrases": [
+            "3 điều :",
+            "Những gì con thấy,",
+            "những việc hiện có,",
+            "những việc sắp phải xảy đến"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Ba nhân vật theo thứ tự xuất hiện",
+          "answer": "7 sứ giả, Satan đảng ni-cô-la, Giăng",
+          "phrases": [
+            "7 sứ giả,",
+            "Satan đảng ni-cô-la,",
+            "Giăng"
+          ]
+        },
+        {
+          "slotIndex": 3,
+          "label": "③",
+          "title": "Từng nhân vật đã làm việc gì",
+          "answer": "7 sứ giả : Lịch sử chân đèn dọn đường Satan đảng ni-cô-la : Của cúng hình tượng, giáo huấn, gian dâm Giăng : bức thư yêu cầu ăn năn và lời hứa",
+          "phrases": [
+            "7 sứ giả :",
+            "Lịch sử chân đèn dọn đường",
+            "Satan đảng ni-cô-la :",
+            "Của cúng hình tượng,",
+            "giáo huấn, gian dâm",
+            "Giăng : bức thư yêu cầu ăn năn",
+            "và lời hứa"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "stageId": 1,
+      "question": "Hãy viết 3 bí mật của khải huyền là gì và câu kinh đi kèm.",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Bí mật thứ nhất và câu kinh đi kèm",
+          "answer": "Bí mật của 7 ngôi sao và 7 chân đèn vàng, Kh 1:20",
+          "phrases": [
+            "Bí mật của 7 ngôi sao",
+            "và 7 chân đèn vàng,",
+            "Kh 1:20"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Bí mật thứ hai và câu kinh đi kèm",
+          "answer": "Bí mật của đại kỹ nữ và babylon và 7 đầu con thú có 10 sừng, Kh 17:5~7",
+          "phrases": [
+            "Bí mật của đại kỹ nữ",
+            "và babylon",
+            "và 7 đầu con thú có 10 sừng,",
+            "Kh 17:5~7"
+          ]
+        },
+        {
+          "slotIndex": 3,
+          "label": "③",
+          "title": "Bí mật thứ ba và câu kinh đi kèm",
+          "answer": "Bí mật của chiếc kèn cuối cùng thứ bảy, Kh 10:7",
+          "phrases": [
+            "Bí mật của chiếc kèn",
+            "cuối cùng thứ bảy,",
+            "Kh 10:7"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "stageId": 1,
+      "question": "Ở Kh 4:8 đã hứa ngai của Đức Chúa Trời sẽ đến đất này. Ngai của Đức Chúa Trời sẽ đến ① đâu của chương mấy khải huyền, thực thể nơi này ② ở đâu?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Ngai của Đức Chúa Trời sẽ đến đâu của chương mấy",
+          "answer": "Núi Si-ôn có 12 Bộ Tộc 144.000 đã được đóng ấn của Kh 14",
+          "phrases": [
+            "Núi Si-ôn",
+            "có 12 Bộ Tộc 144.000",
+            "đã được đóng ấn",
+            "của Kh 14"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Thực thể nơi này ở đâu",
+          "answer": "Tân Thiên Địa Jesus Giáo Đền Thờ Đền Tạm Làm Chứng",
+          "phrases": [
+            "Tân Thiên Địa Jesus Giáo",
+            "Đền Thờ Đền Tạm Làm Chứng"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "stageId": 2,
+      "question": "'Cuốn sách niêm bằng 7 ấn' trong tay phải của Đức Chúa Trời ở Kh 5 là 'Khải huyền'. Lý do suốt thời gian qua, trên trời trên đất không một ai hiểu được nội dung của sách niêm phong ① là gì, nội dung của sách niêm phong ② là gì?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Lý do suốt thời gian qua không một ai hiểu được nội dung",
+          "answer": "Vì thực thể chưa xuất hiện",
+          "phrases": [
+            "Vì thực thể",
+            "chưa xuất hiện"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Nội dung của sách niêm phong là gì",
+          "answer": "Bí mật Đức Chúa Trời sẽ thành đạt",
+          "phrases": [
+            "Bí mật Đức Chúa Trời",
+            "sẽ thành đạt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "stageId": 2,
+      "question": "Những người đã được đóng ấn của Kh 7 ① sau việc gì, ② là những người đã đến từ đâu như thế nào, thực thể họ ③ là ai?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Được đóng ấn sau việc gì",
+          "answer": "Sau phán xét trời cũ mặt trời trăng sao bội đạo của Kh 6",
+          "phrases": [
+            "Sau phán xét trời cũ",
+            "mặt trời trăng sao",
+            "bội đạo của Kh 6"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Là những người đã đến từ đâu như thế nào",
+          "answer": "Gặt về từ đồng ruộng",
+          "phrases": [
+            "Gặt về",
+            "từ đồng ruộng"
+          ]
+        },
+        {
+          "slotIndex": 3,
+          "label": "③",
+          "title": "Thực thể họ là ai",
+          "answer": "Tân Thiên Địa 12 Bộ Tộc 144.000",
+          "phrases": [
+            "Tân Thiên Địa",
+            "12 Bộ Tộc 144.000"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "stageId": 2,
+      "question": "Lý do chiếc kèn được thổi lên ở Kh 8 ① là gì, những người đã bị giết hại ở Kh 8-9 ② là ai, tiếng kèn 1~6 và tiếng kèn thứ 7 ③ khác nhau như thế nào?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Lý do chiếc kèn được thổi lên ở Kh 8",
+          "answer": "Vì đã tháo tất cả ấn, sách đã được mở ra",
+          "phrases": [
+            "Vì đã tháo tất cả ấn,",
+            "sách đã được mở ra"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Những người đã bị giết hại ở Kh 8-9 là ai",
+          "answer": "Những người đã bị đuổi đi tại Kh 6",
+          "phrases": [
+            "Những người đã bị đuổi đi",
+            "tại Kh 6"
+          ]
+        },
+        {
+          "slotIndex": 3,
+          "label": "③",
+          "title": "Tiếng kèn 1~6 và tiếng kèn thứ 7 khác nhau thế nào",
+          "answer": "Tiếng kèn 1~6: Sự chết của những kẻ bội đạo Tiếng kèn thứ 7: Chiếc kèn cứu rỗi",
+          "phrases": [
+            "Tiếng kèn 1~6:",
+            "Sự chết của những kẻ bội đạo",
+            "Tiếng kèn thứ 7:",
+            "Chiếc kèn cứu rỗi"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "stageId": 2,
+      "question": "Thời Chúa đến, 'Khải thị đã thành đạt cựu ước' do ① ai đã nhận ăn và làm chứng ở đâu, viết câu kinh dẫn chứng đi kèm, thời Chúa trở lại 'Khải thị đã thành đạt tân ước' do ② ai đã nhận ăn và làm chứng ở đâu, viết câu kinh dẫn chứng đi kèm.",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Thời Chúa đến: ai nhận ăn, làm chứng ở đâu, câu kinh",
+          "answer": "Đức Chúa Jesus, Dân Israel nổi loạn, Ê-xê, Mat 15:24",
+          "phrases": [
+            "Đức Chúa Jesus,",
+            "Dân Israel nổi loạn,",
+            "Ê-xê, Mat 15:24"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Thời Chúa trở lại: ai nhận ăn, làm chứng ở đâu, câu kinh",
+          "answer": "Giăng Mới, các hội thánh ở giữa tội lỗi, Kh 10, Kh 22:8, 16",
+          "phrases": [
+            "Giăng Mới,",
+            "các hội thánh ở giữa tội lỗi,",
+            "Kh 10,",
+            "Kh 22:8, 16"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "stageId": 2,
+      "question": "Hãy viết ‘Việc xảy ra khi chiếc kèn thứ 7 được thổi lên’ ① là gì, ‘Bí mật của chiếc kèn cuối cùng' ② là gì, viết 2 câu kinh liên quan đi kèm.",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Việc xảy ra khi chiếc kèn thứ 7 được thổi lên",
+          "answer": "Vương quốc thế gian trở thành Vương quốc Đức Chúa Trời",
+          "phrases": [
+            "Vương quốc thế gian trở thành",
+            "Vương quốc Đức Chúa Trời"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Bí mật của chiếc kèn cuối cùng và 2 câu kinh liên quan",
+          "answer": "Phục sinh và Sự sống đời đời tức biến hóa trở thành tạo vật mới, Kh 10:7, 1 Cô 15:51~54",
+          "phrases": [
+            "Phục sinh và Sự sống đời đời",
+            "tức biến hóa trở thành",
+            "tạo vật mới,",
+            "Kh 10:7, 1 Cô 15:51~54"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "stageId": 3,
+      "question": "Ở Kh 12:9~11, con trai và các anh em đã chiến đấu và chiến thắng bầy lũ của rồng bằng vũ khí ① ‘Huyết chiên con' và ② ‘Lời làm chứng' là gì? Vương quốc Đức Chúa Trời và sự cứu rỗi xảy ra ③ sau việc gì? Và lời hứa của Kh 2~3 đã thành đạt ④ ở chương mấy?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Vũ khí ‘Huyết chiên con’ là gì",
+          "answer": "Ngôi lời sự sống của Đức Chúa Jesus",
+          "phrases": [
+            "Ngôi lời sự sống",
+            "của Đức Chúa Jesus"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Vũ khí ‘Lời làm chứng’ là gì",
+          "answer": "Ngôi lời làm chứng thực thể thành đạt khải huyền",
+          "phrases": [
+            "Ngôi lời làm chứng",
+            "thực thể thành đạt",
+            "khải huyền"
+          ]
+        },
+        {
+          "slotIndex": 3,
+          "label": "③",
+          "title": "Vương quốc Đức Chúa Trời và sự cứu rỗi xảy ra sau việc gì",
+          "answer": "Sau khi chiến đấu và chiến thắng bầy lũ của rồng",
+          "phrases": [
+            "Sau khi chiến đấu",
+            "và chiến thắng bầy lũ của rồng"
+          ]
+        },
+        {
+          "slotIndex": 4,
+          "label": "④",
+          "title": "Lời hứa của Kh 2~3 đã thành đạt ở chương mấy",
+          "answer": "Kh 12",
+          "phrases": [
+            "Kh 12"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "stageId": 3,
+      "question": "'Trời' tức hiện trường của sự kiện Kh 13 ① ở đâu, '7 đầu và 10 sừng' của Kh 13 ② là ai của khải huyền chương mấy?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "‘Trời’ tức hiện trường của sự kiện Kh 13 ở đâu",
+          "answer": "Đền Thờ Đền Tạm cùng hiện trường với Kh 2-3",
+          "phrases": [
+            "Đền Thờ Đền Tạm",
+            "cùng hiện trường",
+            "với Kh 2-3"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "‘7 đầu và 10 sừng’ của Kh 13 là ai của chương mấy",
+          "answer": "7 mục tử và 10 người thẩm quyền của Babylon của Kh 17",
+          "phrases": [
+            "7 mục tử và 10 người thẩm quyền",
+            "của Babylon của Kh 17"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "stageId": 3,
+      "question": "'Bài ca mới' của Kh 14:3 ① là gì, cả thế giới ② chỉ có ai có thể hát bài ca mới, thực thể nơi học hát bài ca mới ③ ở đâu?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "‘Bài ca mới’ của Kh 14:3 là gì",
+          "answer": "Ngôi lời thực thể đã thành đạt của khải huyền",
+          "phrases": [
+            "Ngôi lời thực thể",
+            "đã thành đạt",
+            "của khải huyền"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Cả thế giới chỉ có ai có thể hát bài ca mới",
+          "answer": "12 Bộ Tộc 144.000 đã được đóng ấn",
+          "phrases": [
+            "12 Bộ Tộc 144.000",
+            "đã được đóng ấn"
+          ]
+        },
+        {
+          "slotIndex": 3,
+          "label": "③",
+          "title": "Thực thể nơi học hát bài ca mới ở đâu",
+          "answer": "Trung tâm truyền giáo Si-ôn trước ngai",
+          "phrases": [
+            "Trung tâm truyền giáo",
+            "Si-ôn trước ngai"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "stageId": 3,
+      "question": "Tại 'Đền Thờ Đền Tạm Làm Chứng' của Kh 15:5 ① ai, làm chứng điều gì, lý do duy nhất họ có thể làm chứng 2 điều ② là gì?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Tại Kh 15:5 ai làm chứng điều gì",
+          "answer": "Những người chiến thắng, Thực thể toàn sách khải huyền",
+          "phrases": [
+            "Những người chiến thắng,",
+            "Thực thể toàn sách khải huyền"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Lý do duy nhất họ có thể làm chứng 2 điều",
+          "answer": "Vì đã chứng kiến các thực thể tại hiện trường sự kiện, đã chiến đấu và chiến thắng kẻ hủy diệt",
+          "phrases": [
+            "Vì đã chứng kiến các thực thể",
+            "tại hiện trường sự kiện,",
+            "đã chiến đấu",
+            "và chiến thắng kẻ hủy diệt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "stageId": 3,
+      "question": "Hãy viết 'Tai họa' của khải huyền ① có mấy điều, là gì theo thứ tự, hãy viết đối tượng bị phán xét của 'Kh 6' và 'Kh 16' ② khác nhau như thế nào?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "‘Tai họa’ của khải huyền có mấy điều, thứ tự",
+          "answer": "3 điều, 7 ấn, 7 kèn, 7 bát",
+          "phrases": [
+            "3 điều,",
+            "7 ấn,",
+            "7 kèn,",
+            "7 bát"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Đối tượng bị phán xét của Kh 6 và Kh 16 khác nhau thế nào",
+          "answer": "Kh 6 : Những kẻ bội đạo Kh 16 : Những kẻ bội đạo và những kẻ hủy diệt",
+          "phrases": [
+            "Kh 6 : Những kẻ bội đạo",
+            "Kh 16 : Những kẻ bội đạo",
+            "và những kẻ hủy diệt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "stageId": 4,
+      "question": "‘Rượu nho gian dâm’ ① là gì, những người đã uống rượu nho gian dâm và các nước sụp đổ đã ở Kh 18 ② đã kết hôn với ai, chú rể và cô dâu đã kết hôn ③ là ai?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "‘Rượu nho gian dâm’ là gì",
+          "answer": "Giáo lý giả (trái thiện ác)",
+          "phrases": [
+            "Giáo lý giả",
+            "(trái thiện ác)"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Những người uống rượu nho gian dâm kết hôn với ai",
+          "answer": "Thần rồng Satan",
+          "phrases": [
+            "Thần rồng Satan"
+          ]
+        },
+        {
+          "slotIndex": 3,
+          "label": "③",
+          "title": "Chú rể và cô dâu đã kết hôn là ai",
+          "answer": "Satan và các tín đồ thuộc Satan",
+          "phrases": [
+            "Satan",
+            "và các tín đồ thuộc Satan"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "stageId": 4,
+      "question": "Lý do Đức Chúa Trời vẫn chưa phán xét Babylon ① là gì, hãy viết 1 câu kinh liên quan đi kèm, hãy viết phán xét này do ② ai, phán xét bằng gì?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Lý do chưa phán xét Babylon và 1 câu kinh liên quan",
+          "answer": "Vì dân chúng của Đức Chúa Trời tất cả chưa ra khỏi, Kh 18:4",
+          "phrases": [
+            "Vì dân chúng của Đức Chúa Trời",
+            "tất cả chưa ra khỏi,",
+            "Kh 18:4"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Phán xét này do ai, phán xét bằng gì",
+          "answer": "Đức Chúa Trời, lửa",
+          "phrases": [
+            "Đức Chúa Trời,",
+            "lửa"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "stageId": 4,
+      "question": "Kh 19 xảy ra ① sau việc gì, tại Kh 19 có 2 việc thành đạt ② là gì?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Kh 19 xảy ra sau việc gì",
+          "answer": "Sau phán xét Babylon của Kh 18",
+          "phrases": [
+            "Sau phán xét Babylon",
+            "của Kh 18"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Tại Kh 19 có 2 việc thành đạt là gì",
+          "answer": "Kết hôn linh xác thịt, Đức Chúa Trời đến thống trị",
+          "phrases": [
+            "Kết hôn linh xác thịt,",
+            "Đức Chúa Trời đến thống trị"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "stageId": 4,
+      "question": "Kh 20, sau khi rồng bị bắt, những người nhận thẩm quyền ngồi trên các ngai① là ai, những người tham dự vào sự sống lại thứ nhất cùng với Đấng Christ② là ai, những người chịu phán xét sau 1000 năm ③ họ là ai?",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Những người nhận thẩm quyền ngồi trên các ngai là ai",
+          "answer": "12 môn đồ linh xác thịt của Đức Chúa Jesus",
+          "phrases": [
+            "12 môn đồ linh xác thịt",
+            "của Đức Chúa Jesus"
+          ]
+        },
+        {
+          "slotIndex": 2,
+          "label": "②",
+          "title": "Những người tham dự vào sự sống lại thứ nhất cùng Đấng Christ",
+          "answer": "Các linh tử vì đạo, những người sống sót đã được đóng ấn của Đức Chúa Trời không nhận dấu của con thú",
+          "phrases": [
+            "Các linh tử vì đạo,",
+            "những người sống sót",
+            "đã được đóng ấn của Đức Chúa Trời",
+            "không nhận dấu của con thú"
+          ]
+        },
+        {
+          "slotIndex": 3,
+          "label": "③",
+          "title": "Những người chịu phán xét sau 1000 năm là ai",
+          "answer": "Gok và Magok, các linh đã chết xác thịt",
+          "phrases": [
+            "Gok và Magok,",
+            "các linh đã chết xác thịt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "stageId": 4,
+      "question": "Thời Chúa trở lại, hãy viết lý do khải huyền quan trọng nhất và câu kinh dẫn chứng đi kèm.",
+      "slots": [
+        {
+          "slotIndex": 1,
+          "label": "①",
+          "title": "Lý do khải huyền quan trọng nhất và câu kinh dẫn chứng",
+          "answer": "Vì nếu thêm bớt thì không thể vào được thiên đàng, Kh 22:18~19",
+          "phrases": [
+            "Vì nếu thêm bớt",
+            "thì không thể vào được thiên đàng,",
+            "Kh 22:18~19"
+          ]
+        }
+      ]
+    }
+  ]
+}
