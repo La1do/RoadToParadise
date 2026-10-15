@@ -15,11 +15,19 @@ export default function CharacterDemo() {
   const [bieuCam, setBieuCam] = useState('dung-yen');
   const [tuThe, setTuThe] = useState('dung');
   const [trangPhuc, setTrangPhuc] = useState('di-hoc');
+  const [gocNhin, setGocNhin] = useState('3-4');
   const [doThuoc, setDoThuoc] = useState(0.2);
   const [showBackpack, setShowBackpack] = useState(true);
   const [showStudentCard, setShowStudentCard] = useState(true);
   const [showHeadphones, setShowHeadphones] = useState(false);
   const [bgMode, setBgMode] = useState('dark');
+
+  // Danh sách các góc nhìn
+  const DS_GOC_NHIN = [
+    { id: '3-4', label: 'Góc 3/4 (Khuyên dùng)', desc: 'Bán nghiêng 45° - Tự nhiên, có chiều sâu' },
+    { id: 'side', label: 'Nghiêng 90° (Side)', desc: 'Profile nhìn ngang 2D' },
+    { id: 'chinh-dien', label: 'Chính diện', desc: 'Nhìn thẳng trực diện' },
+  ];
 
   // Danh sách các biểu cảm theo đặc tả
   const DS_BIEU_CAM = [
@@ -259,6 +267,7 @@ export default function CharacterDemo() {
                 bieuCam={bieuCam}
                 tuThe={tuThe}
                 trangPhuc={trangPhuc}
+                gocNhin={gocNhin}
                 doThuoc={doThuoc}
                 showBackpack={showBackpack}
                 showStudentCard={showStudentCard}
@@ -285,7 +294,7 @@ export default function CharacterDemo() {
               <span>•</span>
               <span>{tuThe}</span>
               <span>•</span>
-              <span>{trangPhuc}</span>
+              <span style={{ color: '#38BDF8', fontWeight: 600 }}>Góc: {gocNhin}</span>
               <span>•</span>
               <span style={{ color: '#F59E0B', fontWeight: 'bold' }}>
                 Độ thuộc: {Math.round(doThuoc * 100)}%
@@ -430,6 +439,52 @@ export default function CharacterDemo() {
                       <div style={{ fontWeight: 'bold', fontSize: '0.88rem' }}>.{item.id}</div>
                       <div style={{ fontSize: '0.75rem', color: '#94A3B8', marginTop: 2 }}>
                         {item.label}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* 3.5 GÓC NHÌN ('3-4', 'side', 'chinh-dien') */}
+            <section
+              style={{
+                backgroundColor: '#131B2E',
+                padding: 16,
+                borderRadius: 12,
+                border: '1px solid #1E293B',
+              }}
+            >
+              <h2 style={{ fontSize: '0.95rem', margin: '0 0 10px', color: '#A78BFA' }}>
+                Góc nhìn (Camera Angle)
+              </h2>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+                  gap: 8,
+                }}
+              >
+                {DS_GOC_NHIN.map((item) => {
+                  const isActive = gocNhin === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setGocNhin(item.id)}
+                      style={{
+                        padding: '10px 8px',
+                        borderRadius: 8,
+                        border: isActive ? '2px solid #8B5CF6' : '1px solid #334155',
+                        backgroundColor: isActive ? 'rgba(139, 92, 246, 0.18)' : '#1E293B',
+                        color: isActive ? '#C4B5FD' : '#E2E8F0',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'all 0.15s ease',
+                      }}
+                    >
+                      <div style={{ fontWeight: 'bold', fontSize: '0.88rem' }}>{item.label}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#94A3B8', marginTop: 2 }}>
+                        {item.desc}
                       </div>
                     </button>
                   );
@@ -642,7 +697,7 @@ export default function CharacterDemo() {
                   overflowX: 'auto',
                 }}
               >
-                {`<MinhCharacter bieuCam="${bieuCam}" tuThe="${tuThe}" trangPhuc="${trangPhuc}" doThuoc={${doThuoc}} />`}
+                {`<MinhCharacter gocNhin="${gocNhin}" bieuCam="${bieuCam}" tuThe="${tuThe}" trangPhuc="${trangPhuc}" doThuoc={${doThuoc}} />`}
               </code>
             </section>
           </div>

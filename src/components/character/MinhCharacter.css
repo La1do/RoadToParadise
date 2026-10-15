@@ -458,32 +458,33 @@
 }
 
 /* --- 2. ĐI BỘ (.di-bo) --- */
+/* Bước đi sole phối cảnh trước-sau, tự nhiên, không choạc compa */
 @keyframes buoc-chan-trai {
   0%, 100% {
-    transform: rotate(-16deg);
+    transform: rotate(-14deg) scale(0.96);
   }
   50% {
-    transform: rotate(18deg);
+    transform: rotate(14deg) scale(1.02);
   }
 }
 
 @keyframes buoc-chan-phai {
   0%, 100% {
-    transform: rotate(18deg);
+    transform: rotate(14deg) scale(1.02);
   }
   50% {
-    transform: rotate(-16deg);
+    transform: rotate(-14deg) scale(0.96);
   }
 }
 
 @keyframes buoc-khuyu-chan-trai {
   0%, 100% {
-    transform: rotate(8deg);
+    transform: rotate(18deg);
   }
-  30% {
-    transform: rotate(24deg);
+  35% {
+    transform: rotate(4deg);
   }
-  60% {
+  65% {
     transform: rotate(0deg);
   }
 }
@@ -492,29 +493,30 @@
   0%, 100% {
     transform: rotate(0deg);
   }
-  50% {
-    transform: rotate(8deg);
+  35% {
+    transform: rotate(18deg);
   }
-  80% {
-    transform: rotate(24deg);
+  65% {
+    transform: rotate(4deg);
   }
 }
 
+/* Vung tay trước-sau theo hướng đi, không chụm vào giữa */
 @keyframes vung-tay-trai {
   0%, 100% {
-    transform: rotate(15deg);
+    transform: rotate(18deg);
   }
   50% {
-    transform: rotate(-15deg);
+    transform: rotate(-14deg);
   }
 }
 
 @keyframes vung-tay-phai {
   0%, 100% {
-    transform: rotate(-15deg);
+    transform: rotate(-14deg);
   }
   50% {
-    transform: rotate(15deg);
+    transform: rotate(18deg);
   }
 }
 
@@ -523,7 +525,7 @@
     transform: translateY(0);
   }
   25%, 75% {
-    transform: translateY(-3px);
+    transform: translateY(-5px);
   }
 }
 
@@ -660,6 +662,53 @@
 }
 .minh-character-root.cui-nhin-dien-thoai .dao-cu-dien-thoai {
   opacity: 1;
+}
+
+/* ========================================================
+   GÓC NHÌN (CAMERA VIEW ANGLES)
+   .goc-3-4 (Mặc định - Khuyên dùng)
+   .goc-side (Nghiêng 90 độ Profile)
+   .goc-chinh-dien (Chính diện)
+   ======================================================== */
+.minh-character-root.goc-3-4 .minh-character-svg {
+  transform: perspective(900px) rotateY(-5deg);
+  transition: transform 0.35s ease;
+}
+
+.minh-character-root.goc-3-4 .chan-trai,
+.minh-character-root.goc-3-4 .tay-trai {
+  filter: brightness(0.92);
+}
+
+.minh-character-root.goc-3-4 .chan-phai,
+.minh-character-root.goc-3-4 .tay-phai {
+  filter: brightness(1.02);
+}
+
+.minh-character-root.goc-side .minh-character-svg {
+  transform: perspective(900px) rotateY(-22deg) scaleX(0.92);
+  transition: transform 0.35s ease;
+}
+
+.minh-character-root.goc-side .chan-trai,
+.minh-character-root.goc-side .tay-trai {
+  filter: brightness(0.85);
+  opacity: 0.88;
+}
+
+.minh-character-root.goc-side .chan-phai,
+.minh-character-root.goc-side .tay-phai {
+  filter: brightness(1.04);
+}
+
+.minh-character-root.goc-side .phu-kien-balo-sau {
+  transform: translateX(-8px) scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.minh-character-root.goc-chinh-dien .minh-character-svg {
+  transform: none;
+  transition: transform 0.35s ease;
 }
 
 /* ========================================================
