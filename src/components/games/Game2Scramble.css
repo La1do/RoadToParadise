@@ -217,164 +217,224 @@
   color: #ffffff;
 }
 
-.game2-tray-box {
-  min-height: 84px;
-  padding: 10px;
-  background-color: #f8fafc;
-  border: 2px dashed #94a3b8;
-  border-radius: 14px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-content: flex-start;
-  align-items: center;
+/* ================= KHAY GHÉP CHIA Ô LƯỚI 2x2 ================= */
+.game2-grid-2x2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
   box-sizing: border-box;
+}
+
+@media (max-width: 420px) {
+  .game2-grid-2x2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.game2-grid-cell {
+  background: #090d16;
+  border: 1.5px dashed #475569;
+  border-radius: 12px;
+  padding: 8px 10px;
+  min-height: 72px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   transition: all 0.2s ease;
 }
 
-.game2-tray-box.is-complete {
-  border-color: #3b82f6;
-  background-color: #f0f7ff;
+.game2-grid-cell.drag-over-cell {
+  border-color: #38bdf8;
+  background: #172554;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4);
 }
 
-.game2-tray-box.is-error {
-  border-color: #ef4444;
-  background-color: #fef2f2;
+/* Phản hồi trực quan khi đúng / sai từng ô sau khi kiểm tra */
+.game2-grid-cell.cell-correct {
+  border: 2px solid #22c55e !important;
+  background: rgba(34, 197, 94, 0.12) !important;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
 }
 
-.game2-tray-empty {
-  width: 100%;
-  text-align: center;
-  color: #94a3b8;
-  font-size: 0.9rem;
-  font-style: italic;
-  padding: 16px 0;
-  user-select: none;
+.game2-grid-cell.cell-wrong {
+  border: 2px solid #ef4444 !important;
+  background: rgba(239, 68, 68, 0.2) !important;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
 }
 
-/* Hàng thẻ từ xáo trộn ở dưới */
-.game2-pool-section {
-  margin-bottom: 16px;
-}
-
-.game2-pool-label {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #475569;
-  margin-bottom: 8px;
-}
-
-.game2-pool-box {
+.grid-cell-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  min-height: 52px;
+  justify-content: space-between;
   align-items: center;
-}
-
-/* Thẻ từ - bo tròn, cảm ứng thân thiện chiều cao >= 44px */
-.game2-card {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 8px 14px;
-  border-radius: 22px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  box-sizing: border-box;
-  cursor: pointer;
-  user-select: none;
-  touch-action: manipulation;
-  transition: all 0.15s ease;
-  word-break: break-word;
-  line-height: 1.3;
-}
-
-/* Thẻ nằm dưới hàng xáo trộn */
-.game2-card-pool {
-  background-color: #ffffff;
-  color: #1e293b;
-  border: 2px solid #cbd5e1;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-}
-
-.game2-card-pool:hover {
-  border-color: #7c3aed;
-  background-color: #faf5ff;
-}
-
-.game2-card-pool:active {
-  transform: scale(0.96);
-}
-
-/* Thẻ nằm trên khay */
-.game2-card-tray {
-  background-color: #ede9fe;
-  color: #5b21b6;
-  border: 2px solid #8b5cf6;
-  box-shadow: 0 1px 3px rgba(124, 58, 237, 0.15);
-}
-
-.game2-card-tray:hover {
-  background-color: #fee2e2;
-  border-color: #ef4444;
-  color: #991b1b;
-}
-
-.game2-card-tray:active {
-  transform: scale(0.96);
-}
-
-.game2-card-index {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  background: rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
-  font-size: 0.75rem;
-  margin-right: 6px;
+  font-size: 0.72rem;
+  color: #94a3b8;
   font-weight: 700;
+  margin-bottom: 6px;
 }
 
-/* Nút bấm hành động - chiều cao >= 44px */
-.game2-actions {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 10px;
-  margin-bottom: 14px;
+.grid-cell-num {
+  letter-spacing: 0.04em;
 }
 
-.game2-btn {
-  display: inline-flex;
+.cell-badge {
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.cell-badge.correct {
+  background: #166534;
+  color: #86efac;
+}
+
+.cell-badge.wrong {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 0 6px rgba(220, 38, 38, 0.6);
+}
+
+/* Thẻ đã đặt vào ô */
+.game2-placed-card {
+  background: #1e293b;
+  border: 1px solid #64748b;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 10px 18px;
-  font-size: 0.95rem;
+  gap: 8px;
+  color: #f8fafc;
+  font-size: 0.92rem;
   font-weight: 600;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  touch-action: manipulation;
-  transition: all 0.15s ease;
+  cursor: grab;
+  user-select: none;
+  min-height: 44px;
+  box-sizing: border-box;
 }
 
-.game2-btn:active {
-  transform: scale(0.98);
+.game2-placed-card:hover {
+  background: #334155;
+  border-color: #38bdf8;
 }
 
-.game2-btn-confirm {
-  background-color: #7c3aed;
+.game2-placed-card .placed-text {
+  flex: 1;
+  line-height: 1.35;
+}
+
+.game2-placed-card .remove-cross {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.game2-placed-card .remove-cross:hover {
+  background: #ef4444;
   color: #ffffff;
 }
 
-.game2-btn-confirm:hover:not(:disabled) {
-  background-color: #6d28d9;
+.grid-empty-prompt {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-style: italic;
+  text-align: center;
+}
+
+/* ================= HÀNG CỤM TỪ CẦN SẮP XẾP ================= */
+.game2-pool-section {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #334155;
+}
+
+.game2-pool-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.game2-pool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  min-height: 52px;
+}
+
+@media (max-width: 420px) {
+  .game2-pool-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.game2-pool-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 22px;
+  background-color: #0284c7;
+  color: #ffffff;
+  border: 1px solid #38bdf8;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.game2-pool-card:hover {
+  background-color: #0369a1;
+  transform: translateY(-1px);
+}
+
+.game2-pool-card:active {
+  transform: scale(0.97);
+}
+
+.pool-card-text {
+  flex: 1;
+  line-height: 1.35;
+}
+
+.pool-card-arrow {
+  color: #bae6fd;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+/* Bảng báo lỗi trực quan tương phản cao */
+.alert-high-contrast {
+  background-color: rgba(220, 38, 38, 0.22);
+  border: 1.5px solid #ef4444;
+  color: #fca5a5;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Legacy selectors for test compatibility */
+.game2-card {
+  min-height: 44px;
+  border-radius: 22px;
 }
 
 .game2-btn-confirm:disabled {
