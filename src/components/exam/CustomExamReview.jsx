@@ -423,7 +423,7 @@ export default function CustomExamReview({ onBackToMap }) {
                     <input type="checkbox" checked={isShuffle} onChange={e => setIsShuffle(e.target.checked)} />
                     <span>🔀 Xáo trộn thứ tự các câu hỏi</span>
                   </label>
-                  {mode !== 'exam' && (
+                  {mode === 'copy' && (
                     <label className="checkbox-option">
                       <input type="checkbox" checked={showReferenceAnswer} onChange={e => setShowReferenceAnswer(e.target.checked)} />
                       <span>👁️ Mở sẵn đáp án tham khảo</span>
@@ -545,7 +545,7 @@ export default function CustomExamReview({ onBackToMap }) {
                   <input type="checkbox" checked={isShuffle} onChange={e => setIsShuffle(e.target.checked)} />
                   <span>🔀 Xáo trộn thứ tự các câu</span>
                 </label>
-                {mode !== 'exam' && (
+                {mode === 'copy' && (
                   <label className="checkbox-option">
                     <input type="checkbox" checked={showReferenceAnswer} onChange={e => setShowReferenceAnswer(e.target.checked)} />
                     <span>👁️ Mở sẵn đáp án tham khảo</span>
@@ -709,15 +709,17 @@ export default function CustomExamReview({ onBackToMap }) {
                 {mode === 'exam' && '📝 BÀI THI RIÊNG'}
               </span>
 
-              {/* Nút ẩn/hiện đáp án tham khảo tiện lợi */}
-              <button
-                type="button"
-                className="toggle-ref-action-btn"
-                onClick={() => setShowReferenceAnswer(prev => !prev)}
-                title={showReferenceAnswer ? "Ẩn đáp án tham khảo để tự nhớ" : "Hiện đáp án tham khảo"}
-              >
-                {showReferenceAnswer ? '🙈 Ẩn đáp án' : '👁️ Hiện đáp án'}
-              </button>
+              {/* Nút ẩn/hiện đáp án tham khảo: CHỈ HIỆN Ở CHẾ ĐỘ CHÉP LẠI (COPY) */}
+              {mode === 'copy' && (
+                <button
+                  type="button"
+                  className="toggle-ref-action-btn"
+                  onClick={() => setShowReferenceAnswer(prev => !prev)}
+                  title={showReferenceAnswer ? "Ẩn đáp án tham khảo để tự nhớ" : "Hiện đáp án tham khảo"}
+                >
+                  {showReferenceAnswer ? '🙈 Ẩn đáp án' : '👁️ Hiện đáp án'}
+                </button>
+              )}
             </div>
 
             <div className="session-header-center">
@@ -786,8 +788,8 @@ export default function CustomExamReview({ onBackToMap }) {
             })}
           </div>
 
-          {/* Hộp đáp án tham khảo (khi người dùng bật nút Hiện đáp án) */}
-          {showReferenceAnswer && (
+          {/* Hộp đáp án tham khảo (CHỈ HIỆN Ở CHẾ ĐỘ CHÉP LẠI KHI NGƯỜI DÙNG BẬT) */}
+          {mode === 'copy' && showReferenceAnswer && (
             <div className="floating-ref-drawer">
               <div className="floating-ref-header">
                 <span className="floating-ref-tag">👁️ ĐÁP ÁN THAM KHẢO (CÂU #{currentQ.id})</span>
@@ -819,6 +821,7 @@ export default function CustomExamReview({ onBackToMap }) {
                 key={currentQ.id}
                 question={currentQ}
                 initialInputs={copyAnswers[currentQ.id]}
+                initialShowReference={showReferenceAnswer}
                 onStateChange={inputs => handleCopyStateChange(currentQ.id, inputs)}
                 onNext={() => {
                   if (currentIndex < sessionQuestions.length - 1) {
