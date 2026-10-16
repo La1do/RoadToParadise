@@ -328,12 +328,9 @@
 }
 
 .game2-drop-placeholder.at-end {
-  width: 100%;
-  margin-top: 6px;
   background: rgba(123, 181, 232, 0.28);
   border: 2px dashed #4a82b8;
   color: #1c3553;
-  min-height: 46px;
 }
 
 .placeholder-arrow {
