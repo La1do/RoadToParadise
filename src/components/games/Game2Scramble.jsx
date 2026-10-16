@@ -123,35 +123,56 @@ export default function Game2Scramble({
   // Tính toán vị trí chèn (tách khe giữa các thẻ) dựa vào tọa độ ngón tay / con trỏ
   const calculateInsertIndex = (slotIndex, clientX, clientY) => {
     const trayElem = document.querySelector(`[data-tray-slot="${slotIndex}"]`);
-    if (!trayElem) return undefined;
+    if (!trayElem) return 0;
 
     const cards = Array.from(trayElem.querySelectorAll('[data-tray-card-index]'));
     if (cards.length === 0) return 0;
 
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards[i];
-      const rect = card.getBoundingClientRect();
-      if (
-        clientX >= rect.left - 15 &&
-        clientX <= rect.right + 15 &&
-        clientY >= rect.top - 25 &&
-        clientY <= rect.bottom + 25
-      ) {
-        const midX = rect.left + rect.width / 2;
-        return clientX < midX ? i : i + 1;
-      }
-    }
-
     const lastCard = cards[cards.length - 1];
     const lastRect = lastCard.getBoundingClientRect();
-    if (clientY > lastRect.bottom || (clientY >= lastRect.top - 10 && clientX > lastRect.right)) {
+
+    // 1. Nếu ngón tay/con trỏ ở ngang hoặc bên dưới thẻ cuối cùng -> vị trí cuối cùng
+    if (clientY >= lastRect.bottom - 10) {
       return cards.length;
     }
 
     const firstCard = cards[0];
     const firstRect = firstCard.getBoundingClientRect();
-    if (clientY < firstRect.top || (clientY <= firstRect.bottom + 10 && clientX < firstRect.left)) {
+
+    // 2. Nếu ngón tay/con trỏ ở phía trên thẻ đầu tiên -> vị trí đầu tiên (0)
+    if (clientY <= firstRect.top + 6) {
       return 0;
+    }
+
+    // 3. Duyệt qua từng thẻ để xác định chèn trước hay sau thẻ đó
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i];
+      const rect = card.getBoundingClientRect();
+
+      // Kiểm tra vùng lân cận của thẻ
+      if (
+        clientY >= rect.top - 8 &&
+        clientY <= rect.bottom + 8 &&
+        clientX >= rect.left - 25 &&
+        clientX <= rect.right + 25
+      ) {
+        const midY = rect.top + rect.height / 2;
+        const midX = rect.left + rect.width / 2;
+
+        // Nếu thẻ cao hoặc đang ở dòng riêng (như trên mobile)
+        if (rect.height >= 40) {
+          if (clientY > midY + 3) return i + 1;
+          if (clientY < midY - 3) return i;
+        }
+
+        // Nếu thẻ nằm ngang cùng 1 hàng
+        return clientX >= midX ? i + 1 : i;
+      }
+    }
+
+    // 4. Nếu con trỏ nằm thấp hơn đỉnh thẻ cuối cùng -> vị trí cuối cùng
+    if (clientY >= lastRect.top) {
+      return cards.length;
     }
 
     return cards.length;
@@ -169,20 +190,22 @@ export default function Game2Scramble({
       if (drag.source === 'pool') {
         // Lấy từ kho từ vào ô khay
         nextPool = nextPool.filter(c => c.id !== drag.item.id);
-        if (typeof targetIndex === 'number' && targetIndex >= 0 && targetIndex <= nextTray.length) {
-          nextTray.splice(targetIndex, 0, drag.item);
-        } else {
-          nextTray.push(drag.item);
-        }
+        const insertIdx = (typeof targetIndex === 'number' && targetIndex >= 0 && targetIndex <= nextTray.length)
+          ? targetIndex
+          : nextTray.length;
+        nextTray.splice(insertIdx, 0, drag.item);
       } else if (drag.source === 'tray') {
         // Đổi chỗ (reorder) các thẻ trong cùng 1 ô khay
         const fromIdx = drag.fromIndex ?? nextTray.findIndex(c => c.id === drag.item.id);
         if (fromIdx !== -1) {
           const [moved] = nextTray.splice(fromIdx, 1);
-          const adjustedIndex = typeof targetIndex === 'number'
-            ? (targetIndex > fromIdx ? targetIndex - 1 : targetIndex)
-            : nextTray.length;
-          const safeIdx = Math.min(Math.max(0, adjustedIndex), nextTray.length);
+          let destIdx;
+          if (typeof targetIndex === 'number' && targetIndex >= 0) {
+            destIdx = targetIndex > fromIdx ? targetIndex - 1 : targetIndex;
+          } else {
+            destIdx = nextTray.length;
+          }
+          const safeIdx = Math.min(Math.max(0, destIdx), nextTray.length);
           nextTray.splice(safeIdx, 0, moved);
         }
       }
@@ -297,19 +320,40 @@ export default function Game2Scramble({
       if (e.cancelable) e.preventDefault(); // Ngăn cuộn trang trong lúc kéo
       setGhostPos({ x: touch.clientX, y: touch.clientY });
 
-      // Phát hiện phần tử dưới ngón tay và tách khe chèn
-      const elem = document.elementFromPoint(touch.clientX, touch.clientY);
-      const trayElem = elem?.closest(`[data-tray-slot="${slotIndex}"]`);
-      const poolElem = elem?.closest(`[data-pool-slot="${slotIndex}"]`);
+      // Phát hiện vùng khay hoặc vùng kho từ với dung sai vùng biên rộng
+      const trayElem = document.querySelector(`[data-tray-slot="${slotIndex}"]`);
+      const poolElem = document.querySelector(`[data-pool-slot="${slotIndex}"]`);
 
+      let target = null;
+
+      // 1. Kiểm tra khay: Cho phép dung sai 40px các cạnh và 70px bên dưới
       if (trayElem) {
-        const insertIdx = calculateInsertIndex(slotIndex, touch.clientX, touch.clientY);
-        setHoverTarget({ slotIndex, type: 'tray-insert', index: insertIdx });
-      } else if (poolElem) {
-        setHoverTarget({ slotIndex, type: 'pool' });
-      } else {
-        setHoverTarget(null);
+        const trayRect = trayElem.getBoundingClientRect();
+        if (
+          touch.clientX >= trayRect.left - 40 &&
+          touch.clientX <= trayRect.right + 40 &&
+          touch.clientY >= trayRect.top - 30 &&
+          touch.clientY <= trayRect.bottom + 70
+        ) {
+          const insertIdx = calculateInsertIndex(slotIndex, touch.clientX, touch.clientY);
+          target = { slotIndex, type: 'tray-insert', index: insertIdx };
+        }
       }
+
+      // 2. Kiểm tra kho từ: nếu đang kéo thẻ từ khay xuống kho từ để gỡ
+      if (!target && poolElem) {
+        const poolRect = poolElem.getBoundingClientRect();
+        if (
+          touch.clientX >= poolRect.left - 40 &&
+          touch.clientX <= poolRect.right + 40 &&
+          touch.clientY >= poolRect.top - 20 &&
+          touch.clientY <= poolRect.bottom + 60
+        ) {
+          target = { slotIndex, type: 'pool' };
+        }
+      }
+
+      setHoverTarget(target);
     }
   };
 
@@ -580,11 +624,11 @@ export default function Game2Scramble({
                             );
                           })}
 
-                          {/* KHE TÁCH RA Ở CUỐI CÙNG (NẾU THẢ VÀO VỊ TRÍ CUỐI CÙNG) */}
-                          {isDraggingThisSlot && targetInsertIndex === st.trayItems.length && (
+                          {/* KHE TÁCH RA Ở CUỐI CÙNG (NẾU THẢ VÀO VỊ TRÍ CUỐI CÙNG HOẶC ĐANG KÉO Ở VÙNG KHAY) */}
+                          {isDraggingThisSlot && (targetInsertIndex === st.trayItems.length || targetInsertIndex === undefined) && (
                             <div className="game2-drop-placeholder at-end" key="placeholder-end">
                               <span className="placeholder-arrow">↳</span>
-                              <span className="placeholder-text">Thả vào đây</span>
+                              <span className="placeholder-text">Thả vào cuối</span>
                             </div>
                           )}
                         </div>
