@@ -77,13 +77,13 @@
 }
 
 .game2-slot-card.slot-passed {
-  border-color: var(--color-primary, #7bb5e8);
-  background: linear-gradient(180deg, #ffffff 0%, var(--color-bg-ice, #eef6fc) 100%);
-  box-shadow: 0 0 0 2px rgba(123, 181, 232, 0.35);
+  border-color: #86efac;
+  background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
 }
 
 .game2-slot-card.slot-failed {
-  border-color: var(--color-blush, #fca5a5);
+  border-color: #fca5a5;
   background: linear-gradient(180deg, #ffffff 0%, #fff5f5 100%);
 }
 
@@ -131,15 +131,15 @@
 }
 
 .game2-slot-card .badge-exact {
-  background: var(--color-bg-ice, #eef6fc);
-  color: var(--color-primary-deep, #4a82b8);
-  border: 1.5px solid var(--color-border, #c5def3);
+  background: #dcfce7;
+  color: #15803d;
+  border: 1.5px solid #86efac;
 }
 
-.game2-slot-card .badge-arranged {
-  background: var(--color-bg-ice, #eef6fc);
-  color: var(--color-text-main, #1c3553);
-  border: 1.5px solid var(--color-primary, #7bb5e8);
+.game2-slot-card .badge-wrong {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1.5px solid #fca5a5;
 }
 
 .game2-header {
@@ -259,15 +259,15 @@
 }
 
 .game2-single-tray.tray-correct {
-  border: 2px solid var(--color-primary, #7bb5e8) !important;
-  background: var(--color-bg-ice, #eef6fc) !important;
-  box-shadow: 0 0 10px rgba(123, 181, 232, 0.35);
+  border: 2px solid #22c55e !important;
+  background: #f0fdf4 !important;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.25);
 }
 
 .game2-single-tray.tray-wrong {
-  border: 2px solid var(--color-blush, #fca5a5) !important;
+  border: 2px solid #ef4444 !important;
   background: #fff5f5 !important;
-  box-shadow: 0 0 10px rgba(252, 165, 165, 0.4);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
 }
 
 .game2-tray-empty-prompt {
@@ -421,21 +421,24 @@
 }
 
 .game2-placed-card.pos-correct {
-  border-color: var(--color-primary, #7bb5e8) !important;
-  background: var(--color-bg-ice, #eef6fc) !important;
+  border-color: #22c55e !important;
+  background: #f0fdf4 !important;
+  color: #14532d !important;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
   animation: correctPulse 0.35s ease;
 }
 
 @keyframes correctPulse {
   0% { transform: scale(1); }
-  50% { transform: scale(1.06); box-shadow: 0 0 12px rgba(123, 181, 232, 0.6); }
+  50% { transform: scale(1.06); box-shadow: 0 0 12px rgba(34, 197, 94, 0.5); }
   100% { transform: scale(1); }
 }
 
 .game2-placed-card.pos-wrong {
-  border-color: var(--color-blush, #fca5a5) !important;
+  border-color: #ef4444 !important;
   background: #fff5f5 !important;
-  box-shadow: 0 0 8px rgba(252, 165, 165, 0.5);
+  color: #7f1d1d !important;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
   animation: wrongWiggle 0.35s ease;
 }
 
@@ -443,6 +446,28 @@
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-4px); }
   75% { transform: translateX(4px); }
+}
+
+.cell-badge {
+  font-size: 0.76rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+}
+
+.cell-badge.correct {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.cell-badge.wrong {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
 }
 
 .placed-chip-num {
@@ -850,9 +875,9 @@
 }
 
 .game2-summary-bar.summary-passed {
-  background: var(--color-bg-ice, #eef6fc);
-  border: 1.5px solid var(--color-primary, #7bb5e8);
-  color: var(--color-text-main, #1c3553);
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  color: #15803d;
 }
 
 .game2-summary-bar.summary-pending {
