@@ -80,7 +80,7 @@ export default function App() {
   const hasMultipleTabs = visibleNavItems.length > 1;
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #eef6fc 0%, #ffffff 35%, #eef6fc 100%)', color: '#1c3553', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-gradient, linear-gradient(180deg, #eef6fc 0%, #ffffff 35%, #eef6fc 100%))', color: 'var(--color-text-main, #1c3553)', display: 'flex', flexDirection: 'column' }}>
       <style>{`
         .app-desktop-nav {
           display: flex;
@@ -89,9 +89,9 @@ export default function App() {
         }
         .app-mobile-menu-btn {
           display: none;
-          background: #eef6fc;
-          border: 1.5px solid #c5def3;
-          color: #1c3553;
+          background: var(--color-bg-ice, #eef6fc);
+          border: 1.5px solid var(--color-border, #c5def3);
+          color: var(--color-text-main, #1c3553);
           width: 38px;
           height: 38px;
           border-radius: 10px;
@@ -102,7 +102,7 @@ export default function App() {
           transition: all 0.15s ease;
         }
         .app-mobile-menu-btn:hover {
-          background: #c5def3;
+          background: var(--color-border, #c5def3);
         }
         .app-sidebar-backdrop {
           position: fixed;
@@ -119,7 +119,7 @@ export default function App() {
           bottom: 0;
           width: 290px;
           max-width: 82vw;
-          background: #ffffff;
+          background: var(--color-white, #ffffff);
           z-index: 1000;
           box-shadow: -4px 0 24px rgba(74, 130, 184, 0.25);
           display: flex;
@@ -131,11 +131,11 @@ export default function App() {
           align-items: center;
           justify-content: space-between;
           padding: 1rem 1.2rem;
-          border-bottom: 1.5px solid #eef6fc;
-          background: #f8fbfe;
+          border-bottom: 1.5px solid var(--color-bg-ice, #eef6fc);
+          background: var(--color-bg-ice, #f8fbfe);
         }
         .app-sidebar-close-btn {
-          background: #eef6fc;
+          background: var(--color-bg-ice, #eef6fc);
           border: none;
           width: 32px;
           height: 32px;
@@ -163,7 +163,7 @@ export default function App() {
           border-radius: 12px;
           border: 1.5px solid transparent;
           background: #f8fbfe;
-          color: #1c3553;
+          color: var(--color-text-main, #1c3553);
           font-size: 0.92rem;
           font-weight: 600;
           cursor: pointer;
@@ -172,16 +172,16 @@ export default function App() {
           transition: all 0.15s ease;
         }
         .app-sidebar-item:hover {
-          background: #eef6fc;
+          background: var(--color-bg-ice, #eef6fc);
         }
         .app-sidebar-item.active {
-          background: #eef6fc;
-          border-color: #7bb5e8;
-          color: #4a82b8;
+          background: var(--color-bg-ice, #eef6fc);
+          border-color: var(--color-primary, #7bb5e8);
+          color: var(--color-primary-deep, #4a82b8);
           font-weight: 700;
         }
         .app-sidebar-check {
-          color: #4a82b8;
+          color: var(--color-primary-deep, #4a82b8);
           font-weight: bold;
         }
         @keyframes appFadeIn {
@@ -206,7 +206,7 @@ export default function App() {
       <header
         style={{
           background: 'rgba(255, 255, 255, 0.96)',
-          borderBottom: '2px solid #c5def3',
+          borderBottom: '2px solid var(--color-border, #c5def3)',
           padding: '0.6rem 1rem',
           display: 'flex',
           alignItems: 'center',
@@ -238,12 +238,12 @@ export default function App() {
               height: 36,
               borderRadius: '50%',
               objectFit: 'cover',
-              border: '2px solid #7bb5e8',
+              border: '2px solid var(--color-primary, #7bb5e8)',
               boxShadow: '0 0 10px rgba(123, 181, 232, 0.45)',
               flexShrink: 0
             }}
           />
-          <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem', color: '#1c3553' }}>{appTitle}</strong>
+          <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem', color: 'var(--color-text-main, #1c3553)' }}>{appTitle}</strong>
         </div>
 
         {/* Desktop Navbar */}
@@ -255,9 +255,9 @@ export default function App() {
               style={{
                 padding: '0.45rem 0.85rem',
                 borderRadius: 20,
-                border: viewMode === item.id ? '2px solid #4a82b8' : '1.5px solid #c5def3',
-                background: viewMode === item.id ? '#4a82b8' : '#eef6fc',
-                color: viewMode === item.id ? '#ffffff' : '#1c3553',
+                border: viewMode === item.id ? '2px solid var(--color-primary-deep, #4a82b8)' : '1.5px solid var(--color-border, #c5def3)',
+                background: viewMode === item.id ? 'var(--color-primary-deep, #4a82b8)' : 'var(--color-bg-ice, #eef6fc)',
+                color: viewMode === item.id ? 'var(--color-white, #ffffff)' : 'var(--color-text-main, #1c3553)',
                 cursor: 'pointer',
                 fontWeight: viewMode === item.id ? 'bold' : '600',
                 fontSize: '0.85rem',
@@ -381,9 +381,9 @@ export default function App() {
                   style={{
                     padding: '0.45rem 1rem',
                     borderRadius: 20,
-                    border: cutsceneStageId === sId ? '2px solid #4a82b8' : '1.5px solid #c5def3',
-                    background: cutsceneStageId === sId ? '#4a82b8' : '#ffffff',
-                    color: cutsceneStageId === sId ? '#ffffff' : '#1c3553',
+                    border: cutsceneStageId === sId ? '2px solid var(--color-primary-deep, #4a82b8)' : '1.5px solid var(--color-border, #c5def3)',
+                    background: cutsceneStageId === sId ? 'var(--color-primary-deep, #4a82b8)' : 'var(--color-white, #ffffff)',
+                    color: cutsceneStageId === sId ? 'var(--color-white, #ffffff)' : 'var(--color-text-main, #1c3553)',
                     fontWeight: 'bold',
                     cursor: 'pointer',
                     fontSize: '0.85rem',
@@ -410,11 +410,11 @@ export default function App() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
               <button
                 onClick={() => setViewMode(homeTab)}
-                style={{ background: '#ffffff', border: '1.5px solid #c5def3', color: '#4a82b8', padding: '0.5rem 1rem', borderRadius: 20, cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 6px rgba(74, 130, 184, 0.12)' }}
+                style={{ background: 'var(--color-white, #ffffff)', border: '1.5px solid var(--color-border, #c5def3)', color: 'var(--color-primary-deep, #4a82b8)', padding: '0.5rem 1rem', borderRadius: 20, cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 6px rgba(74, 130, 184, 0.12)' }}
               >
                 ← Trở về bản đồ
               </button>
-              <span style={{ fontSize: '1rem', color: '#4a82b8', fontWeight: 'bold' }}>
+              <span style={{ fontSize: '1rem', color: 'var(--color-primary-deep, #4a82b8)', fontWeight: 'bold' }}>
                 Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Tách riêng từng ý
               </span>
             </div>
@@ -434,7 +434,7 @@ export default function App() {
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <button
                   onClick={() => setViewMode(homeTab)}
-                  style={{ background: '#ffffff', border: '1.5px solid #c5def3', color: '#4a82b8', padding: '0.5rem 1rem', borderRadius: 20, cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 6px rgba(74, 130, 184, 0.12)' }}
+                  style={{ background: 'var(--color-white, #ffffff)', border: '1.5px solid var(--color-border, #c5def3)', color: 'var(--color-primary-deep, #4a82b8)', padding: '0.5rem 1rem', borderRadius: 20, cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 6px rgba(74, 130, 184, 0.12)' }}
                 >
                   ← Trở về bản đồ
                 </button>
@@ -450,9 +450,9 @@ export default function App() {
                     }
                   }}
                   style={{
-                    background: selectedQuestion.id <= 1 ? '#f0f4f8' : '#ffffff',
-                    color: selectedQuestion.id <= 1 ? '#8fa4b8' : '#4a82b8',
-                    border: '1.5px solid #c5def3',
+                    background: selectedQuestion.id <= 1 ? '#f0f4f8' : 'var(--color-white, #ffffff)',
+                    color: selectedQuestion.id <= 1 ? '#8fa4b8' : 'var(--color-primary-deep, #4a82b8)',
+                    border: '1.5px solid var(--color-border, #c5def3)',
                     padding: '0.5rem 0.8rem',
                     borderRadius: 20,
                     cursor: selectedQuestion.id <= 1 ? 'not-allowed' : 'pointer',
@@ -473,9 +473,9 @@ export default function App() {
                     }
                   }}
                   style={{
-                    background: selectedQuestion.id >= questionsData.questions.length ? '#f0f4f8' : '#ffffff',
-                    color: selectedQuestion.id >= questionsData.questions.length ? '#8fa4b8' : '#4a82b8',
-                    border: '1.5px solid #c5def3',
+                    background: selectedQuestion.id >= questionsData.questions.length ? '#f0f4f8' : 'var(--color-white, #ffffff)',
+                    color: selectedQuestion.id >= questionsData.questions.length ? '#8fa4b8' : 'var(--color-primary-deep, #4a82b8)',
+                    border: '1.5px solid var(--color-border, #c5def3)',
                     padding: '0.5rem 0.8rem',
                     borderRadius: 20,
                     cursor: selectedQuestion.id >= questionsData.questions.length ? 'not-allowed' : 'pointer',
@@ -488,13 +488,13 @@ export default function App() {
               </div>
 
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '1rem', color: '#4a82b8', fontWeight: 'bold' }}>
+                <span style={{ fontSize: '1rem', color: 'var(--color-primary-deep, #4a82b8)', fontWeight: 'bold' }}>
                   Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Xáo từ
                 </span>
                 {isTabEnabled('motorbike') && (
                   <button
                     onClick={() => setViewMode('motorbike')}
-                    style={{ background: '#7bb5e8', border: '1.5px solid #4a82b8', color: '#ffffff', padding: '0.45rem 0.85rem', borderRadius: 20, cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem', boxShadow: '0 2px 8px rgba(74, 130, 184, 0.25)' }}
+                    style={{ background: 'var(--color-primary, #7bb5e8)', border: '1.5px solid var(--color-primary-deep, #4a82b8)', color: 'var(--color-white, #ffffff)', padding: '0.45rem 0.85rem', borderRadius: 20, cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem', boxShadow: '0 2px 8px rgba(74, 130, 184, 0.25)' }}
                   >
                     🛵 Chuyển sang góc nhìn xe máy
                   </button>
@@ -534,19 +534,19 @@ export default function App() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <button
                 onClick={() => setViewMode(homeTab)}
-                style={{ background: '#ffffff', border: '1.5px solid #c5def3', color: '#4a82b8', padding: '0.5rem 1rem', borderRadius: 20, cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 6px rgba(74, 130, 184, 0.12)' }}
+                style={{ background: 'var(--color-white, #ffffff)', border: '1.5px solid var(--color-border, #c5def3)', color: 'var(--color-primary-deep, #4a82b8)', padding: '0.5rem 1rem', borderRadius: 20, cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 6px rgba(74, 130, 184, 0.12)' }}
               >
                 ← Trở về bản đồ
               </button>
 
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '1rem', color: '#4a82b8', fontWeight: 'bold' }}>
+                <span style={{ fontSize: '1rem', color: 'var(--color-primary-deep, #4a82b8)', fontWeight: 'bold' }}>
                   🛵 Minh (21 tuổi) lái xe Wave đi học • Xáo từ góc nhìn thứ nhất
                 </span>
                 {isTabEnabled('game2') && (
                   <button
                     onClick={() => setViewMode('game2')}
-                    style={{ background: '#ffffff', border: '1.5px solid #c5def3', color: '#4a82b8', padding: '0.45rem 0.85rem', borderRadius: 20, cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
+                    style={{ background: 'var(--color-white, #ffffff)', border: '1.5px solid var(--color-border, #c5def3)', color: 'var(--color-primary-deep, #4a82b8)', padding: '0.45rem 0.85rem', borderRadius: 20, cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
                   >
                     🧩 Xem dạng danh sách
                   </button>

@@ -3,6 +3,7 @@
  */
 
 import { LEARNING_STEPS } from '../../core/index.js';
+import { COLORS } from '../../styles/colors.js';
 
 export const STAGES_CONFIG = [
   {
@@ -24,8 +25,8 @@ export const STAGES_CONFIG = [
     location: 'Giảng đường Đại học',
     desc: 'Vượt qua ồn ào phố thị, giữ tâm trí trong sáng giữa những bài giảng và cuộc trò chuyện bạn bè.',
     questionRange: [6, 10],
-    color: '#4a82b8',
-    accentColor: '#7bb5e8'
+    color: COLORS.primaryDeep,
+    accentColor: COLORS.primary
   },
   {
     id: 3,

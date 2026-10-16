@@ -1,0 +1,44 @@
+/**
+ * colors.css - Bảng màu tập trung duy nhất cho toàn bộ hệ thống
+ * Khi muốn đổi màu toàn web, chỉ cần chỉnh sửa tại file này!
+ */
+
+:root {
+  /* ================= 1. BẢNG MÀU CHÍNH (THEME PALETTE) ================= */
+  --color-primary: #7bb5e8;        /* Xanh pastel chủ đạo (baby blue) */
+  --color-primary-deep: #4a82b8;   /* Xanh đậm: nút chính, đường viền active, nhấn mạnh */
+  --color-text-main: #1c3553;      /* Xanh than đậm: chữ chính, độ tương phản cao */
+  --color-border: #c5def3;         /* Viền sáng màu băng nhẹ */
+  --color-bg-ice: #eef6fc;         /* Nền trắng sữa ánh băng */
+  --color-white: #ffffff;          /* Trắng tinh khiết */
+  --color-blush: #fca5a5;          /* Hồng nhẹ má hồng / viền lỗi */
+  --color-beak: #fbd38d;           /* Vàng kem nhẹ */
+
+  /* ================= 2. ALIASES TƯƠNG THÍCH THEME CÁNH CỤT ================= */
+  --penguin-blue-main: var(--color-primary);
+  --penguin-blue-deep: var(--color-primary-deep);
+  --penguin-blue-dark: var(--color-text-main);
+  --penguin-blue-light: var(--color-border);
+  --penguin-blue-ice: var(--color-bg-ice);
+  --penguin-white: var(--color-white);
+  --penguin-blush: var(--color-blush);
+  --penguin-beak: var(--color-beak);
+
+  /* ================= 3. TRẠNG THÁI SỬA BÀI & CHẤM ĐIỂM ================= */
+  --color-correct-bg: #dcfce7;
+  --color-correct-text: #15803d;
+  --color-correct-border: #86efac;
+
+  --color-wrong-bg: #f8d7da;
+  --color-wrong-text: #991b1b;
+  --color-wrong-border: #fca5a5;
+
+  --color-missing-bg: #fef3c7;
+  --color-missing-text: #92400e;
+  --color-missing-border: #fde68a;
+
+  /* ================= 4. HIỆU ỨNG ĐỔ BÓNG THEO MÀU THEME ================= */
+  --shadow-theme-sm: 0 2px 6px rgba(74, 130, 184, 0.1);
+  --shadow-theme-md: 0 4px 14px rgba(74, 130, 184, 0.15);
+  --shadow-theme-lg: 0 10px 30px rgba(74, 130, 184, 0.2);
+}

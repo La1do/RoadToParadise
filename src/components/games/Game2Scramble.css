@@ -1,5 +1,6 @@
 /* Game2Scramble.css - Giao diện Game 2: Xáo từ / Xếp cụm (kéo thả, từng ý một card)
  * Theme Cánh Cụt Xanh Trắng (Penguin Blue & White Palette)
+ * Sử dụng CSS Variables tập trung từ colors.css
  */
 
 .game2-container {
@@ -9,7 +10,7 @@
   padding: 16px;
   box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
 }
 
 /* Header câu hỏi */
@@ -22,8 +23,8 @@
 }
 
 .game2-chapter-badge {
-  background: #4a82b8;
-  color: #ffffff;
+  background: var(--color-primary-deep, #4a82b8);
+  color: var(--color-white, #ffffff);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.78rem;
@@ -32,9 +33,9 @@
 }
 
 .game2-question-pill {
-  background: #eef6fc;
-  color: #1c3553;
-  border: 1.5px solid #c5def3;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-text-main, #1c3553);
+  border: 1.5px solid var(--color-border, #c5def3);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.78rem;
@@ -45,14 +46,14 @@
   margin: 0;
   font-size: 1.18rem;
   line-height: 1.55;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
   font-weight: 700;
 }
 
 .game2-instruction-note {
   margin: 8px 0 0 0;
   font-size: 0.88rem;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   line-height: 1.5;
 }
 
@@ -65,24 +66,24 @@
 }
 
 .game2-slot-card {
-  background: #ffffff;
+  background: var(--color-white, #ffffff);
   border-radius: 16px;
-  border: 1.5px solid #c5def3;
+  border: 1.5px solid var(--color-border, #c5def3);
   padding: 18px 20px;
   box-sizing: border-box;
   box-shadow: 0 4px 14px rgba(74, 130, 184, 0.08);
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .game2-slot-card.slot-passed {
-  border-color: #7bb5e8;
-  background: linear-gradient(180deg, #ffffff 0%, #eef6fc 100%);
+  border-color: var(--color-primary, #7bb5e8);
+  background: linear-gradient(180deg, #ffffff 0%, var(--color-bg-ice, #eef6fc) 100%);
   box-shadow: 0 0 0 2px rgba(123, 181, 232, 0.35);
 }
 
 .game2-slot-card.slot-failed {
-  border-color: #fca5a5;
+  border-color: var(--color-blush, #fca5a5);
   background: linear-gradient(180deg, #ffffff 0%, #fff5f5 100%);
 }
 
@@ -102,8 +103,8 @@
 }
 
 .game2-slot-card .slot-tag-pill {
-  background: #7bb5e8;
-  color: #ffffff;
+  background: var(--color-primary, #7bb5e8);
+  color: var(--color-white, #ffffff);
   width: 28px;
   height: 28px;
   border-radius: 14px;
@@ -118,7 +119,7 @@
 
 .game2-slot-card .slot-title-text {
   font-size: 0.98rem;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
   font-weight: 600;
 }
 
@@ -130,15 +131,15 @@
 }
 
 .game2-slot-card .badge-exact {
-  background: #eef6fc;
-  color: #4a82b8;
-  border: 1.5px solid #c5def3;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-primary-deep, #4a82b8);
+  border: 1.5px solid var(--color-border, #c5def3);
 }
 
 .game2-slot-card .badge-arranged {
-  background: #eef6fc;
-  color: #1c3553;
-  border: 1.5px solid #7bb5e8;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-text-main, #1c3553);
+  border: 1.5px solid var(--color-primary, #7bb5e8);
 }
 
 .game2-header {
@@ -159,8 +160,8 @@
   min-width: 28px;
   height: 28px;
   padding: 0 6px;
-  background-color: #4a82b8;
-  color: #ffffff;
+  background-color: var(--color-primary-deep, #4a82b8);
+  color: var(--color-white, #ffffff);
   border-radius: 14px;
   font-size: 0.875rem;
   font-weight: 700;
@@ -169,12 +170,12 @@
 .game2-slot-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
 }
 
 .game2-instruction {
   font-size: 0.875rem;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   margin: 0;
   line-height: 1.4;
 }
@@ -192,7 +193,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   margin-bottom: 8px;
   flex-wrap: wrap;
   gap: 6px;
@@ -205,9 +206,9 @@
 }
 
 .game2-reset-inline-btn {
-  background: #eef6fc;
-  color: #4a82b8;
-  border: 1.5px solid #c5def3;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-primary-deep, #4a82b8);
+  border: 1.5px solid var(--color-border, #c5def3);
   border-radius: 14px;
   padding: 4px 12px;
   font-size: 0.76rem;
@@ -217,20 +218,20 @@
 }
 
 .game2-reset-inline-btn:hover {
-  background: #c5def3;
-  color: #1c3553;
+  background: var(--color-border, #c5def3);
+  color: var(--color-text-main, #1c3553);
 }
 
 .game2-slot-card .badge-wrong {
   background-color: #fee2e2;
   color: #991b1b;
-  border: 1px solid #fca5a5;
+  border: 1px solid var(--color-blush, #fca5a5);
 }
 
-/* ================= 3. KHAY GHÉP ĐƠN (CHỈ 1 Ô DUY NHẤT) ================= */
+/* ================= 1 KHAY GHÉP DUY NHẤT CHO CẢ Ý ================= */
 .game2-single-tray {
   background: #f8fafc;
-  border: 2px dashed #c5def3;
+  border: 2px dashed var(--color-border, #c5def3);
   border-radius: 16px;
   padding: 12px 14px 18px 14px;
   min-height: 80px;
@@ -247,24 +248,24 @@
 
 .game2-single-tray.has-items {
   border-style: solid;
-  border-color: #c5def3;
-  background: #ffffff;
+  border-color: var(--color-border, #c5def3);
+  background: var(--color-white, #ffffff);
 }
 
 .game2-single-tray.is-drag-over {
-  border-color: #4a82b8 !important;
-  background: #eef6fc !important;
+  border-color: var(--color-primary-deep, #4a82b8) !important;
+  background: var(--color-bg-ice, #eef6fc) !important;
   box-shadow: 0 0 16px rgba(123, 181, 232, 0.45);
 }
 
 .game2-single-tray.tray-correct {
-  border: 2px solid #7bb5e8 !important;
-  background: #eef6fc !important;
+  border: 2px solid var(--color-primary, #7bb5e8) !important;
+  background: var(--color-bg-ice, #eef6fc) !important;
   box-shadow: 0 0 10px rgba(123, 181, 232, 0.35);
 }
 
 .game2-single-tray.tray-wrong {
-  border: 2px solid #fca5a5 !important;
+  border: 2px solid var(--color-blush, #fca5a5) !important;
   background: #fff5f5 !important;
   box-shadow: 0 0 10px rgba(252, 165, 165, 0.4);
 }
@@ -276,7 +277,7 @@
   gap: 8px;
   width: 100%;
   min-height: 48px;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   font-size: 0.9rem;
   font-style: italic;
   user-select: none;
@@ -284,7 +285,7 @@
 }
 
 .game2-tray-empty-prompt.is-target-hovered {
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
   font-weight: 700;
   transform: scale(1.02);
 }
@@ -315,68 +316,59 @@
   padding: 4px 14px;
   border-radius: 22px;
   background: rgba(123, 181, 232, 0.22);
-  border: 2px dashed #4a82b8;
-  color: #1c3553;
+  border: 2px dashed var(--color-primary-deep, #4a82b8);
+  color: var(--color-text-main, #1c3553);
   font-size: 0.84rem;
-  font-weight: 800;
-  box-shadow: 0 0 14px rgba(123, 181, 232, 0.55);
+  font-weight: 700;
+  animation: slotPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
-  animation: placeholderSplit 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  pointer-events: none;
-  user-select: none;
-  white-space: nowrap;
+  transform-origin: center;
 }
 
-.game2-drop-placeholder.at-end {
-  background: rgba(123, 181, 232, 0.28);
-  border: 2px dashed #4a82b8;
-  color: #1c3553;
+@keyframes slotPopIn {
+  from {
+    transform: scale(0.65);
+    opacity: 0;
+    min-width: 0;
+    padding: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+    min-width: 110px;
+    padding: 4px 14px;
+  }
 }
 
-.placeholder-arrow {
-  color: #4a82b8;
-  font-size: 1rem;
-  font-weight: 900;
-  animation: bounceDown 0.6s infinite alternate ease-in-out;
+.placeholder-dot {
+  color: var(--color-primary-deep, #4a82b8);
+  font-size: 0.9rem;
+  animation: blinkDot 1s infinite alternate;
+}
+
+@keyframes blinkDot {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
 }
 
 .placeholder-text {
+  font-weight: 700;
+  color: var(--color-primary-deep, #4a82b8);
   letter-spacing: 0.02em;
 }
 
-@keyframes placeholderSplit {
-  0% {
-    opacity: 0;
-    transform: scale(0.6) translateY(6px);
-    max-width: 0;
-    margin: 0;
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    max-width: 220px;
-    margin: 0 4px;
-  }
-}
-
-@keyframes bounceDown {
-  from { transform: translateY(-2px); }
-  to { transform: translateY(2px); }
-}
-
-/* Thẻ từ đã đặt vào ô khay — hiệu ứng trượt vào đúng vị trí */
+/* Thẻ đã đặt vào khay */
 .game2-placed-card {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
-  min-height: 44px;
+  background: var(--color-white, #ffffff);
+  border: 1.5px solid var(--color-border, #c5def3);
   border-radius: 22px;
-  background: #ffffff;
-  border: 1.5px solid #c5def3;
-  color: #1c3553;
-  font-size: 0.92rem;
-  font-weight: 600;
+  padding: 8px 14px;
+  color: var(--color-text-main, #1c3553);
+  font-size: 0.95rem;
+  font-weight: 700;
   cursor: grab;
   user-select: none;
   touch-action: none;
@@ -402,8 +394,8 @@
 }
 
 .game2-placed-card:hover {
-  background: #eef6fc;
-  border-color: #7bb5e8;
+  background: var(--color-bg-ice, #eef6fc);
+  border-color: var(--color-primary, #7bb5e8);
   transform: translateY(-1px);
 }
 
@@ -429,8 +421,8 @@
 }
 
 .game2-placed-card.pos-correct {
-  border-color: #7bb5e8 !important;
-  background: #eef6fc !important;
+  border-color: var(--color-primary, #7bb5e8) !important;
+  background: var(--color-bg-ice, #eef6fc) !important;
   animation: correctPulse 0.35s ease;
 }
 
@@ -441,7 +433,7 @@
 }
 
 .game2-placed-card.pos-wrong {
-  border-color: #fca5a5 !important;
+  border-color: var(--color-blush, #fca5a5) !important;
   background: #fff5f5 !important;
   box-shadow: 0 0 8px rgba(252, 165, 165, 0.5);
   animation: wrongWiggle 0.35s ease;
@@ -455,10 +447,10 @@
 
 .placed-chip-num {
   font-size: 0.72rem;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   font-weight: 800;
-  background: #eef6fc;
-  border: 1px solid #c5def3;
+  background: var(--color-bg-ice, #eef6fc);
+  border: 1px solid var(--color-border, #c5def3);
   padding: 2px 6px;
   border-radius: 10px;
   flex-shrink: 0;
@@ -468,45 +460,50 @@
   line-height: 1.35;
 }
 
-.cell-badge {
-  font-size: 0.7rem;
-  padding: 2px 7px;
-  border-radius: 10px;
+.placed-chip-status {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 12px;
   font-weight: 800;
   letter-spacing: 0.02em;
 }
 
-.cell-badge.correct {
-  background: #eef6fc;
-  color: #4a82b8;
-  border: 1px solid #c5def3;
+.placed-chip-status.exact {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
 }
 
-.cell-badge.wrong {
+.placed-chip-status.wrong {
   background: #fee2e2;
   color: #991b1b;
-  border: 1px solid #fca5a5;
+  border: 1px solid var(--color-blush, #fca5a5);
 }
 
-.game2-placed-card .remove-cross {
-  color: #4a82b8;
-  font-size: 0.85rem;
-  padding: 2px 6px;
-  border-radius: 8px;
+.placed-remove-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.8rem;
   cursor: pointer;
-  margin-left: 2px;
+  padding: 2px 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
 }
 
-.game2-placed-card .remove-cross:hover {
+.placed-remove-btn:hover {
   background: #fee2e2;
   color: #991b1b;
 }
 
-/* ================= 4. KHO CỤM TỪ CẦN SẮP XẾP ================= */
+/* ================= HÀNG CỤM TỪ CẦN SẮP XẾP (KHO TỪ) ================= */
 .game2-pool-section {
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 1px solid #eef6fc;
+  border-top: 1px solid var(--color-bg-ice, #eef6fc);
 }
 
 .game2-pool-label {
@@ -514,37 +511,36 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   margin-bottom: 8px;
 }
 
-.game2-pool-grid {
+.game2-pool-flow {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  min-height: 50px;
+  min-height: 48px;
+  align-items: center;
   padding: 4px;
   border-radius: 12px;
-  box-sizing: border-box;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
 }
 
-.game2-pool-grid.is-drag-over {
-  background: #eef6fc;
-  border: 1.5px dashed #4a82b8;
+.game2-pool-flow.pool-is-target {
+  background: rgba(123, 181, 232, 0.15);
+  outline: 2px dashed var(--color-primary-deep, #4a82b8);
 }
 
 .game2-pool-card {
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   min-height: 44px;
   padding: 8px 14px;
   border-radius: 22px;
-  background-color: #ffffff;
-  color: #1c3553;
-  border: 1.5px solid #c5def3;
+  background-color: var(--color-white, #ffffff);
+  color: var(--color-text-main, #1c3553);
+  border: 1.5px solid var(--color-border, #c5def3);
   font-size: 0.92rem;
   font-weight: 600;
   cursor: pointer;
@@ -556,9 +552,9 @@
 }
 
 .game2-pool-card:hover {
-  background-color: #eef6fc;
-  border-color: #7bb5e8;
-  color: #1c3553;
+  background-color: var(--color-bg-ice, #eef6fc);
+  border-color: var(--color-primary, #7bb5e8);
+  color: var(--color-text-main, #1c3553);
   transform: translateY(-1px);
 }
 
@@ -588,7 +584,7 @@
 }
 
 .pool-card-arrow {
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   font-weight: 800;
   font-size: 1rem;
 }
@@ -599,7 +595,7 @@
   align-items: center;
   justify-content: center;
   min-height: 44px;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   font-size: 0.88rem;
   font-weight: 700;
   font-style: italic;
@@ -612,9 +608,9 @@
   left: 0;
   pointer-events: none;
   z-index: 99999;
-  background: #4a82b8;
-  color: #ffffff;
-  border: 2px solid #7bb5e8;
+  background: var(--color-primary-deep, #4a82b8);
+  color: var(--color-white, #ffffff);
+  border: 2px solid var(--color-primary, #7bb5e8);
   border-radius: 22px;
   padding: 8px 16px;
   font-size: 0.95rem;
@@ -635,7 +631,7 @@
 /* Bảng báo lỗi trực quan tương phản cao */
 .alert-high-contrast {
   background-color: #fff5f5;
-  border: 1.5px solid #fca5a5;
+  border: 1.5px solid var(--color-blush, #fca5a5);
   color: #991b1b;
   padding: 10px 14px;
   border-radius: 10px;
@@ -654,20 +650,20 @@
 }
 
 .game2-btn-confirm:disabled {
-  background-color: #eef6fc;
-  color: #c5def3;
+  background-color: var(--color-bg-ice, #eef6fc);
+  color: var(--color-border, #c5def3);
   cursor: not-allowed;
 }
 
 .game2-btn-reset {
-  background-color: #eef6fc;
-  color: #4a82b8;
-  border: 1.5px solid #c5def3;
+  background-color: var(--color-bg-ice, #eef6fc);
+  color: var(--color-primary-deep, #4a82b8);
+  border: 1.5px solid var(--color-border, #c5def3);
 }
 
 .game2-btn-reset:hover {
-  background-color: #c5def3;
-  color: #1c3553;
+  background-color: var(--color-border, #c5def3);
+  color: var(--color-text-main, #1c3553);
 }
 
 /* Báo lỗi khi xếp sai */
@@ -686,8 +682,8 @@
 
 /* Bước gõ củng cố (Gõ nhẩm lại cả câu không cần nhìn) */
 .game2-reinforce-card {
-  background-color: #ffffff;
-  border: 2px solid #7bb5e8;
+  background-color: var(--color-white, #ffffff);
+  border: 2px solid var(--color-primary, #7bb5e8);
   border-radius: 16px;
   padding: 18px;
   margin-top: 12px;
@@ -701,8 +697,8 @@
 
 .game2-reinforce-badge {
   display: inline-block;
-  background-color: #4a82b8;
-  color: #ffffff;
+  background-color: var(--color-primary-deep, #4a82b8);
+  color: var(--color-white, #ffffff);
   font-size: 0.8rem;
   font-weight: 700;
   padding: 3px 10px;
@@ -713,13 +709,13 @@
 .game2-reinforce-title {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
   margin: 0 0 4px 0;
 }
 
 .game2-reinforce-subtitle {
   font-size: 0.85rem;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   margin: 0;
   line-height: 1.4;
 }
@@ -732,9 +728,9 @@
   font-size: 1.05rem;
   line-height: 1.5;
   font-family: inherit;
-  color: #1c3553;
-  background-color: #ffffff;
-  border: 1.5px solid #c5def3;
+  color: var(--color-text-main, #1c3553);
+  background-color: var(--color-white, #ffffff);
+  border: 1.5px solid var(--color-border, #c5def3);
   border-radius: 12px;
   outline: none;
   resize: vertical;
@@ -743,7 +739,7 @@
 }
 
 .game2-reinforce-textarea:focus {
-  border-color: #4a82b8;
+  border-color: var(--color-primary-deep, #4a82b8);
   box-shadow: 0 0 0 3px rgba(123, 181, 232, 0.3);
 }
 
@@ -754,8 +750,8 @@
 }
 
 .game2-btn-grade-reinforce {
-  background: linear-gradient(135deg, #4a82b8 0%, #3a6fa0 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary-deep, #4a82b8) 0%, #3a6fa0 100%);
+  color: var(--color-white, #ffffff);
   border: none;
   border-radius: 20px;
   min-height: 44px;
@@ -777,9 +773,9 @@
 }
 
 .game2-reinforce-result.correct {
-  background-color: #eef6fc;
-  border-color: #7bb5e8;
-  color: #1c3553;
+  background-color: var(--color-bg-ice, #eef6fc);
+  border-color: var(--color-primary, #7bb5e8);
+  color: var(--color-text-main, #1c3553);
 }
 
 .game2-reinforce-result.wrong {
@@ -805,9 +801,9 @@
 }
 
 .game2-token.correct {
-  background: #eef6fc;
-  color: #4a82b8;
-  border: 1px solid #c5def3;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-primary-deep, #4a82b8);
+  border: 1px solid var(--color-border, #c5def3);
   padding: 2px 7px;
   border-radius: 6px;
   font-weight: 600;
@@ -816,8 +812,8 @@
 .game2-btn-next-step {
   width: 100%;
   margin-top: 12px;
-  background: linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary, #7bb5e8) 0%, var(--color-primary-deep, #4a82b8) 100%);
+  color: var(--color-white, #ffffff);
   border: none;
   border-radius: 22px;
   min-height: 44px;
@@ -836,7 +832,7 @@
   bottom: 12px;
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(12px);
-  border: 2px solid #c5def3;
+  border: 2px solid var(--color-border, #c5def3);
   border-radius: 18px;
   padding: 14px 20px;
   box-shadow: 0 10px 30px rgba(74, 130, 184, 0.18);
@@ -854,9 +850,9 @@
 }
 
 .game2-summary-bar.summary-passed {
-  background: #eef6fc;
-  border: 1.5px solid #7bb5e8;
-  color: #1c3553;
+  background: var(--color-bg-ice, #eef6fc);
+  border: 1.5px solid var(--color-primary, #7bb5e8);
+  color: var(--color-text-main, #1c3553);
 }
 
 .game2-summary-bar.summary-pending {
@@ -882,8 +878,8 @@
 .game2-check-all-btn {
   flex: 1;
   min-height: 48px;
-  background: linear-gradient(135deg, #4a82b8 0%, #3a6fa0 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary-deep, #4a82b8) 0%, #3a6fa0 100%);
+  color: var(--color-white, #ffffff);
   border: none;
   border-radius: 24px;
   font-size: 1.05rem;
@@ -909,8 +905,8 @@
 .game2-next-btn {
   min-height: 48px;
   padding: 0 24px;
-  background: linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary, #7bb5e8) 0%, var(--color-primary-deep, #4a82b8) 100%);
+  color: var(--color-white, #ffffff);
   border: none;
   border-radius: 24px;
   font-size: 1rem;
@@ -941,7 +937,7 @@
     font-size: 1.35rem;
   }
 
-  .game2-grid-cell {
-    min-height: 80px;
+  .game2-single-tray {
+    min-height: 90px;
   }
 }

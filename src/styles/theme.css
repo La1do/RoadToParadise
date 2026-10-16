@@ -3,6 +3,8 @@
    Theme Chim Cánh Cụt Xanh Trắng (Penguin Blue & White Palette)
    ========================================================================== */
 
+@import './colors.css';
+
 :root {
   /* Biến chuẩn mặc định */
   --touch-target-size: 44px;
