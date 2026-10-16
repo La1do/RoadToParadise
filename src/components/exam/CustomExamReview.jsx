@@ -20,6 +20,29 @@ import './CustomExamReview.css';
  * - Lưu bài làm khi nhảy qua lại giữa các câu hỏi, không bị mất dữ liệu.
  * - Tự do chọn phạm vi câu hỏi: Toàn bộ 20 câu, theo chặng, ngẫu nhiên hoặc tick chọn thủ công.
  */
+export const QUESTION_SHORT_TITLES = {
+  1: 'Hai loại khải thị Đức Chúa Trời',
+  2: '‘Người đọc’ là ai & câu kinh',
+  3: 'Nội dung bức thư Kh 2~3',
+  4: 'Bí mật thứ nhất & câu kinh',
+  5: 'Ngai Đức Chúa Trời đến đâu',
+  6: 'Lý do sách niêm phong chưa ai hiểu',
+  7: 'Được đóng ấn sau việc gì',
+  8: 'Lý do thổi kèn ở Kh 8',
+  9: 'Thời Chúa đến: nhận ăn & làm chứng',
+  10: 'Chiếc kèn thứ 7 thổi lên',
+  11: 'Vũ khí ‘Huyết chiên con’',
+  12: 'Hiện trường ‘Trời’ Kh 13 ở đâu',
+  13: '‘Bài ca mới’ Kh 14:3 là gì',
+  14: 'Tại Kh 15:5 ai làm chứng điều gì',
+  15: 'Các ‘Tai họa’ & thứ tự',
+  16: '‘Rượu nho gian dâm’ là gì',
+  17: 'Lý do chưa phán xét Babylon',
+  18: 'Kh 19 xảy ra sau việc gì',
+  19: 'Người nhận thẩm quyền ngồi ngai',
+  20: 'Lý do Khải huyền quan trọng nhất'
+};
+
 export default function CustomExamReview({ onBackToMap }) {
   const allQuestions = questionsData.questions;
 
@@ -507,14 +530,14 @@ export default function CustomExamReview({ onBackToMap }) {
                 <div className="questions-select-grid">
                   {allQuestions.map(q => {
                     const isSelected = selectedQuestionIds.includes(q.id);
-                    const hintText = q.slots[0]?.title || q.question;
+                    const hintText = QUESTION_SHORT_TITLES[q.id] || q.slots[0]?.title || q.question;
                     return (
                       <button
                         key={q.id}
                         type="button"
                         className={`q-select-card ${isSelected ? 'is-selected' : ''}`}
                         onClick={() => handleToggleQuestionId(q.id)}
-                        title={`Câu ${q.id}: ${hintText}`}
+                        title={`Câu ${q.id}: ${q.question}`}
                       >
                         <div className="q-card-top">
                           <span className="q-id-badge">Câu {q.id}</span>

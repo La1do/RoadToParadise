@@ -334,8 +334,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 102px;
+  min-height: 98px;
   box-sizing: border-box;
+  overflow: visible;
   transition: all 0.15s ease;
 }
 
@@ -376,13 +377,9 @@
   font-size: 0.84rem;
   line-height: 1.45;
   color: var(--color-text-main, #1c3553);
-  font-weight: 500;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-weight: 600;
+  overflow: visible;
   word-break: break-word;
-  padding-bottom: 2px;
 }
 
 .q-slots-count {
