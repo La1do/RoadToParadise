@@ -106,9 +106,9 @@ export default function MinhCharacter({
 
           {/* Luồng sáng điện thoại */}
           <linearGradient id="minh-phone-screen-glow" x1="50%" y1="100%" x2="50%" y2="0%">
-            <stop offset="0%" stopColor="#38BDF8" stopOpacity="0.85" />
-            <stop offset="50%" stopColor="#60A5FA" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#93C5FD" stopOpacity="0" />
+            <stop offset="0%" stopColor="#7bb5e8" stopOpacity="0.85" />
+            <stop offset="50%" stopColor="#4a82b8" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#c5def3" stopOpacity="0" />
           </linearGradient>
         </defs>
 
