@@ -175,13 +175,13 @@ export default function App() {
           background: #eef6fc;
         }
         .app-sidebar-item.active {
-          background: #e0f2fe;
-          border-color: #38bdf8;
-          color: #0284c7;
+          background: #eef6fc;
+          border-color: #7bb5e8;
+          color: #4a82b8;
           font-weight: 700;
         }
         .app-sidebar-check {
-          color: #0284c7;
+          color: #4a82b8;
           font-weight: bold;
         }
         @keyframes appFadeIn {
