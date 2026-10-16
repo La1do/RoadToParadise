@@ -860,8 +860,15 @@ export default function CustomExamReview({ onBackToMap }) {
                 question={currentQ}
                 initialInputs={copyAnswers[currentQ.id]}
                 initialShowReference={showReferenceAnswer}
+                isLastQuestion={currentIndex === sessionQuestions.length - 1}
                 onStateChange={inputs => handleCopyStateChange(currentQ.id, inputs)}
                 onToggleReference={setShowReferenceAnswer}
+                onResetAll={() => {
+                  setCopyAnswers({});
+                  setCurrentIndex(0);
+                  setElapsedSeconds(0);
+                }}
+                onFinish={handleSubmitCopy}
                 onNext={() => {
                   if (currentIndex < sessionQuestions.length - 1) {
                     setCurrentIndex(prev => prev + 1);
@@ -906,7 +913,14 @@ export default function CustomExamReview({ onBackToMap }) {
                 key={currentQ.id}
                 question={currentQ}
                 initialState={scrambleProgress[currentQ.id]}
+                isLastQuestion={currentIndex === sessionQuestions.length - 1}
                 onStateChange={state => handleScrambleStateChange(currentQ.id, state)}
+                onResetAll={() => {
+                  setScrambleProgress({});
+                  setCurrentIndex(0);
+                  setElapsedSeconds(0);
+                }}
+                onFinish={handleSubmitScramble}
                 onNext={() => {
                   if (currentIndex < sessionQuestions.length - 1) {
                     setCurrentIndex(prev => prev + 1);

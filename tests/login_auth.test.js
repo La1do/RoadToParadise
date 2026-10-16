@@ -110,3 +110,25 @@ test('Sticker: Hỗ trợ case bỏ trống với sticker Tỉnh táo lên (wake
 
   assert.ok(fs.existsSync('./public/stickers/wake_up.png'), 'File wake_up.png tồn tại trong public/stickers');
 });
+
+test('Phông chữ & Nút thao tác sau kiểm tra: Làm lại câu này, Làm lại cả bài, Kết thúc', () => {
+  // 1. Phông chữ tiếng Việt đẹp rõ nét
+  const indexHtml = fs.readFileSync('./index.html', 'utf8');
+  assert.match(indexHtml, /Be\+Vietnam\+Pro/, 'Import Google Fonts Be Vietnam Pro trong index.html');
+
+  const themeCss = fs.readFileSync('./src/styles/theme.css', 'utf8');
+  assert.match(themeCss, /'Be Vietnam Pro'/, 'theme.css định nghĩa phông chữ chủ đạo Be Vietnam Pro');
+
+  // 2. Game 1: Sau khi kiểm tra có nút Làm lại / Làm lại cả bài / Kết thúc
+  const g1Jsx = fs.readFileSync('./src/components/games/Game1Copy.jsx', 'utf8');
+  assert.match(g1Jsx, /Làm lại câu này/, 'Game 1 có nút Làm lại câu này');
+  assert.match(g1Jsx, /Làm lại cả bài/, 'Game 1 có nút Làm lại cả bài');
+  assert.match(g1Jsx, /Kết thúc/, 'Game 1 có nút Kết thúc');
+
+  // 3. Game 2: Sau khi kiểm tra có nút Làm lại / Làm lại cả bài / Kết thúc
+  const g2Jsx = fs.readFileSync('./src/components/games/Game2Scramble.jsx', 'utf8');
+  assert.match(g2Jsx, /Làm lại câu này/, 'Game 2 có nút Làm lại câu này');
+  assert.match(g2Jsx, /Làm lại cả bài/, 'Game 2 có nút Làm lại cả bài');
+  assert.match(g2Jsx, /Kết thúc/, 'Game 2 có nút Kết thúc');
+});
+

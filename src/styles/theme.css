@@ -8,7 +8,7 @@
 :root {
   /* Biến chuẩn mặc định */
   --touch-target-size: 44px;
-  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans',
+  --font-family-base: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans',
     'Helvetica Neue', Arial, sans-serif;
   --font-family-serif: 'Be Vietnam Pro', 'Merriweather', 'Lora', Georgia, serif;
 
@@ -142,13 +142,14 @@ body {
   transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
-/* Touch targets tối thiểu 44px */
+/* Touch targets tối thiểu 44px & Kế thừa phông chữ tiếng Việt chuẩn */
 button,
 a,
 input,
 select,
 textarea,
 [role="button"] {
+  font-family: inherit;
   min-height: var(--touch-target-size);
   box-sizing: border-box;
 }
