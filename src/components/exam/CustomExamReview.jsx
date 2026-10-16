@@ -861,6 +861,7 @@ export default function CustomExamReview({ onBackToMap }) {
                 initialInputs={copyAnswers[currentQ.id]}
                 initialShowReference={showReferenceAnswer}
                 onStateChange={inputs => handleCopyStateChange(currentQ.id, inputs)}
+                onToggleReference={setShowReferenceAnswer}
                 onNext={() => {
                   if (currentIndex < sessionQuestions.length - 1) {
                     setCurrentIndex(prev => prev + 1);
