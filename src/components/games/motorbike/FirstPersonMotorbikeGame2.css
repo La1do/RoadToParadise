@@ -52,17 +52,17 @@
   transition: background 1.2s ease;
 }
 
-/* Chặng 1: Sáng sớm sương mai vàng cam */
+/* Chặng 1: Sáng sớm sương mai tuyết trắng */
 .chang-1 .layer-sky {
   background: linear-gradient(180deg, #c5def3 0%, #eef6fc 60%, #ffffff 100%);
 }
-/* Chặng 2: Trưa nắng gắt xanh thẳm */
+/* Chặng 2: Trưa nắng nhẹ xanh cánh cụt */
 .chang-2 .layer-sky {
   background: linear-gradient(180deg, #7bb5e8 0%, #c5def3 70%, #eef6fc 100%);
 }
 /* Chặng 3: Chiều tà hoàng hôn rực rỡ */
 .chang-3 .layer-sky {
-  background: linear-gradient(180deg, #7c3aed 0%, #f43f5e 55%, #fbbf24 100%);
+  background: linear-gradient(180deg, #4a82b8 0%, #f43f5e 55%, #fbbf24 100%);
 }
 /* Chặng 4: Đêm phán xét huyền ảo */
 .chang-4 .layer-sky {

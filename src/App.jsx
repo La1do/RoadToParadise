@@ -29,7 +29,6 @@ export default function App() {
   const homeTab = isTabEnabled('map') ? 'map' : (isTabEnabled(defaultTab) ? defaultTab : 'custom-practice');
 
   const [viewMode, setViewMode] = useState(isTabEnabled(defaultTab) ? defaultTab : 'custom-practice');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Đảm bảo nếu tab hiện tại bị ẩn theo permissions.json thì tự động chuyển về tab mặc định hợp lệ
   useEffect(() => {
@@ -43,6 +42,7 @@ export default function App() {
   const [selectedStep, setSelectedStep] = useState(1);
   const [cutsceneStageId, setCutsceneStageId] = useState(1);
   const [modalResult, setModalResult] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   // Lưu trạng thái làm bài Game 2 để chuyển câu không bị mất đáp án
   const [game2Progress, setGame2Progress] = useState({});
 
@@ -222,7 +222,7 @@ export default function App() {
         <div
           style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }}
           onClick={() => {
-            if (hasMultipleTabs && window.innerWidth < 768) {
+            if (hasMultipleTabs && typeof window !== 'undefined' && window.innerWidth < 768) {
               setIsSidebarOpen(true);
             } else {
               setViewMode(homeTab);
