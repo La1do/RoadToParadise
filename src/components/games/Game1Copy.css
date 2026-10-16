@@ -350,6 +350,17 @@
   cursor: pointer;
 }
 
+.slot-result-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.slot-diff-reaction-row {
+  margin-bottom: 10px;
+}
+
 /* Hộp so sánh từ sai / thiếu */
 .slot-diff-box {
   margin-top: 12px;

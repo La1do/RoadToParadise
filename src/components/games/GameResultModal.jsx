@@ -1,4 +1,6 @@
 import React from 'react';
+import StickerReaction, { getStickerByScore } from '../common/StickerReaction.jsx';
+import { getStoredUserName } from '../../utils/cookie.js';
 import './GameResultModal.css';
 
 /**
@@ -108,25 +110,41 @@ export default function GameResultModal({
     accuracyColorClass = 'medium';
   }
 
+  const currentUserName = getStoredUserName();
+
+  const isAllBlank = calculatedAccuracy === 0 && correct === 0;
+
   const defaultTitle = isPerfect
-    ? 'Hoàn thành xuất sắc!'
+    ? (currentUserName ? `Hoàn thành xuất sắc, ${currentUserName}!` : 'Hoàn thành xuất sắc!')
+    : isAllBlank
+    ? (currentUserName ? `Tỉnh táo lên ${currentUserName} ơi!` : 'Tỉnh táo lên!')
     : isExamMode
     ? 'Kết quả bài thi'
     : 'Kết quả lượt học';
 
-  const defaultSubtitle = isPerfect
-    ? 'Bạn đã nhớ và làm đúng 100% không một lỗi sai.'
+  const defaultSubtitle = isAllBlank
+    ? (currentUserName ? `${currentUserName} ơi, cố lên nào, đừng bỏ trống bài làm chứ!` : 'Cố lên nào, đừng bỏ trống bài làm chứ!')
+    : isPerfect
+    ? (currentUserName ? `${currentUserName} ơi, bạn đã nhớ và làm đúng 100% không một lỗi sai.` : 'Bạn đã nhớ và làm đúng 100% không một lỗi sai.')
     : hasMistakes
-    ? 'Hãy kiểm tra các từ sai bên dưới để ôn tập củng cố lại.'
+    ? (currentUserName ? `${currentUserName} hãy kiểm tra các từ sai bên dưới để ôn tập củng cố lại nhé.` : 'Hãy kiểm tra các từ sai bên dưới để ôn tập củng cố lại.')
     : 'Bạn đã hoàn thành phiên học.';
+
+  const stickerInfo = getStickerByScore(calculatedAccuracy, isPerfect, wrong, currentUserName, isAllBlank);
 
   return (
     <div className="result-modal-overlay" role="dialog" aria-modal="true">
       <div className="result-modal-dialog">
-        {/* Header */}
+        {/* Header có Sticker cảm xúc hoạt họa */}
         <div className="result-modal-header">
-          <div className={`result-modal-badge ${isPerfect ? 'success' : 'needs-work'}`}>
-            {isPerfect ? '✓' : '!'}
+          <div className="result-modal-sticker-wrap">
+            <StickerReaction
+              type={stickerInfo.type}
+              text={stickerInfo.text}
+              size="lg"
+              layout="vertical"
+              animate={isPerfect ? 'bounce' : calculatedAccuracy < 50 ? 'shake' : 'pop'}
+            />
           </div>
           <h3 className="result-modal-title">{title || defaultTitle}</h3>
           <p className="result-modal-subtitle">{subtitle || defaultSubtitle}</p>

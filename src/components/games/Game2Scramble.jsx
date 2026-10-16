@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { generateStep2Arrange, evaluateStep2Arrange } from '../../core/learningStepEngine.js';
 import { compareAnswer } from '../../core/gradeEngine.js';
+import StickerReaction from '../common/StickerReaction.jsx';
 import './Game2Scramble.css';
 
 /**
@@ -77,6 +78,8 @@ export default function Game2Scramble({
   // Kéo thả & Cảm ứng mượt mà trên điện thoại và máy tính
   const dragRef = useRef(null);
   const hoverTargetRef = useRef(null);
+  const lastTapHandledAtRef = useRef(0);
+  const lastCardActionRef = useRef(0);
   const [dragInfo, setDragInfo] = useState(null); // { slotIndex, itemId, text, source, fromIndex }
   const [ghostPos, setGhostPos] = useState(null); // { x, y } cho thẻ bay theo ngón tay
   const [hoverTarget, setHoverTarget] = useState(null); // { slotIndex, type: 'tray-insert' | 'pool', index?: number }
@@ -249,6 +252,10 @@ export default function Game2Scramble({
 
   // Chạm thẻ ở kho từ: đưa ngay vào ô khay
   const handleSelectPoolCard = (slotIndex, item) => {
+    const now = Date.now();
+    if (now - lastCardActionRef.current < 250) return;
+    lastCardActionRef.current = now;
+
     updateSlot(slotIndex, cur => ({
       ...cur,
       poolItems: cur.poolItems.filter(c => c.id !== item.id),
@@ -259,6 +266,10 @@ export default function Game2Scramble({
 
   // Chạm thẻ trên khay: gỡ trả về kho từ
   const handleRemoveTrayCard = (slotIndex, item) => {
+    const now = Date.now();
+    if (now - lastCardActionRef.current < 250) return;
+    lastCardActionRef.current = now;
+
     updateSlot(slotIndex, cur => ({
       ...cur,
       trayItems: cur.trayItems.filter(c => c.id !== item.id),
@@ -369,6 +380,7 @@ export default function Game2Scramble({
     const currentHover = hoverTargetRef.current;
 
     if (!drag.isDragging) {
+      lastTapHandledAtRef.current = Date.now();
       // Nhấp chuột / Chạm nhẹ: chuyển đổi tức thì (tap-to-move)
       if (drag.source === 'pool') {
         handleSelectPoolCard(drag.slotIndex, drag.item);
@@ -568,9 +580,34 @@ export default function Game2Scramble({
 
                 {/* Kết quả đánh giá */}
                 {res && (
-                  <span className={`slot-status-badge ${res.isCorrect ? 'badge-exact' : 'badge-wrong'}`}>
-                    {res.isCorrect ? '✓ Hoàn thành chính xác' : '✕ Có cụm sai vị trí'}
-                  </span>
+                  <div className="slot-result-badge-wrap">
+                    <StickerReaction
+                      type={
+                        st.trayItems.length === 0
+                          ? 'wake_up'
+                          : res.isCorrect
+                          ? 'determined'
+                          : 'shocked'
+                      }
+                      text={
+                        st.trayItems.length === 0
+                          ? 'Tỉnh táo lên! Cố lên nào, đừng bỏ trống chứ!'
+                          : res.isCorrect
+                          ? 'Đúng thứ tự rồi!'
+                          : 'Ái chà sai thứ tự rồi!!'
+                      }
+                      size="sm"
+                      layout="badge"
+                      animate={res.isCorrect ? 'bounce' : 'shake'}
+                    />
+                    <span className={`slot-status-badge ${res.isCorrect ? 'badge-exact' : 'badge-wrong'}`}>
+                      {st.trayItems.length === 0
+                        ? '✕ Bỏ trống'
+                        : res.isCorrect
+                        ? '✓ Hoàn thành chính xác'
+                        : '✕ Có cụm sai vị trí'}
+                    </span>
+                  </div>
                 )}
               </div>
 
@@ -662,6 +699,7 @@ export default function Game2Scramble({
                                         }}
                                         onDragStart={e => e.preventDefault()}
                                         onClick={() => {
+                                          if (Date.now() - lastTapHandledAtRef.current < 400) return;
                                           if (!dragRef.current?.isDragging) handleRemoveTrayCard(sIndex, item);
                                         }}
                                         title="Kéo sang cụm khác để đổi chỗ • Chạm để gỡ về kho"
@@ -749,6 +787,7 @@ export default function Game2Scramble({
                       }}
                       onDragStart={e => e.preventDefault()}
                       onClick={() => {
+                        if (Date.now() - lastTapHandledAtRef.current < 400) return;
                         if (!dragRef.current?.isDragging) handleSelectPoolCard(sIndex, item);
                       }}
                       title="Chạm hoặc kéo vào ô đáp án ở trên"
@@ -774,7 +813,25 @@ export default function Game2Scramble({
       <footer className="game2-footer">
         {summary && (
           <div className={`game2-summary-bar ${summary.isAllExact ? 'summary-passed' : 'summary-pending'}`}>
-            <span className="summary-icon">{summary.isAllExact ? '🎉' : '⚠️'}</span>
+            <StickerReaction
+              type={
+                summary.isAllExact
+                  ? 'determined'
+                  : slots.every(s => (slotStates[s.slotIndex]?.trayItems.length || 0) === 0)
+                  ? 'wake_up'
+                  : 'shocked'
+              }
+              text={
+                summary.isAllExact
+                  ? 'Đỉnh nóc kịch trần! Xếp đúng 100%!'
+                  : slots.every(s => (slotStates[s.slotIndex]?.trayItems.length || 0) === 0)
+                  ? 'Tỉnh táo lên! Cố lên nào, đừng bỏ trống chứ!'
+                  : 'Ái chà còn cụm sai vị trí, đổi chỗ nhé!!'
+              }
+              size="sm"
+              layout="badge"
+              animate={summary.isAllExact ? 'bounce' : 'shake'}
+            />
             <div className="summary-text">
               <strong>
                 {summary.isAllExact
