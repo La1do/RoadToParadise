@@ -71,9 +71,9 @@ export default function App() {
         </nav>
       </header>
 
-      {/* Main Content Area - Full width trên PC */}
+      {/* Main Content Area - Vừa vặn 1 màn hình trên Laptop/PC */}
       <main style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
+        <div style={{ width: '100%', maxWidth: 1040, padding: '0.5rem 1rem', boxSizing: 'border-box', margin: '0 auto' }}>
           <CustomExamReview />
         </div>
       </main>
