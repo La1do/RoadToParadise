@@ -39,6 +39,12 @@
   margin-bottom: 18px;
 }
 
+.result-modal-sticker-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
 .result-modal-badge {
   display: inline-flex;
   align-items: center;

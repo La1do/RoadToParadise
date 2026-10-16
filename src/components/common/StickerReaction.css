@@ -1,0 +1,300 @@
+/**
+ * StickerReaction.css - Giao diện hiển thị sticker phản ứng cảm xúc
+ * Đồng bộ hệ thống Theme Cánh Cụt Xanh Trắng & Centralized Colors
+ */
+
+.sticker-reaction-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.sticker-reaction-wrap:hover {
+  transform: translateY(-2px);
+}
+
+/* ================= 1. KÍCH THƯỚC ================= */
+.sticker-reaction-wrap.size-sm .sticker-img-container {
+  width: 48px;
+  height: 48px;
+}
+
+.sticker-reaction-wrap.size-md .sticker-img-container {
+  width: 72px;
+  height: 72px;
+}
+
+.sticker-reaction-wrap.size-lg .sticker-img-container {
+  width: 96px;
+  height: 96px;
+}
+
+.sticker-reaction-wrap.size-xl .sticker-img-container {
+  width: 120px;
+  height: 120px;
+}
+
+/* ================= 2. KHUNG HÌNH STICKER ================= */
+.sticker-img-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 14px rgba(74, 130, 184, 0.16);
+  padding: 4px;
+  border: 2px solid var(--color-border, #b8daf5);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.sticker-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Biến thể không nền viền cho sticker dạng trong suốt (như determined) */
+.sticker-determined .sticker-img-container {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.sticker-determined .sticker-img {
+  filter: drop-shadow(0 4px 10px rgba(74, 130, 184, 0.25));
+}
+
+/* ================= 3. BONG BÓNG LỜI THOẠI (SPEECH BUBBLE) ================= */
+.sticker-bubble {
+  position: relative;
+  background: var(--color-white, #ffffff);
+  border: 1.5px solid var(--color-border, #b8daf5);
+  border-radius: 14px;
+  padding: 8px 14px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text-main, #1c3553);
+  box-shadow: 0 4px 14px rgba(74, 130, 184, 0.12);
+  line-height: 1.4;
+  max-width: 280px;
+}
+
+.sticker-speech-arrow {
+  position: absolute;
+  left: -7px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background: var(--color-white, #ffffff);
+  border-left: 1.5px solid var(--color-border, #b8daf5);
+  border-bottom: 1.5px solid var(--color-border, #b8daf5);
+}
+
+/* ================= 4. BỐ CỤC (LAYOUTS) ================= */
+.sticker-reaction-wrap.layout-vertical {
+  flex-direction: column;
+  text-align: center;
+  gap: 8px;
+}
+
+.sticker-reaction-wrap.layout-vertical .sticker-speech-arrow {
+  left: 50%;
+  top: -6px;
+  transform: translateX(-50%) rotate(45deg);
+  border-left: 1.5px solid var(--color-border, #b8daf5);
+  border-top: 1.5px solid var(--color-border, #b8daf5);
+  border-bottom: none;
+}
+
+.sticker-reaction-wrap.layout-badge {
+  display: inline-flex;
+  padding: 4px 10px 4px 4px;
+  border-radius: 30px;
+  background: var(--color-white, #ffffff);
+  border: 1.5px solid var(--color-border, #b8daf5);
+  box-shadow: 0 2px 8px rgba(74, 130, 184, 0.12);
+}
+
+.sticker-reaction-wrap.layout-badge .sticker-bubble {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  max-width: none;
+}
+
+.sticker-reaction-wrap.layout-badge .sticker-speech-arrow {
+  display: none;
+}
+
+/* ================= 5. HIỆU ỨNG HOẠT HỌA ================= */
+.sticker-reaction-wrap.anim-pop .sticker-img {
+  animation: stickerPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes stickerPopIn {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.sticker-reaction-wrap.anim-bounce .sticker-img {
+  animation: stickerBounce 1.8s infinite ease-in-out;
+}
+
+@keyframes stickerBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.sticker-reaction-wrap.anim-wiggle .sticker-img {
+  animation: stickerWiggle 1.4s infinite ease-in-out;
+}
+
+@keyframes stickerWiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+.sticker-reaction-wrap.anim-shake .sticker-img {
+  animation: stickerShake 0.4s ease;
+}
+
+@keyframes stickerShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+/* ================= 6. TÙY BIẾN THEO LOẠI STICKER ================= */
+.sticker-shocked .sticker-bubble {
+  border-color: #fca5a5;
+  background: #fff5f5;
+  color: #991b1b;
+}
+
+.sticker-shocked .sticker-speech-arrow {
+  background: #fff5f5;
+  border-left-color: #fca5a5;
+  border-bottom-color: #fca5a5;
+  border-top-color: #fca5a5;
+}
+
+.sticker-angry .sticker-bubble {
+  border-color: #fca5a5;
+  background: #fff5f5;
+  color: #991b1b;
+}
+
+.sticker-angry .sticker-speech-arrow {
+  background: #fff5f5;
+  border-left-color: #fca5a5;
+  border-bottom-color: #fca5a5;
+  border-top-color: #fca5a5;
+}
+
+.sticker-wake_up .sticker-img-container {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.sticker-wake_up .sticker-img {
+  filter: drop-shadow(0 4px 10px rgba(185, 28, 28, 0.25));
+}
+
+.sticker-wake_up .sticker-bubble {
+  border-color: #fca5a5;
+  background: #fff5f5;
+  color: #991b1b;
+}
+
+.sticker-wake_up .sticker-speech-arrow {
+  background: #fff5f5;
+  border-left-color: #fca5a5;
+  border-bottom-color: #fca5a5;
+  border-top-color: #fca5a5;
+}
+
+.sticker-determined .sticker-bubble {
+  border-color: #86efac;
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.sticker-determined .sticker-speech-arrow {
+  background: #f0fdf4;
+  border-left-color: #86efac;
+  border-bottom-color: #86efac;
+  border-top-color: #86efac;
+}
+
+.sticker-thinking .sticker-bubble {
+  border-color: #fde68a;
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.sticker-thinking .sticker-speech-arrow {
+  background: #fffbeb;
+  border-left-color: #fde68a;
+  border-bottom-color: #fde68a;
+  border-top-color: #fde68a;
+}
+
+/* ================= 7. RESPONSIVE MOBILE ================= */
+@media (max-width: 600px) {
+  .sticker-reaction-wrap.size-lg .sticker-img-container {
+    width: 76px;
+    height: 76px;
+  }
+
+  .sticker-reaction-wrap.size-xl .sticker-img-container {
+    width: 90px;
+    height: 90px;
+  }
+
+  .sticker-bubble {
+    font-size: 0.82rem;
+    padding: 6px 10px;
+    max-width: 200px;
+  }
+}

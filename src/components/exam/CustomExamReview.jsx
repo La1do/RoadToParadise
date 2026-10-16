@@ -4,6 +4,7 @@ import { compareAnswer } from '../../core/gradeEngine.js';
 import { loadMistakeBook, addExamRecord } from '../../core/storageEngine.js';
 import Game1Copy from '../games/Game1Copy.jsx';
 import Game2Scramble from '../games/Game2Scramble.jsx';
+import StickerReaction from '../common/StickerReaction.jsx';
 import './CustomExamReview.css';
 
 /**
@@ -397,8 +398,18 @@ export default function CustomExamReview({ onBackToMap }) {
             {/* Cột trái: Tiêu đề, Chế độ, Tùy chọn & Nút bắt đầu */}
             <div className="setup-col-left">
               <header className="setup-header-compact">
-                <div className="header-badge">✦ KHÔNG GIAN HỌC TỰ CHỌN</div>
-                <h1 className="header-title-compact">🎯 Ôn Tập & Thi Riêng</h1>
+                <div className="setup-header-row">
+                  <div>
+                    <div className="header-badge">✦ KHÔNG GIAN HỌC TỰ CHỌN</div>
+                    <h1 className="header-title-compact">🎯 Ôn Tập & Thi Riêng</h1>
+                  </div>
+                  <img
+                    src="/stickers/cheer.png"
+                    alt="Anh em thi thử nhé 0.0"
+                    className="setup-static-sticker"
+                    draggable="false"
+                  />
+                </div>
               </header>
 
               <div className="setup-section mode-section">
@@ -508,8 +519,18 @@ export default function CustomExamReview({ onBackToMap }) {
           {/* B. BỐ CỤC SIÊU GỌN DẠNG POP-UP CHO MOBILE (< 820px) */}
           <div className="setup-mobile-view">
             <header className="setup-header-compact">
-              <div className="header-badge">✦ KHÔNG GIAN HỌC TỰ CHỌN</div>
-              <h1 className="header-title-compact">🎯 Ôn Tập & Thi Riêng</h1>
+              <div className="setup-header-row">
+                <div>
+                  <div className="header-badge">✦ KHÔNG GIAN HỌC TỰ CHỌN</div>
+                  <h1 className="header-title-compact">🎯 Ôn Tập & Thi Riêng</h1>
+                </div>
+                <img
+                  src="/stickers/cheer.png"
+                  alt="Anh em thi thử nhé 0.0"
+                  className="setup-static-sticker"
+                  draggable="false"
+                />
+              </div>
             </header>
 
             {/* Trigger 1: Chọn hình thức */}
@@ -989,6 +1010,40 @@ export default function CustomExamReview({ onBackToMap }) {
               <div className="score-label">Độ chính xác tổng thể</div>
             </div>
 
+            <div className="result-featured-sticker-wrap">
+              <StickerReaction
+                type={
+                  examResultData.overallAccuracy === 100
+                    ? 'determined'
+                    : examResultData.overallAccuracy === 0
+                    ? 'wake_up'
+                    : examResultData.overallAccuracy >= 75
+                    ? 'cheer'
+                    : examResultData.overallAccuracy >= 50
+                    ? 'thinking'
+                    : examResultData.overallAccuracy >= 25
+                    ? 'shocked'
+                    : 'angry'
+                }
+                text={
+                  examResultData.overallAccuracy === 100
+                    ? 'Xuất sắc tuyệt đối! Bạn đã thuộc lòng 100%!'
+                    : examResultData.overallAccuracy === 0
+                    ? 'Tỉnh táo lên! Cố lên nào, đừng bỏ trống chứ!'
+                    : examResultData.overallAccuracy >= 75
+                    ? 'Khá lắm anh em ơi! Cố thêm xíu nữa là đạt 100%!'
+                    : examResultData.overallAccuracy >= 50
+                    ? 'Hơi lú một chút! Gãi đầu xem lại các câu sai nhé!'
+                    : examResultData.overallAccuracy >= 25
+                    ? 'Ối làng nước ơi!! Nhầm lẫn nhiều câu quá!'
+                    : 'Quạu thật đấy! Phải phục thù thi lại ngay!'
+                }
+                size="lg"
+                layout="horizontal"
+                animate={examResultData.overallAccuracy === 100 ? 'bounce' : examResultData.overallAccuracy < 50 ? 'shake' : 'pop'}
+              />
+            </div>
+
             <h2 className="result-title">
               {examResultData.overallAccuracy === 100
                 ? 'Xuất Sắc! Bạn Đã Thuộc Lòng 100%!'
@@ -1055,6 +1110,29 @@ export default function CustomExamReview({ onBackToMap }) {
                     <strong className="q-status">
                       {r.isPerfect ? '✓ Đúng 100%' : `Độ chính xác: ${r.accuracy}%`}
                     </strong>
+                    <StickerReaction
+                      type={
+                        r.isPerfect
+                          ? 'determined'
+                          : r.accuracy === 0
+                          ? 'wake_up'
+                          : r.accuracy < 40
+                          ? 'angry'
+                          : 'shocked'
+                      }
+                      text={
+                        r.isPerfect
+                          ? 'Đúng 100%!'
+                          : r.accuracy === 0
+                          ? 'Tỉnh táo lên! Đừng bỏ trống chứ!'
+                          : r.accuracy < 40
+                          ? 'Quạu ghê!'
+                          : 'Ái chà sai rồi!'
+                      }
+                      size="sm"
+                      layout="badge"
+                      animate={r.isPerfect ? 'bounce' : 'shake'}
+                    />
                   </div>
 
                   <p className="q-title-bold">{q.question}</p>

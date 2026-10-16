@@ -12,6 +12,8 @@ import CharacterDemo from './components/character/CharacterDemo';
 import DayRoadMap from './components/map/DayRoadMap';
 import { CutscenePlayer, FirstPersonIntro, CUTSCENES } from './components/cutscenes';
 import { CustomExamReview } from './components/exam';
+import LoginModal from './components/auth/LoginModal';
+import { isUserAuthenticated, getStoredUserName, logoutUser } from './utils/cookie';
 
 export function isTabEnabled(tabId) {
   if (Array.isArray(permissions.enabledTabs)) {
@@ -29,6 +31,10 @@ export default function App() {
   const homeTab = isTabEnabled('map') ? 'map' : (isTabEnabled(defaultTab) ? defaultTab : 'custom-practice');
 
   const [viewMode, setViewMode] = useState(isTabEnabled(defaultTab) ? defaultTab : 'custom-practice');
+
+  // Quản lý đăng nhập chặn ở ngoài
+  const [isAuthenticated, setIsAuthenticated] = useState(() => isUserAuthenticated());
+  const [currentUserName, setCurrentUserName] = useState(() => getStoredUserName());
 
   // Đảm bảo nếu tab hiện tại bị ẩn theo permissions.json thì tự động chuyển về tab mặc định hợp lệ
   useEffect(() => {
@@ -81,6 +87,15 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-gradient, linear-gradient(180deg, #eef6fc 0%, #ffffff 35%, #eef6fc 100%))', color: 'var(--color-text-main, #1c3553)', display: 'flex', flexDirection: 'column' }}>
+      {/* Pop-up đăng nhập: Chặn ở ngoài nếu chưa đăng nhập */}
+      {!isAuthenticated && (
+        <LoginModal
+          onLoginSuccess={(name) => {
+            setCurrentUserName(name);
+            setIsAuthenticated(true);
+          }}
+        />
+      )}
       <style>{`
         .app-desktop-nav {
           display: flex;
@@ -268,6 +283,45 @@ export default function App() {
               {item.label}
             </button>
           ))}
+
+          {/* User profile badge */}
+          {isAuthenticated && currentUserName && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'var(--color-bg-ice, #eef6fc)',
+                border: '1.5px solid var(--color-border, #b8daf5)',
+                padding: '4px 12px',
+                borderRadius: 20,
+                fontSize: '0.84rem',
+                fontWeight: 700,
+                color: 'var(--color-text-main, #1c3553)'
+              }}
+            >
+              <span>👤 {currentUserName}</span>
+              <button
+                type="button"
+                onClick={() => {
+                  logoutUser();
+                  setIsAuthenticated(false);
+                }}
+                title="Đổi tên / Đăng xuất"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '0.74rem',
+                  color: 'var(--color-primary-deep, #4a82b8)',
+                  padding: '0 2px',
+                  textDecoration: 'underline'
+                }}
+              >
+                (Đổi)
+              </button>
+            </div>
+          )}
         </nav>
 
         {/* Mobile Hamburger Menu Button (chỉ hiện khi có nhiều hơn 1 tab) */}
@@ -321,6 +375,44 @@ export default function App() {
                 </button>
               ))}
             </div>
+            {isAuthenticated && currentUserName && (
+              <div
+                style={{
+                  padding: '0.8rem 1.2rem',
+                  borderTop: '1.5px solid var(--color-bg-ice, #eef6fc)',
+                  background: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '8px'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.88rem', fontWeight: 700, color: 'var(--color-text-main, #1c3553)' }}>
+                  <span>👤</span>
+                  <span>{currentUserName}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    logoutUser();
+                    setIsAuthenticated(false);
+                    setIsSidebarOpen(false);
+                  }}
+                  style={{
+                    background: 'var(--color-bg-ice, #eef6fc)',
+                    border: '1px solid var(--color-border, #b8daf5)',
+                    padding: '4px 10px',
+                    borderRadius: 14,
+                    fontSize: '0.78rem',
+                    color: 'var(--color-primary-deep, #4a82b8)',
+                    cursor: 'pointer',
+                    fontWeight: 600
+                  }}
+                >
+                  Đổi tên
+                </button>
+              </div>
+            )}
           </aside>
         </>
       )}

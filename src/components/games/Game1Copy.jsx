@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { compareAnswer } from '../../core/gradeEngine.js';
 import { getNextWordHint } from '../../core/hintEngine.js';
+import StickerReaction from '../common/StickerReaction.jsx';
 import './Game1Copy.css';
 
 /**
@@ -207,9 +208,36 @@ export default function Game1Copy({
                 </div>
 
                 {result && (
-                  <span className={`slot-status-badge ${result.isExact ? 'badge-exact' : 'badge-wrong'}`}>
-                    {result.isExact ? '✓ Chính xác' : `✕ Chưa đúng (${result.accuracy}%)`}
-                  </span>
+                  <div className="slot-result-badge-wrap">
+                    <StickerReaction
+                      type={
+                        !currentVal.trim()
+                          ? 'wake_up'
+                          : result.isExact
+                          ? 'determined'
+                          : result.accuracy < 40
+                          ? 'angry'
+                          : 'shocked'
+                      }
+                      text={
+                        !currentVal.trim()
+                          ? 'Tỉnh táo lên! Cố lên nào, đừng bỏ trống chứ!'
+                          : result.isExact
+                          ? 'Đúng 100%!'
+                          : `Sai rồi (${result.accuracy}%)`
+                      }
+                      size="sm"
+                      layout="badge"
+                      animate={result.isExact ? 'bounce' : 'shake'}
+                    />
+                    <span className={`slot-status-badge ${result.isExact ? 'badge-exact' : 'badge-wrong'}`}>
+                      {!currentVal.trim()
+                        ? '✕ Bỏ trống'
+                        : result.isExact
+                        ? '✓ Chính xác'
+                        : `✕ Chưa đúng (${result.accuracy}%)`}
+                    </span>
+                  </div>
                 )}
               </div>
 
@@ -277,6 +305,13 @@ export default function Game1Copy({
               {/* Hiển thị gợi ý nếu có */}
               {slotHint && (
                 <div className="slot-hint-box">
+                  <StickerReaction
+                    type="thinking"
+                    text={`Gãi đầu tìm từ: "${slotHint.hintWord}"`}
+                    size="sm"
+                    layout="badge"
+                    animate="wiggle"
+                  />
                   <div className="hint-message">
                     💡 Từ tiếp theo: <strong>"{slotHint.hintWord}"</strong> (Còn {slotHint.remainingWordCount} từ)
                   </div>
@@ -293,6 +328,22 @@ export default function Game1Copy({
               {/* Phân tích kết quả chấm điểm từng ý: từ đúng xanh lá, từ dư gạch đi, thế vào từ đúng màu vàng */}
               {result && !result.isExact && (
                 <div className="slot-diff-box">
+                  <div className="slot-diff-reaction-row">
+                    <StickerReaction
+                      type={!currentVal.trim() ? 'wake_up' : result.accuracy < 40 ? 'angry' : 'shocked'}
+                      text={
+                        !currentVal.trim()
+                          ? 'Tỉnh táo lên! Cố lên nào, đừng bỏ trống chứ!'
+                          : result.accuracy < 40
+                          ? 'Quạu ghê! Xem lại các từ gạch đỏ nhé!'
+                          : 'Ối làng nước ơi sai mất rồi!!'
+                      }
+                      size="sm"
+                      layout="badge"
+                      animate="shake"
+                    />
+                  </div>
+
                   <div className="diff-section">
                     <span className="diff-label">Sửa bài trực tiếp (xanh: từ đúng • gạch ngang: từ dư • vàng: từ đúng thay thế):</span>
                     <div className="diff-tokens-row">
@@ -340,7 +391,25 @@ export default function Game1Copy({
       <footer className="game1-footer">
         {summary && (
           <div className={`game1-summary-bar ${summary.isAllExact ? 'summary-passed' : 'summary-pending'}`}>
-            <span className="summary-icon">{summary.isAllExact ? '🎉' : '⚠️'}</span>
+            <StickerReaction
+              type={
+                summary.isAllExact
+                  ? 'determined'
+                  : slots.every(s => !(inputs[s.slotIndex] || '').trim())
+                  ? 'wake_up'
+                  : 'shocked'
+              }
+              text={
+                summary.isAllExact
+                  ? 'Đỉnh nóc kịch trần! Đúng 100%!'
+                  : slots.every(s => !(inputs[s.slotIndex] || '').trim())
+                  ? 'Tỉnh táo lên! Cố lên nào, đừng bỏ trống chứ!'
+                  : 'Ối giời ơi! Có từ chưa đúng, hãy sửa lại nhé!'
+              }
+              size="sm"
+              layout="badge"
+              animate={summary.isAllExact ? 'bounce' : 'shake'}
+            />
             <div className="summary-text">
               <strong>
                 {summary.isAllExact

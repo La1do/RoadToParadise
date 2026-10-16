@@ -46,6 +46,23 @@
   box-shadow: 0 2px 10px rgba(74, 130, 184, 0.12);
 }
 
+.setup-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.setup-static-sticker {
+  width: 76px;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  flex-shrink: 0;
+  user-select: none;
+  box-shadow: 0 2px 8px rgba(74, 130, 184, 0.12);
+}
+
 .header-badge {
   color: var(--color-primary-deep, #4a82b8);
   font-size: 0.75rem;
@@ -1083,6 +1100,12 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
+}
+
+.result-featured-sticker-wrap {
+  margin: 4px 0;
+  display: flex;
+  justify-content: center;
 }
 
 .score-circle-wrap {
