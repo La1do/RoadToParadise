@@ -20,6 +20,7 @@ export default function Game1Copy({
   initialInputs,
   onStateChange,
   initialShowReference = true,
+  onToggleReference,
   onComplete,
   onNext
 }) {
@@ -65,7 +66,8 @@ export default function Game1Copy({
   // Tổng kết sau khi kiểm tra
   const [summary, setSummary] = useState(null);
 
-  // Reset state khi đổi câu hỏi (nếu không có initialInputs lưu trước)
+  // Reset state CHỈ KHI ĐỔI CÂU HỎI (targetQuestion.id thay đổi).
+  // Tuyệt đối không đưa initialInputs vào dependency vì khi gõ, initialInputs thay đổi liên tục sẽ làm reset ẩn/hiện đáp án!
   useEffect(() => {
     setInputs(initialInputs || {});
     setGradeResults({});
@@ -76,7 +78,19 @@ export default function Game1Copy({
     if (initialShowReference !== undefined) {
       setShowReference(initialShowReference);
     }
-  }, [targetQuestion?.id, initialInputs, initialShowReference]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [targetQuestion?.id]);
+
+  // Đồng bộ khi prop initialShowReference từ component cha thay đổi
+  useEffect(() => {
+    if (initialShowReference !== undefined) {
+      setShowReference(initialShowReference);
+      const nextMap = {};
+      slots.forEach(s => { nextMap[s.slotIndex] = initialShowReference; });
+      setSlotRefVisibility(nextMap);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialShowReference]);
 
   const handleInputChange = (slotIndex, value) => {
     setInputs(prev => {
@@ -177,6 +191,9 @@ export default function Game1Copy({
               const nextMap = {};
               slots.forEach(s => { nextMap[s.slotIndex] = nextVal; });
               setSlotRefVisibility(nextMap);
+              if (typeof onToggleReference === 'function') {
+                onToggleReference(nextVal);
+              }
             }}
             title={showReference ? "Ẩn đáp án tham khảo của tất cả các ý" : "Hiện đáp án tham khảo của tất cả các ý"}
           >
