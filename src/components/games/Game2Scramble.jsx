@@ -212,14 +212,10 @@ export default function Game2Scramble({
         const fromIdx = drag.fromIndex ?? nextTray.findIndex(c => c.id === drag.item.id);
         if (fromIdx !== -1) {
           const [moved] = nextTray.splice(fromIdx, 1);
-          let destIdx;
-          if (typeof targetIndex === 'number' && targetIndex >= 0) {
-            destIdx = targetIndex > fromIdx ? targetIndex - 1 : targetIndex;
-          } else {
-            destIdx = nextTray.length;
-          }
-          const safeIdx = Math.min(Math.max(0, destIdx), nextTray.length);
-          nextTray.splice(safeIdx, 0, moved);
+          const destIdx = (typeof targetIndex === 'number' && targetIndex >= 0)
+            ? Math.min(targetIndex, nextTray.length)
+            : nextTray.length;
+          nextTray.splice(destIdx, 0, moved);
         }
       }
 
@@ -589,61 +585,70 @@ export default function Game2Scramble({
                         </div>
                       ) : (
                         <div className="game2-tray-items-flow">
-                          {st.trayItems.map((item, idx) => {
-                            const isInsertBeforeThis = isDraggingThisSlot && targetInsertIndex === idx;
-                            const posCorrect = res?.posResults ? res.posResults[idx] : null;
-
+                          {(() => {
+                            let visibleCounter = 0;
                             return (
-                              <React.Fragment key={item.id}>
-                                {/* KHE TÁCH RA KHI KÉO THẺ QUA VỊ TRÍ NÀY */}
-                                {isInsertBeforeThis && (
-                                  <div className="game2-drop-placeholder" key={`placeholder-${idx}`}>
+                              <>
+                                {st.trayItems.map((item, originalIdx) => {
+                                  const isThisItemDragging = dragInfo?.itemId === item.id;
+                                  const currentVisibleIdx = isThisItemDragging ? -1 : visibleCounter++;
+                                  const isInsertBeforeThis = isDraggingThisSlot && targetInsertIndex === currentVisibleIdx;
+                                  const posCorrect = res?.posResults ? res.posResults[originalIdx] : null;
+
+                                  return (
+                                    <React.Fragment key={item.id}>
+                                      {/* KHE TÁCH RA KHI KÉO THẺ QUA VỊ TRÍ NÀY */}
+                                      {isInsertBeforeThis && (
+                                        <div className="game2-drop-placeholder" key={`placeholder-${currentVisibleIdx}`}>
+                                          <span className="placeholder-arrow">↳</span>
+                                          <span className="placeholder-text">Thả vào đây</span>
+                                        </div>
+                                      )}
+
+                                      <div
+                                        data-tray-card-index={isThisItemDragging ? undefined : currentVisibleIdx}
+                                        draggable
+                                        className={`game2-placed-card ${isThisItemDragging ? 'is-dragging' : ''} ${
+                                          posCorrect === true ? 'pos-correct' : ''
+                                        } ${posCorrect === false ? 'pos-wrong' : ''}`}
+                                        onTouchStart={e => handleTouchStart(sIndex, item, 'tray', originalIdx, e)}
+                                        onTouchMove={e => handleTouchMove(sIndex, e)}
+                                        onTouchEnd={() => handleTouchEnd(sIndex, item, 'tray')}
+                                        onTouchCancel={handleDragEnd}
+                                        onDragStart={e => handleDragStart(sIndex, item, 'tray', originalIdx, e)}
+                                        onDragEnd={handleDragEnd}
+                                        onClick={() => handleRemoveTrayCard(sIndex, item)}
+                                        title="Kéo sang cụm khác để đổi chỗ • Chạm để gỡ về kho"
+                                      >
+                                        <span className="placed-chip-num">#{originalIdx + 1}</span>
+                                        <span className="placed-chip-text">{item.text}</span>
+                                        {posCorrect === true && <span className="cell-badge correct">✓ Đúng</span>}
+                                        {posCorrect === false && <span className="cell-badge wrong">✕ Sai</span>}
+                                        <span
+                                          className="remove-cross"
+                                          title="Gỡ về kho từ"
+                                          onClick={e => {
+                                            e.stopPropagation();
+                                            handleRemoveTrayCard(sIndex, item);
+                                          }}
+                                        >
+                                          ✕
+                                        </span>
+                                      </div>
+                                    </React.Fragment>
+                                  );
+                                })}
+
+                                {/* KHE TÁCH RA Ở CUỐI CÙNG (NẾU THẢ VÀO VỊ TRÍ CUỐI CÙNG HOẶC ĐANG KÉO Ở VÙNG KHAY) */}
+                                {isDraggingThisSlot && (targetInsertIndex === visibleCounter || (targetInsertIndex === undefined && visibleCounter > 0)) && (
+                                  <div className="game2-drop-placeholder at-end" key="placeholder-end">
                                     <span className="placeholder-arrow">↳</span>
-                                    <span className="placeholder-text">Thả vào đây</span>
+                                    <span className="placeholder-text">Thả vào cuối</span>
                                   </div>
                                 )}
-
-                                <div
-                                  data-tray-card-index={idx}
-                                  draggable
-                                  className={`game2-placed-card ${dragInfo?.itemId === item.id ? 'is-dragging' : ''} ${
-                                    posCorrect === true ? 'pos-correct' : ''
-                                  } ${posCorrect === false ? 'pos-wrong' : ''}`}
-                                  onTouchStart={e => handleTouchStart(sIndex, item, 'tray', idx, e)}
-                                  onTouchMove={e => handleTouchMove(sIndex, e)}
-                                  onTouchEnd={() => handleTouchEnd(sIndex, item, 'tray')}
-                                  onTouchCancel={handleDragEnd}
-                                  onDragStart={e => handleDragStart(sIndex, item, 'tray', idx, e)}
-                                  onDragEnd={handleDragEnd}
-                                  onClick={() => handleRemoveTrayCard(sIndex, item)}
-                                  title="Kéo sang cụm khác để đổi chỗ • Chạm để gỡ về kho"
-                                >
-                                  <span className="placed-chip-num">#{idx + 1}</span>
-                                  <span className="placed-chip-text">{item.text}</span>
-                                  {posCorrect === true && <span className="cell-badge correct">✓ Đúng</span>}
-                                  {posCorrect === false && <span className="cell-badge wrong">✕ Sai</span>}
-                                  <span
-                                    className="remove-cross"
-                                    title="Gỡ về kho từ"
-                                    onClick={e => {
-                                      e.stopPropagation();
-                                      handleRemoveTrayCard(sIndex, item);
-                                    }}
-                                  >
-                                    ✕
-                                  </span>
-                                </div>
-                              </React.Fragment>
+                              </>
                             );
-                          })}
-
-                          {/* KHE TÁCH RA Ở CUỐI CÙNG (NẾU THẢ VÀO VỊ TRÍ CUỐI CÙNG HOẶC ĐANG KÉO Ở VÙNG KHAY) */}
-                          {isDraggingThisSlot && (targetInsertIndex === st.trayItems.length || targetInsertIndex === undefined) && (
-                            <div className="game2-drop-placeholder at-end" key="placeholder-end">
-                              <span className="placeholder-arrow">↳</span>
-                              <span className="placeholder-text">Thả vào cuối</span>
-                            </div>
-                          )}
+                          })()}
                         </div>
                       )}
                     </div>
