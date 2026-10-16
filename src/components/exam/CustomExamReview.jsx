@@ -1059,21 +1059,47 @@ export default function CustomExamReview({ onBackToMap }) {
                   {/* Chi tiết từng ý */}
                   <div className="result-slots-breakdown">
                     {r.slotResults.map(sr => (
-                      <div key={sr.slot.slotIndex} className="slot-diff-row">
+                      <div key={sr.slot.slotIndex} className={`slot-diff-row ${sr.grade.isExact ? 'is-exact-slot' : 'is-wrong-slot'}`}>
                         <div className="slot-diff-header">
-                          <span className="slot-tag">{sr.slot.label}</span>
-                          <strong>{sr.slot.title || `Ý số ${sr.slot.slotIndex}`}</strong>
+                          <div className="slot-diff-title-wrap">
+                            <span className="slot-tag">{sr.slot.label}</span>
+                            <span className="slot-title">{sr.slot.title || `Ý số ${sr.slot.slotIndex}`}</span>
+                          </div>
                           <span className={`diff-pill ${sr.grade.isExact ? 'exact' : 'wrong'}`}>
-                            {sr.grade.isExact ? 'Chính xác' : `${sr.grade.accuracy}%`}
+                            {sr.grade.isExact ? '✓ Chính xác 100%' : `Đúng: ${sr.grade.accuracy}%`}
                           </span>
                         </div>
 
-                        {/* Đáp án bạn gõ */}
+                        {/* Nội dung bài làm & sửa bài */}
                         <div className="diff-content-box">
                           <div className="diff-line">
-                            <span className="line-label">Bài làm của bạn:</span>
+                            <span className="line-label">
+                              {sr.grade.isExact ? 'Bài làm của bạn:' : 'Sửa bài trực tiếp (xanh: từ đúng • gạch ngang: từ dư • vàng: từ đúng thay thế):'}
+                            </span>
                             <div className="tokens-display">
-                              {sr.grade.userTokensResult && sr.grade.userTokensResult.length > 0 ? (
+                              {sr.grade.diff && sr.grade.diff.length > 0 ? (
+                                sr.grade.diff.map((item, tIdx) => {
+                                  if (item.type === 'correct') {
+                                    return (
+                                      <span key={tIdx} className="token tok-correct" title="Từ đúng">
+                                        {item.text}
+                                      </span>
+                                    );
+                                  }
+                                  if (item.type === 'wrong') {
+                                    return (
+                                      <span key={tIdx} className="token tok-wrong" title="Từ dư / sai (gạch bỏ)">
+                                        {item.text}
+                                      </span>
+                                    );
+                                  }
+                                  return (
+                                    <span key={tIdx} className="token tok-missing" title="Thế vào từ đúng">
+                                      {item.text}
+                                    </span>
+                                  );
+                                })
+                              ) : sr.grade.userTokensResult && sr.grade.userTokensResult.length > 0 ? (
                                 sr.grade.userTokensResult.map((tok, tIdx) => (
                                   <span
                                     key={tIdx}
@@ -1088,23 +1114,12 @@ export default function CustomExamReview({ onBackToMap }) {
                             </div>
                           </div>
 
-                          {/* Đáp án chuẩn */}
+                          {/* Hiện đáp án chuẩn ở dưới bản full nguyên mẫu đầy đủ dấu câu , . () → */}
                           {!sr.grade.isExact && (
-                            <div className="diff-line target">
-                              <span className="line-label">Đáp án chuẩn:</span>
-                              <div className="tokens-display">
-                                {sr.grade.targetTokensResult && sr.grade.targetTokensResult.length > 0 ? (
-                                  sr.grade.targetTokensResult.map((tok, tIdx) => (
-                                    <span
-                                      key={tIdx}
-                                      className={`token ${tok.status === 'correct' ? 'tok-target-ok' : 'tok-missing'}`}
-                                    >
-                                      {tok.text}
-                                    </span>
-                                  ))
-                                ) : (
-                                  <span>{sr.slot.answer}</span>
-                                )}
+                            <div className="diff-line target-full">
+                              <span className="line-label">✦ Đáp án chuẩn nguyên mẫu (đầy đủ dấu câu):</span>
+                              <div className="full-answer-text">
+                                {sr.slot.answer}
                               </div>
                             </div>
                           )}

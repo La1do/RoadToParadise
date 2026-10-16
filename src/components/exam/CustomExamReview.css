@@ -1063,3 +1063,349 @@
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ================= 3. RESULT VIEW (MÀN HÌNH TỔNG KẾT & PHÂN TÍCH LỖI) ================= */
+.result-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.result-header {
+  background: #ffffff;
+  border: 1.5px solid #c5def3;
+  border-radius: 20px;
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(74, 130, 184, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.score-circle-wrap {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #eef6fc 0%, #ffffff 100%);
+  border: 4px solid #4a82b8;
+  box-shadow: 0 4px 16px rgba(74, 130, 184, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-big-number {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #1c3553;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #4a82b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+
+.result-title {
+  margin: 0;
+  font-size: 1.35rem;
+  color: #1c3553;
+  font-weight: 800;
+}
+
+.result-stats-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stat-pill {
+  background: #eef6fc;
+  border: 1.5px solid #c5def3;
+  color: #4a82b8;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+/* Thanh nút hành động sau thi */
+.result-actions-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  flex: 1;
+  min-width: 170px;
+  min-height: 46px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(74, 130, 184, 0.15);
+}
+
+.action-btn.retry-wrong {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+}
+
+.action-btn.switch-copy {
+  background: linear-gradient(135deg, #4a82b8 0%, #3a6fa0 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(74, 130, 184, 0.35);
+}
+
+.action-btn.switch-scramble {
+  background: linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(123, 181, 232, 0.35);
+}
+
+.action-btn.new-setup {
+  background: #eef6fc;
+  border: 1.5px solid #c5def3;
+  color: #4a82b8;
+}
+
+.action-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+/* Danh sách chi tiết phân tích từng câu */
+.result-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.details-heading {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #1c3553;
+  font-weight: 800;
+}
+
+.result-q-card {
+  background: #ffffff;
+  border: 1.5px solid #c5def3;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 16px rgba(74, 130, 184, 0.08);
+}
+
+.result-q-card.q-perfect {
+  border-color: #86efac;
+  background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+}
+
+.result-q-card.q-has-error {
+  border-color: #fca5a5;
+  background: linear-gradient(180deg, #ffffff 0%, #fffbfb 100%);
+}
+
+.result-q-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.q-badge {
+  background: #4a82b8;
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: 14px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.q-status {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #4a82b8;
+}
+
+.q-title-bold {
+  margin: 0 0 14px 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: #1c3553;
+  font-weight: 700;
+}
+
+/* Từng ý con */
+.result-slots-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slot-diff-row {
+  background: #f8fbfe;
+  border: 1.5px solid #eef6fc;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.slot-diff-row.is-wrong-slot {
+  border-color: #fecaca;
+  background: #fffafa;
+}
+
+.slot-diff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.slot-diff-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.slot-diff-header .slot-tag {
+  background: #7bb5e8;
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.slot-diff-header .slot-title {
+  font-size: 0.95rem;
+  color: #1c3553;
+  font-weight: 700;
+}
+
+.diff-pill {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 14px;
+}
+
+.diff-pill.exact {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.diff-pill.wrong {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.diff-content-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.diff-line {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.diff-line .line-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #4a82b8;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.tokens-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.token {
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  line-height: 1.4;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tok-correct {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1.5px solid #86efac;
+}
+
+.tok-wrong {
+  background: #f8d7da;
+  color: #991b1b;
+  border: 1.5px solid #fca5a5;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  opacity: 0.9;
+}
+
+.tok-missing {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1.5px solid #fde68a;
+  font-weight: 800;
+  box-shadow: 0 1px 4px rgba(245, 158, 11, 0.2);
+}
+
+.empty-text {
+  font-size: 0.88rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+/* Hộp đáp án chuẩn nguyên mẫu (đầy đủ dấu câu) */
+.diff-line.target-full {
+  margin-top: 4px;
+}
+
+.full-answer-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1c3553;
+  font-weight: 600;
+  background: #eef6fc;
+  border: 1.5px solid #c5def3;
+  border-left: 4px solid #4a82b8;
+  border-radius: 10px;
+  padding: 10px 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
