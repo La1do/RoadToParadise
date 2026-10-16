@@ -327,7 +327,7 @@ export default function Game1Copy({
                   {/* Hiện đáp án ở dưới bản full nguyên mẫu có đầy đủ dấu câu , . () → */}
                   <div className="diff-full-answer-box">
                     <span className="diff-full-answer-label">✦ Đáp án chuẩn nguyên mẫu:</span>
-                    <p className="diff-full-answer-text">{slot.answer}</p>
+                    <p className="diff-full-answer-text">{s?.answer || s?.fullAnswer || ''}</p>
                   </div>
                 </div>
               )}

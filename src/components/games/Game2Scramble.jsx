@@ -74,12 +74,17 @@ export default function Game2Scramble({
 
   const [summary, setSummary] = useState(() => initialState?.summary || null);
 
-  // Kéo thả & Cảm ứng mượt mà trên điện thoại
+  // Kéo thả & Cảm ứng mượt mà trên điện thoại và máy tính
   const dragRef = useRef(null);
-  const touchStartPos = useRef({ x: 0, y: 0, time: 0 });
+  const hoverTargetRef = useRef(null);
   const [dragInfo, setDragInfo] = useState(null); // { slotIndex, itemId, text, source, fromIndex }
   const [ghostPos, setGhostPos] = useState(null); // { x, y } cho thẻ bay theo ngón tay
-  const [hoverTarget, setHoverTarget] = useState(null); // { slotIndex, type: 'tray' | 'tray-card' | 'pool', index?: number }
+  const [hoverTarget, setHoverTarget] = useState(null); // { slotIndex, type: 'tray-insert' | 'pool', index?: number }
+
+  // Đồng bộ hoverTargetRef với hoverTarget state để event handler toàn cục luôn có giá trị mới nhất
+  useEffect(() => {
+    hoverTargetRef.current = hoverTarget;
+  }, [hoverTarget]);
 
   // Khởi tạo lại khi đổi câu hỏi
   useEffect(() => {
@@ -125,7 +130,9 @@ export default function Game2Scramble({
     const trayElem = document.querySelector(`[data-tray-slot="${slotIndex}"]`);
     if (!trayElem) return 0;
 
-    const cards = Array.from(trayElem.querySelectorAll('[data-tray-card-index]'));
+    // Chỉ lấy các thẻ đang hiển thị (bỏ qua thẻ đang được kéo để tính đúng vị trí còn lại)
+    const cards = Array.from(trayElem.querySelectorAll('[data-tray-card-index]'))
+      .filter(card => !card.classList.contains('is-dragging'));
     if (cards.length === 0) return 0;
 
     const firstCard = cards[0];
@@ -270,16 +277,6 @@ export default function Game2Scramble({
     }));
   };
 
-  // --- XỬ LÝ KÉO THẢ TRÊN MÁY TÍNH (HTML5 DRAG & DROP) ---
-  const handleDragStart = (slotIndex, item, source, fromIndex, e) => {
-    dragRef.current = { slotIndex, item, source, fromIndex, isDragging: true };
-    setDragInfo({ slotIndex, itemId: item.id, text: item.text, source, fromIndex });
-    if (e.dataTransfer) {
-      e.dataTransfer.setData('text/plain', item.id);
-      e.dataTransfer.effectAllowed = 'move';
-    }
-  };
-
   const handleTrayDragOver = (slotIndex, e) => {
     if (dragRef.current?.slotIndex !== slotIndex) return;
     e.preventDefault();
@@ -288,64 +285,61 @@ export default function Game2Scramble({
   };
 
   const handleDragEnd = () => {
-    dragRef.current = null;
-    setDragInfo(null);
-    setGhostPos(null);
-    setHoverTarget(null);
+    handleEndDrag();
   };
 
-  // --- XỬ LÝ CẢM ỨNG MƯỢT MÀ TRÊN ĐIỆN THOẠI (TOUCH EVENTS) ---
-  const handleTouchStart = (slotIndex, item, source, fromIndex, e) => {
-    const touch = e.touches[0];
-    touchStartPos.current = { x: touch.clientX, y: touch.clientY, time: Date.now() };
+  // Bắt đầu kéo (chuột hoặc cảm ứng)
+  const handleStartDrag = (slotIndex, item, source, fromIndex, clientX, clientY) => {
     dragRef.current = {
       slotIndex,
       item,
       source,
       fromIndex,
+      startX: clientX,
+      startY: clientY,
       isDragging: false
     };
   };
 
-  const handleTouchMove = (slotIndex, e) => {
-    if (!dragRef.current || dragRef.current.slotIndex !== slotIndex) return;
-    const touch = e.touches[0];
-    const dx = touch.clientX - touchStartPos.current.x;
-    const dy = touch.clientY - touchStartPos.current.y;
+  // Di chuyển con trỏ / ngón tay (toàn cục qua window)
+  const handleMoveDrag = (clientX, clientY) => {
+    const drag = dragRef.current;
+    if (!drag) return;
 
-    // Ngưỡng phát hiện kéo: di chuyển > 8px
-    if (!dragRef.current.isDragging && Math.hypot(dx, dy) > 8) {
-      dragRef.current.isDragging = true;
+    const dx = clientX - drag.startX;
+    const dy = clientY - drag.startY;
+
+    // Ngưỡng di chuyển kích hoạt kéo
+    if (!drag.isDragging && Math.hypot(dx, dy) > 6) {
+      drag.isDragging = true;
       setDragInfo({
-        slotIndex,
-        itemId: dragRef.current.item.id,
-        text: dragRef.current.item.text,
-        source: dragRef.current.source,
-        fromIndex: dragRef.current.fromIndex
+        slotIndex: drag.slotIndex,
+        itemId: drag.item.id,
+        text: drag.item.text,
+        source: drag.source,
+        fromIndex: drag.fromIndex
       });
     }
 
-    if (dragRef.current.isDragging) {
-      if (e.cancelable) e.preventDefault(); // Ngăn cuộn trang trong lúc kéo
-      setGhostPos({ x: touch.clientX, y: touch.clientY });
+    if (drag.isDragging) {
+      setGhostPos({ x: clientX, y: clientY });
 
-      // Phát hiện vùng khay hoặc vùng kho từ với dung sai vùng biên rộng
-      const trayElem = document.querySelector(`[data-tray-slot="${slotIndex}"]`);
-      const poolElem = document.querySelector(`[data-pool-slot="${slotIndex}"]`);
+      const trayElem = document.querySelector(`[data-tray-slot="${drag.slotIndex}"]`);
+      const poolElem = document.querySelector(`[data-pool-slot="${drag.slotIndex}"]`);
 
       let target = null;
 
-      // 1. Kiểm tra khay: Cho phép dung sai 40px các cạnh và 70px bên dưới
+      // 1. Kiểm tra khay: Dung sai 40px các cạnh và 70px bên dưới
       if (trayElem) {
         const trayRect = trayElem.getBoundingClientRect();
         if (
-          touch.clientX >= trayRect.left - 40 &&
-          touch.clientX <= trayRect.right + 40 &&
-          touch.clientY >= trayRect.top - 30 &&
-          touch.clientY <= trayRect.bottom + 70
+          clientX >= trayRect.left - 40 &&
+          clientX <= trayRect.right + 40 &&
+          clientY >= trayRect.top - 30 &&
+          clientY <= trayRect.bottom + 70
         ) {
-          const insertIdx = calculateInsertIndex(slotIndex, touch.clientX, touch.clientY);
-          target = { slotIndex, type: 'tray-insert', index: insertIdx };
+          const insertIdx = calculateInsertIndex(drag.slotIndex, clientX, clientY);
+          target = { slotIndex: drag.slotIndex, type: 'tray-insert', index: insertIdx };
         }
       }
 
@@ -353,46 +347,94 @@ export default function Game2Scramble({
       if (!target && poolElem) {
         const poolRect = poolElem.getBoundingClientRect();
         if (
-          touch.clientX >= poolRect.left - 40 &&
-          touch.clientX <= poolRect.right + 40 &&
-          touch.clientY >= poolRect.top - 20 &&
-          touch.clientY <= poolRect.bottom + 60
+          clientX >= poolRect.left - 40 &&
+          clientX <= poolRect.right + 40 &&
+          clientY >= poolRect.top - 20 &&
+          clientY <= poolRect.bottom + 60
         ) {
-          target = { slotIndex, type: 'pool' };
+          target = { slotIndex: drag.slotIndex, type: 'pool' };
         }
       }
 
+      hoverTargetRef.current = target;
       setHoverTarget(target);
     }
   };
 
-  const handleTouchEnd = (slotIndex, item, source) => {
+  // Thả tay hoặc nhả chuột kết thúc kéo
+  const handleEndDrag = () => {
     const drag = dragRef.current;
-    if (!drag || drag.slotIndex !== slotIndex) return;
+    if (!drag) return;
+
+    const currentHover = hoverTargetRef.current;
 
     if (!drag.isDragging) {
-      // Nếu chỉ chạm nhẹ và nhấc tay (tap): chuyển thẻ ngay lập tức
-      if (source === 'pool') {
-        handleSelectPoolCard(slotIndex, item);
-      } else if (source === 'tray') {
-        handleRemoveTrayCard(slotIndex, item);
+      // Nhấp chuột / Chạm nhẹ: chuyển đổi tức thì (tap-to-move)
+      if (drag.source === 'pool') {
+        handleSelectPoolCard(drag.slotIndex, drag.item);
+      } else if (drag.source === 'tray') {
+        handleRemoveTrayCard(drag.slotIndex, drag.item);
       }
     } else {
-      // Nếu là kéo thả ngón tay (drag release)
-      if (hoverTarget?.slotIndex === slotIndex) {
-        if (hoverTarget.type === 'tray-insert' || hoverTarget.type === 'tray') {
-          dropOnTray(slotIndex, hoverTarget.index);
-        } else if (hoverTarget.type === 'pool' && source === 'tray') {
-          dropOnPool(slotIndex);
+      // Đã kéo và thả: thực hiện chèn hoặc gỡ về kho
+      if (currentHover?.slotIndex === drag.slotIndex) {
+        if (currentHover.type === 'tray-insert' || currentHover.type === 'tray') {
+          dropOnTray(drag.slotIndex, currentHover.index);
+        } else if (currentHover.type === 'pool' && drag.source === 'tray') {
+          dropOnPool(drag.slotIndex);
         }
       }
     }
 
     dragRef.current = null;
+    hoverTargetRef.current = null;
     setDragInfo(null);
     setGhostPos(null);
     setHoverTarget(null);
   };
+
+  // Lắng nghe sự kiện di chuyển và nhả chuột / nhấc ngón tay trên toàn bộ window
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const onWindowMouseMove = (e) => {
+      if (!dragRef.current) return;
+      handleMoveDrag(e.clientX, e.clientY);
+    };
+
+    const onWindowMouseUp = (e) => {
+      if (!dragRef.current) return;
+      handleEndDrag();
+    };
+
+    const onWindowTouchMove = (e) => {
+      if (!dragRef.current) return;
+      const touch = e.touches[0];
+      if (dragRef.current.isDragging && e.cancelable) {
+        e.preventDefault(); // Ngăn cuộn màn hình khi đang kéo
+      }
+      handleMoveDrag(touch.clientX, touch.clientY);
+    };
+
+    const onWindowTouchEnd = () => {
+      if (!dragRef.current) return;
+      handleEndDrag();
+    };
+
+    window.addEventListener('mousemove', onWindowMouseMove);
+    window.addEventListener('mouseup', onWindowMouseUp);
+    window.addEventListener('touchmove', onWindowTouchMove, { passive: false });
+    window.addEventListener('touchend', onWindowTouchEnd);
+    window.addEventListener('touchcancel', onWindowTouchEnd);
+
+    return () => {
+      window.removeEventListener('mousemove', onWindowMouseMove);
+      window.removeEventListener('mouseup', onWindowMouseUp);
+      window.removeEventListener('touchmove', onWindowTouchMove);
+      window.removeEventListener('touchend', onWindowTouchEnd);
+      window.removeEventListener('touchcancel', onWindowTouchEnd);
+    };
+  }, []);
 
   // --- NÚT KIỂM TRA DUY NHẤT Ở CUỐI CÙNG ---
   // Tương thích logic: không yêu cầu nút riêng "Xác nhận thứ tự" và bỏ bước gõ củng cố "reinforce"
@@ -611,13 +653,17 @@ export default function Game2Scramble({
                                         className={`game2-placed-card ${isThisItemDragging ? 'is-dragging' : ''} ${
                                           posCorrect === true ? 'pos-correct' : ''
                                         } ${posCorrect === false ? 'pos-wrong' : ''}`}
-                                        onTouchStart={e => handleTouchStart(sIndex, item, 'tray', originalIdx, e)}
-                                        onTouchMove={e => handleTouchMove(sIndex, e)}
-                                        onTouchEnd={() => handleTouchEnd(sIndex, item, 'tray')}
-                                        onTouchCancel={handleDragEnd}
-                                        onDragStart={e => handleDragStart(sIndex, item, 'tray', originalIdx, e)}
-                                        onDragEnd={handleDragEnd}
-                                        onClick={() => handleRemoveTrayCard(sIndex, item)}
+                                        onMouseDown={e => {
+                                          if (e.button === 0) handleStartDrag(sIndex, item, 'tray', originalIdx, e.clientX, e.clientY);
+                                        }}
+                                        onTouchStart={e => {
+                                          const t = e.touches[0];
+                                          handleStartDrag(sIndex, item, 'tray', originalIdx, t.clientX, t.clientY);
+                                        }}
+                                        onDragStart={e => e.preventDefault()}
+                                        onClick={() => {
+                                          if (!dragRef.current?.isDragging) handleRemoveTrayCard(sIndex, item);
+                                        }}
                                         title="Kéo sang cụm khác để đổi chỗ • Chạm để gỡ về kho"
                                       >
                                         <span className="placed-chip-num">#{originalIdx + 1}</span>
@@ -694,13 +740,17 @@ export default function Game2Scramble({
                       type="button"
                       draggable
                       className={`game2-pool-card ${dragInfo?.itemId === item.id ? 'is-dragging' : ''}`}
-                      onTouchStart={e => handleTouchStart(sIndex, item, 'pool', undefined, e)}
-                      onTouchMove={e => handleTouchMove(sIndex, e)}
-                      onTouchEnd={() => handleTouchEnd(sIndex, item, 'pool')}
-                      onTouchCancel={handleDragEnd}
-                      onDragStart={e => handleDragStart(sIndex, item, 'pool', undefined, e)}
-                      onDragEnd={handleDragEnd}
-                      onClick={() => handleSelectPoolCard(sIndex, item)}
+                      onMouseDown={e => {
+                        if (e.button === 0) handleStartDrag(sIndex, item, 'pool', undefined, e.clientX, e.clientY);
+                      }}
+                      onTouchStart={e => {
+                        const t = e.touches[0];
+                        handleStartDrag(sIndex, item, 'pool', undefined, t.clientX, t.clientY);
+                      }}
+                      onDragStart={e => e.preventDefault()}
+                      onClick={() => {
+                        if (!dragRef.current?.isDragging) handleSelectPoolCard(sIndex, item);
+                      }}
                       title="Chạm hoặc kéo vào ô đáp án ở trên"
                     >
                       <span className="pool-card-text">{item.text}</span>

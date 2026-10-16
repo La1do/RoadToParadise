@@ -249,14 +249,17 @@ export default function CustomExamReview({ onBackToMap }) {
         if (isCorrect) qCorrectSlots++;
 
         const userArrangedText = sState?.trayItems?.map(it => it.text).join(' ') || '';
+        const targetAns = s?.answer || s?.targetAnswer || '';
+        const gradeDiff = compareAnswer(userArrangedText, targetAns);
         slotResults.push({
           slot: s,
           userInput: userArrangedText,
           grade: {
             isExact: isCorrect,
             accuracy: isCorrect ? 100 : 0,
-            userTokensResult: userArrangedText.split(' ').map(t => ({ text: t, status: isCorrect ? 'correct' : 'wrong' })),
-            targetTokensResult: s.answer.split(' ').map(t => ({ text: t, status: isCorrect ? 'correct' : 'missing' }))
+            userTokensResult: userArrangedText ? userArrangedText.split(' ').map(t => ({ text: t, status: isCorrect ? 'correct' : 'wrong' })) : [],
+            targetTokensResult: targetAns ? targetAns.split(' ').map(t => ({ text: t, status: isCorrect ? 'correct' : 'missing' })) : [],
+            diff: gradeDiff.diff
           }
         });
       });
@@ -1119,7 +1122,7 @@ export default function CustomExamReview({ onBackToMap }) {
                             <div className="diff-line target-full">
                               <span className="line-label">✦ Đáp án chuẩn nguyên mẫu (đầy đủ dấu câu):</span>
                               <div className="full-answer-text">
-                                {sr.slot.answer}
+                                {sr.slot?.answer || sr.slot?.targetAnswer || ''}
                               </div>
                             </div>
                           )}
