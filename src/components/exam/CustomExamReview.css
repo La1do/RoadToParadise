@@ -1,6 +1,6 @@
 /**
  * CustomExamReview.css - Giao diện Chế độ Ôn tập Xáo từ & Thi riêng tự chọn
- * Theme Cánh Cụt Xanh Trắng (Ice Blue & Crisp White Palette)
+ * Theme Cánh Cụt Xanh Trắng (Penguin Blue & White Palette)
  * Responsive cho Laptop, iPad và Điện thoại
  */
 
@@ -11,7 +11,7 @@
   padding: 16px;
   box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #0f2744;
+  color: #1c3553;
 }
 
 @media (max-width: 1200px) {
@@ -40,14 +40,14 @@
 
 .setup-header-compact {
   background: #ffffff;
-  border: 1.5px solid #bae6fd;
+  border: 1.5px solid #c5def3;
   border-radius: 12px;
   padding: 10px 14px;
-  box-shadow: 0 2px 10px rgba(123, 181, 232, 0.12);
+  box-shadow: 0 2px 10px rgba(74, 130, 184, 0.12);
 }
 
 .header-badge {
-  color: #0284c7;
+  color: #4a82b8;
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.05em;
@@ -57,7 +57,7 @@
 .header-title-compact {
   margin: 0;
   font-size: 1.2rem;
-  color: #0f2744;
+  color: #1c3553;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -66,17 +66,17 @@
 
 .setup-section {
   background: #ffffff;
-  border: 1.5px solid #bae6fd;
+  border: 1.5px solid #c5def3;
   border-radius: 14px;
   padding: 12px 14px;
-  box-shadow: 0 4px 16px rgba(123, 181, 232, 0.1);
+  box-shadow: 0 4px 16px rgba(74, 130, 184, 0.1);
 }
 
 .section-label {
   display: block;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #0284c7;
+  color: #4a82b8;
   margin-bottom: 10px;
 }
 
@@ -99,9 +99,9 @@
 }
 
 .quick-btn {
-  background: #f0f9ff;
-  color: #0284c7;
-  border: 1.5px solid #bae6fd;
+  background: #eef6fc;
+  color: #4a82b8;
+  border: 1.5px solid #c5def3;
   padding: 4px 10px;
   border-radius: 16px;
   font-size: 0.8rem;
@@ -111,8 +111,8 @@
 }
 
 .quick-btn:hover {
-  background: #e0f2fe;
-  color: #0369a1;
+  background: #c5def3;
+  color: #1c3553;
 }
 
 /* Chọn chế độ (Mode toggle grid) */
@@ -123,14 +123,14 @@
 }
 
 .mode-toggle-btn {
-  background: #f8fafc;
-  border: 2px solid #cbd5e1;
+  background: #ffffff;
+  border: 2px solid #c5def3;
   border-radius: 12px;
   padding: 10px 12px;
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #475569;
+  color: #4a82b8;
   cursor: pointer;
   text-align: left;
   transition: all 0.2s ease;
@@ -139,29 +139,30 @@
 }
 
 .mode-toggle-btn:hover {
-  border-color: #38bdf8;
-  background: #f0f9ff;
+  border-color: #7bb5e8;
+  background: #eef6fc;
+  color: #1c3553;
 }
 
 .mode-toggle-btn.active-copy {
-  border-color: #0284c7;
-  background: #e0f2fe;
-  color: #0f2744;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+  border-color: #4a82b8;
+  background: #eef6fc;
+  color: #1c3553;
+  box-shadow: 0 4px 12px rgba(74, 130, 184, 0.25);
 }
 
 .mode-toggle-btn.active-scramble {
-  border-color: #2563eb;
-  background: #e0f2fe;
-  color: #0f2744;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  border-color: #4a82b8;
+  background: #eef6fc;
+  color: #1c3553;
+  box-shadow: 0 4px 12px rgba(74, 130, 184, 0.25);
 }
 
 .mode-toggle-btn.active-exam {
-  border-color: #38bdf8;
-  background: #e0f2fe;
-  color: #0f2744;
-  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+  border-color: #7bb5e8;
+  background: #eef6fc;
+  color: #1c3553;
+  box-shadow: 0 4px 12px rgba(123, 181, 232, 0.3);
 }
 
 .mode-icon {
@@ -173,13 +174,13 @@
   display: block;
   font-size: 0.95rem;
   margin-bottom: 2px;
-  color: #0f2744;
+  color: #1c3553;
 }
 
 .mode-toggle-btn p {
   margin: 0;
   font-size: 0.78rem;
-  color: #64748b;
+  color: #4a82b8;
   line-height: 1.3;
 }
 
@@ -197,7 +198,7 @@
   gap: 8px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #0f2744;
+  color: #1c3553;
   cursor: pointer;
   user-select: none;
 }
@@ -205,7 +206,7 @@
 .checkbox-option input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #2563eb;
+  accent-color: #4a82b8;
   cursor: pointer;
 }
 
@@ -215,13 +216,13 @@
   gap: 8px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #0f2744;
+  color: #1c3553;
 }
 
 .time-select {
   background: #ffffff;
-  border: 1.5px solid #93c5fd;
-  color: #0f2744;
+  border: 1.5px solid #c5def3;
+  color: #1c3553;
   padding: 4px 10px;
   border-radius: 8px;
   font-size: 0.88rem;
@@ -237,14 +238,14 @@
 .start-session-btn {
   width: 100%;
   min-height: 48px;
-  background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
+  background: linear-gradient(135deg, #4a82b8 0%, #3a6fa0 100%);
   color: #ffffff;
   border: none;
   border-radius: 14px;
   font-size: 1rem;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 16px rgba(74, 130, 184, 0.3);
   transition: transform 0.15s ease, filter 0.15s ease;
   display: flex;
   align-items: center;
@@ -275,8 +276,8 @@
 
 .preset-pill {
   background: #ffffff;
-  border: 1.5px solid #bae6fd;
-  color: #0284c7;
+  border: 1.5px solid #c5def3;
+  color: #4a82b8;
   padding: 4px 10px;
   border-radius: 16px;
   font-size: 0.8rem;
@@ -286,14 +287,14 @@
 }
 
 .preset-pill:hover {
-  background: #f0f9ff;
-  border-color: #2563eb;
+  background: #eef6fc;
+  border-color: #4a82b8;
 }
 
 .preset-pill.highlight {
-  border-color: #2563eb;
-  background: #e0f2fe;
-  color: #1e3a8a;
+  border-color: #4a82b8;
+  background: #eef6fc;
+  color: #1c3553;
 }
 
 /* Questions select grid (20 câu) */
@@ -306,13 +307,13 @@
 }
 
 .q-select-card {
-  background: #f8fafc;
-  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  border: 1.5px solid #c5def3;
   border-radius: 10px;
   padding: 8px 10px;
   text-align: left;
   cursor: pointer;
-  color: #475569;
+  color: #1c3553;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -322,14 +323,14 @@
 
 .q-select-card:hover {
   border-color: #7bb5e8;
-  background: #f0f9ff;
+  background: #eef6fc;
 }
 
 .q-select-card.is-selected {
-  border-color: #2563eb;
-  background: #e0f2fe;
-  color: #0f2744;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+  border-color: #4a82b8;
+  background: #eef6fc;
+  color: #1c3553;
+  box-shadow: 0 0 0 2px rgba(74, 130, 184, 0.3);
 }
 
 .q-card-top {
@@ -342,12 +343,12 @@
 .q-id-badge {
   font-size: 0.78rem;
   font-weight: 800;
-  color: #0284c7;
+  color: #4a82b8;
 }
 
 .q-stage-tag {
   font-size: 0.7rem;
-  color: #64748b;
+  color: #7bb5e8;
   font-weight: 600;
 }
 
@@ -355,7 +356,7 @@
   margin: 0;
   font-size: 0.78rem;
   line-height: 1.3;
-  color: #0f2744;
+  color: #1c3553;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -364,7 +365,7 @@
 
 .q-slots-count {
   font-size: 0.7rem;
-  color: #0369a1;
+  color: #4a82b8;
   margin-top: 4px;
   font-weight: 700;
 }
@@ -464,7 +465,7 @@
 
 .session-header-bar {
   background: rgba(255, 255, 255, 0.96);
-  border: 1.5px solid #bae6fd;
+  border: 1.5px solid #c5def3;
   border-radius: 16px;
   padding: 14px 20px;
   display: flex;
@@ -476,7 +477,7 @@
   top: 60px;
   z-index: 80;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 18px rgba(123, 181, 232, 0.16);
+  box-shadow: 0 4px 18px rgba(74, 130, 184, 0.16);
 }
 
 .session-header-left,
@@ -487,23 +488,25 @@
 }
 
 .exit-btn {
-  background: #f0f9ff;
-  border: 1.5px solid #bae6fd;
-  color: #0284c7;
+  background: #eef6fc;
+  border: 1.5px solid #c5def3;
+  color: #4a82b8;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .exit-btn:hover {
-  background: #e0f2fe;
+  background: #c5def3;
+  color: #1c3553;
 }
 
 .session-mode-badge {
-  background: #0284c7;
-  color: #fff;
+  background: #4a82b8;
+  color: #ffffff;
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.78rem;
@@ -512,9 +515,9 @@
 }
 
 .toggle-ref-action-btn {
-  background: #f0f9ff;
-  border: 1.5px solid #bae6fd;
-  color: #0284c7;
+  background: #eef6fc;
+  border: 1.5px solid #c5def3;
+  color: #4a82b8;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.82rem;
@@ -527,18 +530,18 @@
 }
 
 .toggle-ref-action-btn:hover {
-  background: #e0f2fe;
-  color: #0369a1;
+  background: #c5def3;
+  color: #1c3553;
 }
 
 /* Hộp đáp án tham khảo linh hoạt */
 .floating-ref-drawer {
   background: #ffffff;
-  border: 1.5px solid #7dd3fc;
+  border: 1.5px solid #7bb5e8;
   border-radius: 14px;
   padding: 14px 18px;
   margin-top: 10px;
-  box-shadow: 0 4px 16px rgba(123, 181, 232, 0.2);
+  box-shadow: 0 4px 16px rgba(74, 130, 184, 0.2);
   animation: fadeIn 0.2s ease-in;
 }
 
@@ -547,28 +550,28 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  border-bottom: 1px solid #e0f2fe;
+  border-bottom: 1px solid #eef6fc;
   padding-bottom: 6px;
 }
 
 .floating-ref-tag {
   font-size: 0.82rem;
   font-weight: 800;
-  color: #0284c7;
+  color: #4a82b8;
   letter-spacing: 0.04em;
 }
 
 .floating-ref-close-btn {
   background: transparent;
   border: none;
-  color: #64748b;
+  color: #7bb5e8;
   font-weight: 700;
   font-size: 0.8rem;
   cursor: pointer;
 }
 
 .floating-ref-close-btn:hover {
-  color: #0f2744;
+  color: #1c3553;
 }
 
 .floating-ref-body {
@@ -586,8 +589,8 @@
 }
 
 .ref-slot-pill {
-  background: #38bdf8;
-  color: #fff;
+  background: #7bb5e8;
+  color: #ffffff;
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 0.78rem;
@@ -595,16 +598,16 @@
 }
 
 .ref-slot-title {
-  color: #475569;
+  color: #4a82b8;
 }
 
 .ref-slot-answer {
-  color: #0f2744;
+  color: #1c3553;
   font-weight: 600;
 }
 
 .action-btn.switch-copy {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  background: linear-gradient(135deg, #4a82b8 0%, #3a6fa0 100%);
   color: #ffffff;
 }
 
@@ -617,13 +620,13 @@
 .question-counter {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #0f2744;
+  color: #1c3553;
 }
 
 .session-timer {
-  background: #f0f9ff;
-  border: 1.5px solid #bae6fd;
-  color: #0284c7;
+  background: #eef6fc;
+  border: 1.5px solid #c5def3;
+  color: #4a82b8;
   padding: 4px 12px;
   border-radius: 20px;
   font-family: monospace;
@@ -632,7 +635,7 @@
 }
 
 .submit-exam-quick-btn {
-  background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
+  background: linear-gradient(135deg, #4a82b8 0%, #3a6fa0 100%);
   color: #ffffff;
   border: none;
   padding: 8px 18px;
@@ -640,7 +643,12 @@
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 12px rgba(74, 130, 184, 0.35);
+  transition: all 0.15s ease;
+}
+
+.submit-exam-quick-btn:hover {
+  filter: brightness(1.08);
 }
 
 /* Thanh nhảy câu nhanh */
@@ -656,8 +664,8 @@
   height: 38px;
   border-radius: 19px;
   background: #ffffff;
-  border: 1.5px solid #bae6fd;
-  color: #475569;
+  border: 1.5px solid #c5def3;
+  color: #4a82b8;
   font-weight: 700;
   cursor: pointer;
   display: flex;
@@ -667,21 +675,22 @@
 }
 
 .nav-pill:hover {
-  background: #f0f9ff;
-  border-color: #38bdf8;
+  background: #eef6fc;
+  border-color: #7bb5e8;
+  color: #1c3553;
 }
 
 .nav-pill.is-answered {
-  border-color: #38bdf8;
-  background: #e0f2fe;
-  color: #0284c7;
+  border-color: #7bb5e8;
+  background: #eef6fc;
+  color: #4a82b8;
 }
 
 .nav-pill.is-current {
-  background: #2563eb;
+  background: #4a82b8;
   color: #ffffff;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.35);
+  border-color: #4a82b8;
+  box-shadow: 0 0 0 2px rgba(74, 130, 184, 0.35);
 }
 
 /* Exam body */
@@ -693,10 +702,10 @@
 
 .exam-question-card {
   background: #ffffff;
-  border: 1.5px solid #bae6fd;
+  border: 1.5px solid #c5def3;
   border-radius: 16px;
   padding: 18px 20px;
-  box-shadow: 0 4px 16px rgba(123, 181, 232, 0.12);
+  box-shadow: 0 4px 16px rgba(74, 130, 184, 0.12);
 }
 
 .exam-q-badge-row {
@@ -707,8 +716,8 @@
 }
 
 .exam-q-badge {
-  background: #0284c7;
-  color: #fff;
+  background: #4a82b8;
+  color: #ffffff;
   padding: 3px 10px;
   border-radius: 16px;
   font-size: 0.78rem;
@@ -716,7 +725,7 @@
 }
 
 .exam-q-stage {
-  color: #64748b;
+  color: #7bb5e8;
   font-size: 0.8rem;
   font-weight: 600;
 }
@@ -725,7 +734,7 @@
   margin: 0;
   font-size: 1.18rem;
   line-height: 1.55;
-  color: #0f2744;
+  color: #1c3553;
   font-weight: 700;
 }
 
@@ -738,10 +747,10 @@
 
 .exam-slot-input-card {
   background: #ffffff;
-  border: 1.5px solid #bae6fd;
+  border: 1.5px solid #c5def3;
   border-radius: 16px;
   padding: 18px;
-  box-shadow: 0 4px 14px rgba(123, 181, 232, 0.08);
+  box-shadow: 0 4px 14px rgba(74, 130, 184, 0.08);
 }
 
 .exam-slot-header {
@@ -752,8 +761,8 @@
 }
 
 .exam-slot-tag {
-  background: #38bdf8;
-  color: #fff;
+  background: #7bb5e8;
+  color: #ffffff;
   padding: 3px 10px;
   border-radius: 14px;
   font-size: 0.82rem;
@@ -764,9 +773,9 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1.5px solid #93c5fd;
+  border: 1.5px solid #c5def3;
   background: #ffffff;
-  color: #0f2744;
+  color: #1c3553;
   font-size: 1.05rem;
   line-height: 1.5;
   box-sizing: border-box;
@@ -777,8 +786,8 @@
 }
 
 .exam-slot-textarea:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.3);
+  border-color: #4a82b8;
+  box-shadow: 0 0 0 3px rgba(123, 181, 232, 0.3);
 }
 
 /* Session nav footer */
@@ -801,25 +810,26 @@
 }
 
 .nav-btn.prev {
-  background: #f0f9ff;
-  color: #0284c7;
-  border: 1.5px solid #bae6fd;
+  background: #eef6fc;
+  color: #4a82b8;
+  border: 1.5px solid #c5def3;
 }
 
 .nav-btn.prev:hover {
-  background: #e0f2fe;
+  background: #c5def3;
+  color: #1c3553;
 }
 
 .nav-btn.next {
-  background: #0284c7;
+  background: #4a82b8;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+  box-shadow: 0 4px 12px rgba(74, 130, 184, 0.3);
 }
 
 .nav-btn.finish {
-  background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
+  background: linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 14px rgba(74, 130, 184, 0.35);
 }
 
 @keyframes fadeIn {

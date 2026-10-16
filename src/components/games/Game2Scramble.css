@@ -1,4 +1,6 @@
-/* Game2Scramble.css - Giao diện Game 2: Xáo từ / Xếp cụm (kéo thả, từng ý một card) */
+/* Game2Scramble.css - Giao diện Game 2: Xáo từ / Xếp cụm (kéo thả, từng ý một card)
+ * Theme Cánh Cụt Xanh Trắng (Penguin Blue & White Palette)
+ */
 
 .game2-container {
   width: 100%;
@@ -6,11 +8,11 @@
   margin: 0 auto;
   padding: 16px;
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  color: #1e293b;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #1c3553;
 }
 
-/* Header câu hỏi (giống Game 1) */
+/* Header câu hỏi */
 .game2-badge-row {
   display: flex;
   gap: 8px;
@@ -20,36 +22,37 @@
 }
 
 .game2-chapter-badge {
-  background: #0284c7;
+  background: #4a82b8;
   color: #ffffff;
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 
 .game2-question-pill {
-  background: #f59e0b;
-  color: #0f172a;
-  padding: 4px 10px;
-  border-radius: 6px;
+  background: #eef6fc;
+  color: #1c3553;
+  border: 1.5px solid #c5def3;
+  padding: 4px 12px;
+  border-radius: 20px;
   font-size: 0.78rem;
   font-weight: 800;
 }
 
 .game2-question-title {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.18rem;
   line-height: 1.55;
-  color: #f1f5f9;
-  font-weight: 600;
+  color: #1c3553;
+  font-weight: 700;
 }
 
 .game2-instruction-note {
   margin: 8px 0 0 0;
   font-size: 0.88rem;
-  color: #94a3b8;
+  color: #4a82b8;
   line-height: 1.5;
 }
 
@@ -62,23 +65,25 @@
 }
 
 .game2-slot-card {
-  background: #1e293b;
-  border-radius: 14px;
-  border: 1.5px solid #334155;
-  padding: 16px 18px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1.5px solid #c5def3;
+  padding: 18px 20px;
   box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  color: #f8fafc;
+  box-shadow: 0 4px 14px rgba(74, 130, 184, 0.08);
+  color: #1c3553;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .game2-slot-card.slot-passed {
-  border-color: #10b981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+  border-color: #7bb5e8;
+  background: linear-gradient(180deg, #ffffff 0%, #eef6fc 100%);
+  box-shadow: 0 0 0 2px rgba(123, 181, 232, 0.35);
 }
 
 .game2-slot-card.slot-failed {
-  border-color: #ef4444;
+  border-color: #fca5a5;
+  background: linear-gradient(180deg, #ffffff 0%, #fff5f5 100%);
 }
 
 .game2-slot-card .slot-card-header {
@@ -97,7 +102,7 @@
 }
 
 .game2-slot-card .slot-tag-pill {
-  background: #0284c7;
+  background: #7bb5e8;
   color: #ffffff;
   width: 28px;
   height: 28px;
@@ -108,28 +113,32 @@
   font-weight: 800;
   font-size: 0.85rem;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(123, 181, 232, 0.35);
 }
 
 .game2-slot-card .slot-title-text {
-  font-size: 0.95rem;
-  color: #f1f5f9;
+  font-size: 0.98rem;
+  color: #1c3553;
+  font-weight: 600;
 }
 
 .game2-slot-card .slot-status-badge {
   font-size: 0.78rem;
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 16px;
 }
 
 .game2-slot-card .badge-exact {
-  background: #065f46;
-  color: #6ee7b7;
+  background: #eef6fc;
+  color: #4a82b8;
+  border: 1.5px solid #c5def3;
 }
 
 .game2-slot-card .badge-arranged {
-  background: #1e3a8a;
-  color: #93c5fd;
+  background: #eef6fc;
+  color: #1c3553;
+  border: 1.5px solid #7bb5e8;
 }
 
 .game2-header {
@@ -150,7 +159,7 @@
   min-width: 28px;
   height: 28px;
   padding: 0 6px;
-  background-color: #7c3aed;
+  background-color: #4a82b8;
   color: #ffffff;
   border-radius: 14px;
   font-size: 0.875rem;
@@ -160,12 +169,12 @@
 .game2-slot-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #0f172a;
+  color: #1c3553;
 }
 
 .game2-instruction {
   font-size: 0.875rem;
-  color: #64748b;
+  color: #4a82b8;
   margin: 0;
   line-height: 1.4;
 }
@@ -183,7 +192,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #94a3b8;
+  color: #4a82b8;
   margin-bottom: 8px;
   flex-wrap: wrap;
   gap: 6px;
@@ -196,163 +205,201 @@
 }
 
 .game2-reset-inline-btn {
-  background: #334155;
-  color: #cbd5e1;
-  border: 1px solid #475569;
-  border-radius: 6px;
-  padding: 3px 10px;
+  background: #eef6fc;
+  color: #4a82b8;
+  border: 1.5px solid #c5def3;
+  border-radius: 14px;
+  padding: 4px 12px;
   font-size: 0.76rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .game2-reset-inline-btn:hover {
-  background: #475569;
-  color: #ffffff;
+  background: #c5def3;
+  color: #1c3553;
 }
 
 .game2-slot-card .badge-wrong {
-  background-color: #ef4444;
-  color: #ffffff;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
 }
 
-/* ================= KHAY GHÉP CHIA Ô LƯỚI 2x2 ================= */
-.game2-grid-2x2 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  box-sizing: border-box;
-}
-
-@media (max-width: 420px) {
-  .game2-grid-2x2 {
-    grid-template-columns: 1fr;
-  }
-}
-
-.game2-grid-cell {
-  background: #090d16;
-  border: 1.5px dashed #475569;
-  border-radius: 12px;
-  padding: 8px 10px;
-  min-height: 72px;
+/* ================= 3. KHAY GHÉP ĐƠN (CHỈ 1 Ô DUY NHẤT) ================= */
+.game2-single-tray {
+  background: #f8fafc;
+  border: 2px dashed #c5def3;
+  border-radius: 16px;
+  padding: 10px 14px;
+  min-height: 64px;
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
   transition: all 0.2s ease;
 }
 
-.game2-grid-cell.drag-over-cell {
-  border-color: #38bdf8;
-  background: #172554;
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.4);
+.game2-single-tray.is-empty {
+  border-style: dashed;
 }
 
-/* Phản hồi trực quan khi đúng / sai từng ô sau khi kiểm tra */
-.game2-grid-cell.cell-correct {
-  border: 2px solid #22c55e !important;
-  background: rgba(34, 197, 94, 0.12) !important;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+.game2-single-tray.has-items {
+  border-style: solid;
+  border-color: #c5def3;
+  background: #ffffff;
 }
 
-.game2-grid-cell.cell-wrong {
-  border: 2px solid #ef4444 !important;
-  background: rgba(239, 68, 68, 0.2) !important;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+.game2-single-tray.is-drag-over {
+  border-color: #4a82b8 !important;
+  background: #eef6fc !important;
+  box-shadow: 0 0 16px rgba(123, 181, 232, 0.45);
 }
 
-.grid-cell-header {
+.game2-single-tray.tray-correct {
+  border: 2px solid #7bb5e8 !important;
+  background: #eef6fc !important;
+  box-shadow: 0 0 10px rgba(123, 181, 232, 0.35);
+}
+
+.game2-single-tray.tray-wrong {
+  border: 2px solid #fca5a5 !important;
+  background: #fff5f5 !important;
+  box-shadow: 0 0 10px rgba(252, 165, 165, 0.4);
+}
+
+.game2-tray-empty-prompt {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 0.72rem;
-  color: #94a3b8;
-  font-weight: 700;
-  margin-bottom: 6px;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  color: #4a82b8;
+  font-size: 0.9rem;
+  font-style: italic;
+  user-select: none;
 }
 
-.grid-cell-num {
-  letter-spacing: 0.04em;
+.tray-empty-icon {
+  font-size: 1.15rem;
+}
+
+/* Dòng các cụm từ xếp trong ô khay */
+.game2-tray-items-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+/* Thẻ từ đã đặt vào ô khay */
+.game2-placed-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  min-height: 44px;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1.5px solid #c5def3;
+  color: #1c3553;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  box-sizing: border-box;
+  box-shadow: 0 2px 6px rgba(74, 130, 184, 0.1);
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.game2-placed-card:hover {
+  background: #eef6fc;
+  border-color: #7bb5e8;
+}
+
+.game2-placed-card:active {
+  cursor: grabbing;
+}
+
+.game2-placed-card.is-dragging {
+  opacity: 0.35;
+  transform: scale(0.96);
+}
+
+.game2-placed-card.is-insert-target {
+  border-color: #4a82b8 !important;
+  box-shadow: 0 0 10px rgba(123, 181, 232, 0.6);
+  transform: scale(1.05);
+}
+
+.game2-placed-card.pos-correct {
+  border-color: #7bb5e8 !important;
+  background: #eef6fc !important;
+}
+
+.game2-placed-card.pos-wrong {
+  border-color: #fca5a5 !important;
+  background: #fff5f5 !important;
+  box-shadow: 0 0 8px rgba(252, 165, 165, 0.5);
+}
+
+.placed-chip-num {
+  font-size: 0.72rem;
+  color: #4a82b8;
+  font-weight: 800;
+  background: #eef6fc;
+  border: 1px solid #c5def3;
+  padding: 2px 6px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.placed-chip-text {
+  line-height: 1.35;
 }
 
 .cell-badge {
   font-size: 0.7rem;
   padding: 2px 7px;
-  border-radius: 4px;
+  border-radius: 10px;
   font-weight: 800;
   letter-spacing: 0.02em;
 }
 
 .cell-badge.correct {
-  background: #166534;
-  color: #86efac;
+  background: #eef6fc;
+  color: #4a82b8;
+  border: 1px solid #c5def3;
 }
 
 .cell-badge.wrong {
-  background: #dc2626;
-  color: #ffffff;
-  box-shadow: 0 0 6px rgba(220, 38, 38, 0.6);
-}
-
-/* Thẻ đã đặt vào ô */
-.game2-placed-card {
-  background: #1e293b;
-  border: 1px solid #64748b;
-  border-radius: 8px;
-  padding: 8px 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  color: #f8fafc;
-  font-size: 0.92rem;
-  font-weight: 600;
-  cursor: grab;
-  user-select: none;
-  min-height: 44px;
-  box-sizing: border-box;
-}
-
-.game2-placed-card:hover {
-  background: #334155;
-  border-color: #38bdf8;
-}
-
-.game2-placed-card .placed-text {
-  flex: 1;
-  line-height: 1.35;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
 }
 
 .game2-placed-card .remove-cross {
-  color: #94a3b8;
+  color: #4a82b8;
   font-size: 0.85rem;
-  padding: 2px 4px;
-  border-radius: 4px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 2px;
 }
 
 .game2-placed-card .remove-cross:hover {
-  background: #ef4444;
-  color: #ffffff;
+  background: #fee2e2;
+  color: #991b1b;
 }
 
-.grid-empty-prompt {
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #64748b;
-  font-size: 0.8rem;
-  font-style: italic;
-  text-align: center;
-}
-
-/* ================= HÀNG CỤM TỪ CẦN SẮP XẾP ================= */
+/* ================= 4. KHO CỤM TỪ CẦN SẮP XẾP ================= */
 .game2-pool-section {
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 1px solid #334155;
+  border-top: 1px solid #eef6fc;
 }
 
 .game2-pool-label {
@@ -360,44 +407,51 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #94a3b8;
+  color: #4a82b8;
   margin-bottom: 8px;
 }
 
 .game2-pool-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  min-height: 52px;
+  min-height: 50px;
+  padding: 4px;
+  border-radius: 12px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
 }
 
-@media (max-width: 420px) {
-  .game2-pool-grid {
-    grid-template-columns: 1fr;
-  }
+.game2-pool-grid.is-drag-over {
+  background: #eef6fc;
+  border: 1.5px dashed #4a82b8;
 }
 
 .game2-pool-card {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   min-height: 44px;
   padding: 8px 14px;
   border-radius: 22px;
-  background-color: #0284c7;
-  color: #ffffff;
-  border: 1px solid #38bdf8;
+  background-color: #ffffff;
+  color: #1c3553;
+  border: 1.5px solid #c5def3;
   font-size: 0.92rem;
   font-weight: 600;
   cursor: pointer;
   user-select: none;
-  touch-action: manipulation;
+  touch-action: none;
   transition: all 0.15s ease;
   box-sizing: border-box;
+  box-shadow: 0 2px 6px rgba(74, 130, 184, 0.12);
 }
 
 .game2-pool-card:hover {
-  background-color: #0369a1;
+  background-color: #eef6fc;
+  border-color: #7bb5e8;
+  color: #1c3553;
   transform: translateY(-1px);
 }
 
@@ -405,22 +459,65 @@
   transform: scale(0.97);
 }
 
+.game2-pool-card.is-dragging {
+  opacity: 0.35;
+  transform: scale(0.96);
+}
+
 .pool-card-text {
-  flex: 1;
   line-height: 1.35;
 }
 
 .pool-card-arrow {
-  color: #bae6fd;
+  color: #4a82b8;
   font-weight: 800;
+  font-size: 1rem;
+}
+
+.game2-pool-all-placed {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  color: #4a82b8;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* ================= 5. GHOST PREVIEW KHI KÉO TRÊN ĐIỆN THOẠI ================= */
+.game2-touch-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  background: #4a82b8;
+  color: #ffffff;
+  border: 2px solid #7bb5e8;
+  border-radius: 22px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(28, 53, 83, 0.4), 0 0 16px rgba(123, 181, 232, 0.6);
+  white-space: nowrap;
+  will-change: transform;
+  opacity: 0.95;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ghost-icon {
   font-size: 1rem;
 }
 
 /* Bảng báo lỗi trực quan tương phản cao */
 .alert-high-contrast {
-  background-color: rgba(220, 38, 38, 0.22);
-  border: 1.5px solid #ef4444;
-  color: #fca5a5;
+  background-color: #fff5f5;
+  border: 1.5px solid #fca5a5;
+  color: #991b1b;
   padding: 10px 14px;
   border-radius: 10px;
   font-size: 0.88rem;
@@ -438,23 +535,25 @@
 }
 
 .game2-btn-confirm:disabled {
-  background-color: #cbd5e1;
-  color: #94a3b8;
+  background-color: #eef6fc;
+  color: #c5def3;
   cursor: not-allowed;
 }
 
 .game2-btn-reset {
-  background-color: #e2e8f0;
-  color: #475569;
+  background-color: #eef6fc;
+  color: #4a82b8;
+  border: 1.5px solid #c5def3;
 }
 
 .game2-btn-reset:hover {
-  background-color: #cbd5e1;
+  background-color: #c5def3;
+  color: #1c3553;
 }
 
 /* Báo lỗi khi xếp sai */
 .game2-error-banner {
-  background-color: #fef2f2;
+  background-color: #fff5f5;
   border: 1px solid #fecaca;
   color: #991b1b;
   padding: 10px 12px;
@@ -468,11 +567,12 @@
 
 /* Bước gõ củng cố (Gõ nhẩm lại cả câu không cần nhìn) */
 .game2-reinforce-card {
-  background-color: #f0fdf4;
-  border: 2px solid #86efac;
-  border-radius: 14px;
-  padding: 16px;
-  margin-top: 10px;
+  background-color: #ffffff;
+  border: 2px solid #7bb5e8;
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 12px;
+  box-shadow: 0 4px 14px rgba(74, 130, 184, 0.12);
   animation: fadeIn 0.3s ease;
 }
 
@@ -482,25 +582,25 @@
 
 .game2-reinforce-badge {
   display: inline-block;
-  background-color: #10b981;
+  background-color: #4a82b8;
   color: #ffffff;
   font-size: 0.8rem;
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 3px 10px;
+  border-radius: 12px;
   margin-bottom: 6px;
 }
 
 .game2-reinforce-title {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #065f46;
+  color: #1c3553;
   margin: 0 0 4px 0;
 }
 
 .game2-reinforce-subtitle {
   font-size: 0.85rem;
-  color: #047857;
+  color: #4a82b8;
   margin: 0;
   line-height: 1.4;
 }
@@ -513,18 +613,19 @@
   font-size: 1.05rem;
   line-height: 1.5;
   font-family: inherit;
-  color: #0f172a;
+  color: #1c3553;
   background-color: #ffffff;
-  border: 2px solid #86efac;
-  border-radius: 10px;
+  border: 1.5px solid #c5def3;
+  border-radius: 12px;
   outline: none;
   resize: vertical;
   margin-bottom: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .game2-reinforce-textarea:focus {
-  border-color: #059669;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  border-color: #4a82b8;
+  box-shadow: 0 0 0 3px rgba(123, 181, 232, 0.3);
 }
 
 .game2-reinforce-actions {
@@ -534,26 +635,32 @@
 }
 
 .game2-btn-grade-reinforce {
-  background-color: #059669;
+  background: linear-gradient(135deg, #4a82b8 0%, #3a6fa0 100%);
   color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  min-height: 44px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(74, 130, 184, 0.3);
 }
 
 .game2-btn-grade-reinforce:hover {
-  background-color: #047857;
+  filter: brightness(1.08);
 }
 
 /* Kết quả chấm điểm bước củng cố */
 .game2-reinforce-result {
   margin-top: 14px;
   padding: 12px;
-  border-radius: 10px;
-  border: 1px solid;
+  border-radius: 12px;
+  border: 1.5px solid;
 }
 
 .game2-reinforce-result.correct {
-  background-color: #ecfdf5;
-  border-color: #a7f3d0;
-  color: #065f46;
+  background-color: #eef6fc;
+  border-color: #7bb5e8;
+  color: #1c3553;
 }
 
 .game2-reinforce-result.wrong {
@@ -579,22 +686,29 @@
 }
 
 .game2-token.correct {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background: #eef6fc;
+  color: #4a82b8;
+  border: 1px solid #c5def3;
   padding: 2px 7px;
   border-radius: 6px;
+  font-weight: 600;
 }
 
 .game2-btn-next-step {
   width: 100%;
   margin-top: 12px;
-  background-color: #2563eb;
+  background: linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%);
   color: #ffffff;
+  border: none;
+  border-radius: 22px;
+  min-height: 44px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(123, 181, 232, 0.35);
 }
 
 .game2-btn-next-step:hover {
-  background-color: #1d4ed8;
+  filter: brightness(1.08);
 }
 
 /* ================= RESPONSIVE: LAPTOP & IPAD ================= */
@@ -616,156 +730,5 @@
 
   .game2-grid-cell {
     min-height: 80px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .game2-container {
-    padding: 30px;
-  }
-
-  .game2-header {
-    padding: 24px 30px;
-  }
-
-  .game2-question-title {
-    font-size: 1.55rem;
-    line-height: 1.6;
-  }
-
-  .game2-slots-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-  }
-
-  .game2-slot-card:last-child:nth-child(odd) {
-    grid-column: span 2;
-  }
-
-  .game2-grid-cell {
-    min-height: 88px;
-    padding: 12px 14px;
-  }
-
-  .game2-placed-card,
-  .game2-pool-card {
-    min-height: 52px;
-    font-size: 1.05rem;
-    padding: 10px 16px;
-  }
-
-  .game2-check-all-btn {
-    min-height: 54px;
-    font-size: 1.15rem;
-  }
-}
-
-/* Kéo thả */
-.game2-card {
-  cursor: grab;
-}
-
-.game2-card.is-dragging {
-  opacity: 0.4;
-  cursor: grabbing;
-}
-
-.game2-tray-box.is-drag-over,
-.game2-pool-box.is-drag-over {
-  border-color: #8b5cf6;
-  background-color: #f5f3ff;
-  box-shadow: inset 0 0 0 2px rgba(139, 92, 246, 0.35);
-}
-
-.game2-tray-hint {
-  font-size: 0.75rem;
-  color: #64748b;
-  text-transform: none;
-  letter-spacing: 0;
-  font-weight: 500;
-}
-
-.game2-pool-done {
-  color: #10b981;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.game2-reinforce-result-title {
-  font-weight: 700;
-  font-size: 0.95rem;
-}
-
-/* Tổng kết & kiểm tra toàn bộ các ý */
-.game2-footer {
-  margin-top: 8px;
-}
-
-.game2-summary-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  border: 1px solid;
-}
-
-.game2-summary-bar.summary-passed {
-  background: #ecfdf5;
-  border-color: #a7f3d0;
-  color: #065f46;
-}
-
-.game2-summary-bar.summary-pending {
-  background: #fff7ed;
-  border-color: #fed7aa;
-  color: #9a3412;
-}
-
-.game2-summary-bar .summary-icon {
-  font-size: 1.4rem;
-}
-
-.game2-summary-bar .summary-text {
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-.game2-main-actions {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.game2-check-all-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 10px 18px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  background: #7c3aed;
-  color: #ffffff;
-  touch-action: manipulation;
-}
-
-.game2-check-all-btn:hover {
-  background: #6d28d9;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

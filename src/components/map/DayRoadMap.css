@@ -133,7 +133,7 @@
 }
 
 .count-highlight {
-  color: #38bdf8;
+  color: #4a82b8;
   font-weight: 700;
 }
 
@@ -420,13 +420,13 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  background: #0284c7;
+  background: #4a82b8;
   color: #ffffff;
   font-size: 0.68rem;
   font-weight: 700;
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.6);
+  box-shadow: 0 2px 8px rgba(74, 130, 184, 0.4);
   margin-bottom: 2px;
 }
 
@@ -462,7 +462,7 @@
   height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 6px solid #0284c7;
+  border-top: 6px solid #4a82b8;
   margin-top: -2px;
 }
 
@@ -490,8 +490,8 @@
 }
 
 .is-current-minh-node .question-card {
-  border-color: #38bdf8;
-  box-shadow: 0 0 18px rgba(56, 189, 248, 0.4), 0 4px 14px rgba(0, 0, 0, 0.4);
+  border-color: #7bb5e8;
+  box-shadow: 0 0 18px rgba(123, 181, 232, 0.4), 0 4px 14px rgba(74, 130, 184, 0.15);
 }
 
 .question-card-top {
@@ -826,7 +826,7 @@
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #38bdf8;
+  color: #7bb5e8;
   letter-spacing: 0.04em;
 }
 
@@ -982,7 +982,7 @@
 }
 
 .active-slot-progress-memo strong {
-  color: #38bdf8;
+  color: #4a82b8;
 }
 
 /* Mode Groups (Học theo bậc & Thi) */
