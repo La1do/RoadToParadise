@@ -387,157 +387,113 @@ export default function CustomExamReview({ onBackToMap }) {
     <div className="custom-practice-container">
       {/* ================= 1. MÀN HÌNH THIẾT LẬP (SETUP) ================= */}
       {viewState === 'setup' && (
-        <div className="setup-view">
-          <header className="setup-header">
-            <div className="header-badge">✦ KHÔNG GIAN HỌC TỰ CHỌN</div>
-            <h1 className="header-title">Chế Độ Ôn Tập & Thi Riêng</h1>
-            <p className="header-desc">
-              Tự do cấu hình bài ôn chép lại, ôn ghép cụm từ hoặc thi thử tính điểm theo danh sách câu bạn muốn rèn luyện.
-            </p>
-          </header>
+        <div className="setup-grid-container">
+          {/* Cột trái: Tiêu đề, Chế độ, Tùy chọn & Nút bắt đầu */}
+          <div className="setup-col-left">
+            <header className="setup-header-compact">
+              <div className="header-badge">✦ KHÔNG GIAN HỌC TỰ CHỌN</div>
+              <h1 className="header-title-compact">🎯 Ôn Tập & Thi Riêng</h1>
+            </header>
 
-          {/* Chọn 1 trong 3 hình thức: Chép lại / Xáo từ / Thi */}
-          <section className="setup-section">
-            <label className="section-label">1. Chọn hình thức luyện tập:</label>
-            <div className="mode-toggle-grid three-modes">
-              <button
-                type="button"
-                className={`mode-toggle-btn ${mode === 'copy' ? 'active-copy' : ''}`}
-                onClick={() => setMode('copy')}
-              >
-                <span className="mode-icon">✍️</span>
-                <div>
-                  <strong>Ôn tập Chép lại (Copy)</strong>
-                  <p>Hiển thị từng ý để gõ lại, có chế độ ẩn/hiện đáp án tham khảo</p>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                className={`mode-toggle-btn ${mode === 'scramble' ? 'active-scramble' : ''}`}
-                onClick={() => setMode('scramble')}
-              >
-                <span className="mode-icon">🧩</span>
-                <div>
-                  <strong>Ôn tập Xáo từ (Scramble)</strong>
-                  <p>Luyện kéo thả / chạm ghép các cụm từ theo lưới 2x2</p>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                className={`mode-toggle-btn ${mode === 'exam' ? 'active-exam' : ''}`}
-                onClick={() => setMode('exam')}
-              >
-                <span className="mode-icon">📝</span>
-                <div>
-                  <strong>Chế độ Thi riêng (Real Exam)</strong>
-                  <p>Tự gõ từng ý, tính giờ, chấm điểm nghiêm ngặt và tô đỏ chỗ sai</p>
-                </div>
-              </button>
-            </div>
-          </section>
-
-          {/* Chọn phạm vi câu hỏi */}
-          <section className="setup-section">
-            <div className="section-header-flex">
-              <label className="section-label">2. Chọn phạm vi câu hỏi ({selectedQuestionIds.length}/20 câu đã chọn):</label>
-              <div className="preset-quick-actions">
-                <button type="button" className="quick-btn" onClick={() => handleSelectPreset('all')}>Tất cả</button>
-                <button type="button" className="quick-btn" onClick={() => handleSelectPreset('clear')}>Bỏ chọn</button>
+            <div className="setup-section mode-section">
+              <label className="section-label">1. Hình thức ({mode === 'copy' ? 'Chép lại' : mode === 'scramble' ? 'Xáo từ' : 'Thi riêng'}):</label>
+              <div className="mode-toggle-grid three-modes">
+                <button type="button" className={`mode-toggle-btn ${mode === 'copy' ? 'active-copy' : ''}`} onClick={() => setMode('copy')}>
+                  <span className="mode-icon">✍️</span>
+                  <div><strong>Chép lại</strong><p>Gõ từng ý, hỗ trợ gợi ý</p></div>
+                </button>
+                <button type="button" className={`mode-toggle-btn ${mode === 'scramble' ? 'active-scramble' : ''}`} onClick={() => setMode('scramble')}>
+                  <span className="mode-icon">🧩</span>
+                  <div><strong>Xáo từ</strong><p>Kéo ghép lưới 2x2</p></div>
+                </button>
+                <button type="button" className={`mode-toggle-btn ${mode === 'exam' ? 'active-exam' : ''}`} onClick={() => setMode('exam')}>
+                  <span className="mode-icon">📝</span>
+                  <div><strong>Thi riêng</strong><p>Tự nhớ & chấm điểm</p></div>
+                </button>
               </div>
             </div>
 
-            {/* Presets chọn nhanh */}
-            <div className="presets-pill-row">
-              <button type="button" className="preset-pill" onClick={() => handleSelectPreset('stage1')}>Chặng 1 (1-5)</button>
-              <button type="button" className="preset-pill" onClick={() => handleSelectPreset('stage2')}>Chặng 2 (6-10)</button>
-              <button type="button" className="preset-pill" onClick={() => handleSelectPreset('stage3')}>Chặng 3 (11-15)</button>
-              <button type="button" className="preset-pill" onClick={() => handleSelectPreset('stage4')}>Chặng 4 (16-20)</button>
-              <button type="button" className="preset-pill" onClick={() => handleSelectPreset('random5')}>Ngẫu nhiên 5</button>
-              <button type="button" className="preset-pill" onClick={() => handleSelectPreset('random10')}>Ngẫu nhiên 10</button>
-              <button type="button" className="preset-pill highlight" onClick={() => handleSelectPreset('mistakeBook')}>📖 Sổ Tiếc Nuối</button>
-            </div>
-
-            {/* Grid 20 câu để tick chọn thủ công */}
-            <div className="questions-select-grid">
-              {allQuestions.map(q => {
-                const isSelected = selectedQuestionIds.includes(q.id);
-                return (
-                  <button
-                    key={q.id}
-                    type="button"
-                    className={`q-select-card ${isSelected ? 'is-selected' : ''}`}
-                    onClick={() => handleToggleQuestionId(q.id)}
-                  >
-                    <div className="q-card-top">
-                      <span className="q-id-badge">Câu {q.id}</span>
-                      <span className="q-stage-tag">Chặng {q.stageId}</span>
-                    </div>
-                    <p className="q-text-snippet">
-                      {q.question.length > 55 ? `${q.question.slice(0, 55)}...` : q.question}
-                    </p>
-                    <div className="q-slots-count">{q.slots.length} ý</div>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* Tùy chọn bổ sung */}
-          <section className="setup-section options-row">
-            <div className="checkbox-option">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={isShuffle}
-                  onChange={e => setIsShuffle(e.target.checked)}
-                />
-                <span>🔀 Xáo trộn thứ tự các câu hỏi</span>
-              </label>
-            </div>
-
-            <div className="checkbox-option">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={showReferenceAnswer}
-                  onChange={e => setShowReferenceAnswer(e.target.checked)}
-                />
-                <span>👁️ Mở sẵn đáp án tham khảo (có thể ẩn/hiện bất cứ lúc nào)</span>
-              </label>
-            </div>
-
-            {mode === 'exam' && (
-              <div className="timer-select-wrap">
-                <span>⏱️ Giới hạn thời gian:</span>
-                <select
-                  value={timeLimitMinutes}
-                  onChange={e => setTimeLimitMinutes(Number(e.target.value))}
-                  className="time-select"
-                >
-                  <option value={0}>Không giới hạn (tự do)</option>
-                  <option value={5}>5 phút</option>
-                  <option value={10}>10 phút</option>
-                  <option value={15}>15 phút</option>
-                  <option value={20}>20 phút</option>
-                </select>
+            <div className="setup-section options-section">
+              <label className="section-label">3. Tùy chọn:</label>
+              <div className="options-stacked">
+                <label className="checkbox-option">
+                  <input type="checkbox" checked={isShuffle} onChange={e => setIsShuffle(e.target.checked)} />
+                  <span>🔀 Xáo trộn thứ tự các câu hỏi</span>
+                </label>
+                {mode !== 'exam' && (
+                  <label className="checkbox-option">
+                    <input type="checkbox" checked={showReferenceAnswer} onChange={e => setShowReferenceAnswer(e.target.checked)} />
+                    <span>👁️ Mở sẵn đáp án tham khảo</span>
+                  </label>
+                )}
+                {mode === 'exam' && (
+                  <div className="timer-select-wrap">
+                    <span>⏱️ Thời gian:</span>
+                    <select value={timeLimitMinutes} onChange={e => setTimeLimitMinutes(Number(e.target.value))} className="time-select">
+                      <option value={0}>Tự do</option>
+                      <option value={5}>5 phút</option>
+                      <option value={10}>10 phút</option>
+                      <option value={15}>15 phút</option>
+                      <option value={20}>20 phút</option>
+                    </select>
+                  </div>
+                )}
               </div>
-            )}
-          </section>
 
-          {/* Nút bắt đầu */}
-          <div className="setup-start-footer">
-            <button
-              type="button"
-              className="start-session-btn"
-              onClick={handleStartSession}
-              disabled={selectedQuestionIds.length === 0}
-            >
-              {mode === 'copy' && `✍️ Bắt đầu Ôn chép lại (${selectedQuestionIds.length} câu) →`}
-              {mode === 'scramble' && `🧩 Bắt đầu Ôn xáo từ (${selectedQuestionIds.length} câu) →`}
-              {mode === 'exam' && `🏁 Bắt đầu Bài thi (${selectedQuestionIds.length} câu) →`}
-            </button>
+              <div className="setup-start-wrap">
+                <button type="button" className="start-session-btn" onClick={handleStartSession} disabled={selectedQuestionIds.length === 0}>
+                  {mode === 'copy'
+                    ? `🚀 Bắt đầu Chép lại (${selectedQuestionIds.length} câu) →`
+                    : mode === 'scramble'
+                    ? `🚀 Bắt đầu Xáo từ (${selectedQuestionIds.length} câu) →`
+                    : `🏁 Bắt đầu Bài thi (${selectedQuestionIds.length} câu) →`}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Cột phải: Presets và danh sách câu hỏi */}
+          <div className="setup-col-right">
+            <div className="setup-section questions-section">
+              <div className="section-header-flex">
+                <label className="section-label">2. Phạm vi câu hỏi ({selectedQuestionIds.length}/20 câu đã chọn):</label>
+                <div className="preset-quick-actions">
+                  <button type="button" className="quick-btn" onClick={() => handleSelectPreset('all')}>Tất cả</button>
+                  <button type="button" className="quick-btn" onClick={() => handleSelectPreset('clear')}>Bỏ chọn</button>
+                </div>
+              </div>
+
+              <div className="presets-pill-row">
+                <button type="button" className="preset-pill" onClick={() => handleSelectPreset('stage1')}>Chặng 1 (1-5)</button>
+                <button type="button" className="preset-pill" onClick={() => handleSelectPreset('stage2')}>Chặng 2 (6-10)</button>
+                <button type="button" className="preset-pill" onClick={() => handleSelectPreset('stage3')}>Chặng 3 (11-15)</button>
+                <button type="button" className="preset-pill" onClick={() => handleSelectPreset('stage4')}>Chặng 4 (16-20)</button>
+                <button type="button" className="preset-pill" onClick={() => handleSelectPreset('random5')}>Ngẫu nhiên 5</button>
+                <button type="button" className="preset-pill" onClick={() => handleSelectPreset('random10')}>Ngẫu nhiên 10</button>
+                <button type="button" className="preset-pill highlight" onClick={() => handleSelectPreset('mistakeBook')}>📖 Sổ Tiếc Nuối</button>
+              </div>
+
+              <div className="questions-select-grid">
+                {allQuestions.map(q => {
+                  const isSelected = selectedQuestionIds.includes(q.id);
+                  return (
+                    <button
+                      key={q.id}
+                      type="button"
+                      className={`q-select-card ${isSelected ? 'is-selected' : ''}`}
+                      onClick={() => handleToggleQuestionId(q.id)}
+                    >
+                      <div className="q-card-top">
+                        <span className="q-id-badge">Câu {q.id}</span>
+                        <span className="q-stage-tag">Chặng {q.stageId}</span>
+                      </div>
+                      <p className="q-text-snippet">{q.question.slice(0, 55)}...</p>
+                      <div className="q-slots-count">{q.slots.length} ý</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       )}

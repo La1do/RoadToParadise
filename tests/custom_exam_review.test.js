@@ -50,3 +50,20 @@ test('CustomExamReview: Giữ nguyên đáp án khi chuyển câu trong chế đ
   // Đánh dấu nav-pill khi đã làm câu đó trong chế độ xáo từ
   assert.ok(jsx.includes('scrambleProgress[q.id]'), 'Đánh dấu ô câu hỏi đã làm trên thanh điều hướng nav-pill');
 });
+
+test('CustomExamReview: Cấu trúc 2 cột trên Laptop và lưới ô số trên Mobile', () => {
+  const jsx = fs.readFileSync('./src/components/exam/CustomExamReview.jsx', 'utf8');
+  assert.ok(jsx.includes('setup-grid-container'), 'Có container chia 2 cột setup');
+  assert.ok(jsx.includes('setup-col-left'), 'Có cột trái chứa chế độ và nút bắt đầu');
+  assert.ok(jsx.includes('setup-col-right'), 'Có cột phải chứa câu hỏi');
+});
+
+test('CustomExamReview: CSS bố cục 2 cột vừa khít 1 màn hình', () => {
+  const css = fs.readFileSync('./src/components/exam/CustomExamReview.css', 'utf8');
+  assert.ok(css.includes('.setup-grid-container'), 'Có selector .setup-grid-container');
+  assert.ok(css.includes('.setup-col-left'), 'Có selector .setup-col-left');
+  assert.ok(css.includes('.setup-col-right'), 'Có selector .setup-col-right');
+  assert.ok(css.includes('grid-template-columns: 360px 1fr') || css.includes('grid-template-columns: 380px 1fr') || css.includes('@media (min-width: 820px)'), 'Có media query 2 cột');
+  assert.ok(css.includes('.setup-start-wrap'), 'Có selector .setup-start-wrap');
+});
+
