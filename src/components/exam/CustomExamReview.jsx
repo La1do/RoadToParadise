@@ -49,9 +49,23 @@ export default function CustomExamReview({ onBackToMap }) {
 
   // Result state:
   const [examResultData, setExamResultData] = useState(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   // Timer ref
   const timerRef = useRef(null);
+
+  // Theo dõi cuộn trang để chỉ hiện nút nổi khi đã cuộn xuống (tránh che nút ở đầu trang)
+  useEffect(() => {
+    if (viewState !== 'result') {
+      setShowScrollTop(false);
+      return;
+    }
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 260);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [viewState]);
 
   // Đếm giờ trong phiên làm bài
   useEffect(() => {
@@ -1089,24 +1103,13 @@ export default function CustomExamReview({ onBackToMap }) {
 
             <button
               type="button"
-              className="action-btn new-setup"
-              onClick={() => setViewState('setup')}
-            >
-              ⚙️ Thiết lập đợt mới
-            </button>
-
-            <button
-              type="button"
               className="action-btn exit-btn"
               onClick={() => {
-                if (typeof onBackToMap === 'function') {
-                  onBackToMap();
-                } else {
-                  setViewState('setup');
-                }
+                setViewState('setup');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
             >
-              🚪 Thoát
+              🚪 Thoát ra trang ôn thi
             </button>
           </div>
 
@@ -1243,42 +1246,38 @@ export default function CustomExamReview({ onBackToMap }) {
               type="button"
               className="result-bottom-btn exit-btn"
               onClick={() => {
-                if (typeof onBackToMap === 'function') {
-                  onBackToMap();
-                } else {
-                  setViewState('setup');
-                }
+                setViewState('setup');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
             >
-              🚪 Thoát
+              🚪 Thoát ra trang ôn thi
             </button>
           </footer>
 
-          {/* Nút nổi hỗ trợ cuộn nhanh lên đầu trang xem điểm & thoát */}
-          <div className="result-floating-actions">
-            <button
-              type="button"
-              className="floating-action-btn scroll-top"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              title="Lên đầu trang xem điểm số"
-            >
-              ⬆️ Xem điểm
-            </button>
-            <button
-              type="button"
-              className="floating-action-btn exit-quick"
-              onClick={() => {
-                if (typeof onBackToMap === 'function') {
-                  onBackToMap();
-                } else {
+          {/* Nút nổi hỗ trợ cuộn nhanh lên đầu trang xem điểm & thoát (chỉ hiện khi đã cuộn xuống để không che nút ở trên) */}
+          {showScrollTop && (
+            <div className="result-floating-actions">
+              <button
+                type="button"
+                className="floating-action-btn scroll-top"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                title="Lên đầu trang xem điểm số"
+              >
+                ⬆️ Xem điểm
+              </button>
+              <button
+                type="button"
+                className="floating-action-btn exit-quick"
+                onClick={() => {
                   setViewState('setup');
-                }
-              }}
-              title="Thoát về trang chính"
-            >
-              🚪 Thoát
-            </button>
-          </div>
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                title="Thoát ra màn hình ôn thi"
+              >
+                🚪 Thoát
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
