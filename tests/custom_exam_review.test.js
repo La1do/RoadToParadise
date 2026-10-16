@@ -67,3 +67,27 @@ test('CustomExamReview: CSS bố cục 2 cột vừa khít 1 màn hình', () => 
   assert.ok(css.includes('.setup-start-wrap'), 'Có selector .setup-start-wrap');
 });
 
+test('CustomExamReview: Tinh gọn trên Mobile dạng Pop-up và không bị mất chữ ở thẻ câu hỏi', () => {
+  const jsx = fs.readFileSync('./src/components/exam/CustomExamReview.jsx', 'utf8');
+  const css = fs.readFileSync('./src/components/exam/CustomExamReview.css', 'utf8');
+
+  // Kiểm tra hiển thị hint câu hỏi không bị cắt cụt
+  assert.ok(jsx.includes('q-hint-text'), 'Dùng class q-hint-text hiển thị hint câu hỏi');
+  assert.ok(css.includes('.q-hint-text'), 'Có CSS cho q-hint-text');
+
+  // Kiểm tra giao diện mobile pop-up
+  assert.ok(jsx.includes('setup-mobile-view'), 'Có giao diện setup-mobile-view chuyên biệt');
+  assert.ok(jsx.includes('mobile-trigger-card'), 'Có các thẻ trigger mở pop-up');
+  assert.ok(jsx.includes('mobile-modal-sheet'), 'Có bottom sheet modal cho mobile');
+  assert.ok(jsx.includes('mobile-num-grid'), 'Có lưới ô số 1..20 trên mobile');
+});
+
+test('App: Thanh header trên Mobile có sidebar drawer khi nhiều tab', () => {
+  const appJsx = fs.readFileSync('./src/App.jsx', 'utf8');
+
+  assert.ok(appJsx.includes('app-mobile-menu-btn'), 'Có nút menu hamburger trên mobile');
+  assert.ok(appJsx.includes('app-sidebar-drawer'), 'Có sidebar drawer trượt ra khi bấm');
+  assert.ok(appJsx.includes('hasMultipleTabs'), 'Chỉ hiện nút mở sidebar khi có nhiều hơn 1 tab');
+});
+
+

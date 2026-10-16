@@ -52,21 +52,21 @@
   transition: background 1.2s ease;
 }
 
-/* Chặng 1: Sáng sớm sương mai vàng cam */
+/* Chặng 1: Sáng sớm sương mai tuyết trắng */
 .chang-1 .layer-sky {
-  background: linear-gradient(180deg, #38bdf8 0%, #bae6fd 60%, #fef08a 100%);
+  background: linear-gradient(180deg, #c5def3 0%, #eef6fc 60%, #ffffff 100%);
 }
-/* Chặng 2: Trưa nắng gắt xanh thẳm */
+/* Chặng 2: Trưa nắng nhẹ xanh cánh cụt */
 .chang-2 .layer-sky {
-  background: linear-gradient(180deg, #0284c7 0%, #38bdf8 70%, #e0f2fe 100%);
+  background: linear-gradient(180deg, #7bb5e8 0%, #c5def3 70%, #eef6fc 100%);
 }
 /* Chặng 3: Chiều tà hoàng hôn rực rỡ */
 .chang-3 .layer-sky {
-  background: linear-gradient(180deg, #7c3aed 0%, #f43f5e 55%, #fbbf24 100%);
+  background: linear-gradient(180deg, #4a82b8 0%, #f43f5e 55%, #fbbf24 100%);
 }
 /* Chặng 4: Đêm phán xét huyền ảo */
 .chang-4 .layer-sky {
-  background: linear-gradient(180deg, #020617 0%, #0f172a 60%, #312e81 100%);
+  background: linear-gradient(180deg, #020617 0%, #0f172a 60%, #1c3553 100%);
 }
 
 .sky-sun {
@@ -112,10 +112,10 @@
   height: 100%;
   background: repeating-linear-gradient(
     90deg,
-    #0284c7 0px,
-    #0369a1 40px,
-    #0284c7 80px,
-    #075985 140px
+    #7bb5e8 0px,
+    #4a82b8 40px,
+    #7bb5e8 80px,
+    #1c3553 140px
   );
   clip-path: polygon(
     0% 100%, 5% 40%, 8% 50%, 14% 20%, 20% 60%, 28% 30%, 35% 70%, 42% 10%, 50% 50%,
@@ -349,12 +349,12 @@
 
 .ctrl-btn:hover {
   background: #1e293b;
-  border-color: #38bdf8;
+  border-color: #7bb5e8;
 }
 
 .ctrl-btn.active {
-  background: #0284c7;
-  border-color: #38bdf8;
+  background: #4a82b8;
+  border-color: #7bb5e8;
 }
 
 /* ================= 6. CHẾ ĐỘ TẬP TRUNG (FOCUS MODE) ================= */
@@ -462,16 +462,16 @@
   margin-top: 8px;
   padding: 6px 10px;
   border-radius: 6px;
-  background: rgba(56, 189, 248, 0.15);
-  border: 1px dashed #38bdf8;
-  color: #bae6fd;
+  background: rgba(123, 181, 232, 0.15);
+  border: 1px dashed #7bb5e8;
+  color: #c5def3;
   font-size: 0.85rem;
   text-align: left;
 }
 
 .peek-label {
   font-weight: 700;
-  color: #38bdf8;
+  color: #7bb5e8;
 }
 
 /* ================= 8. THẺ TỪ (TILES) & KÉO THẢ ================= */
@@ -490,7 +490,7 @@
 .motorbike-tray-container {
   background: rgba(30, 41, 59, 0.92);
   backdrop-filter: blur(8px);
-  border: 2px dashed #38bdf8;
+  border: 2px dashed #7bb5e8;
   border-radius: 16px;
   padding: clamp(10px, 1.5vw, 14px);
   min-height: 70px;
@@ -508,7 +508,7 @@
 
 .tray-title {
   font-weight: 700;
-  color: #38bdf8;
+  color: #7bb5e8;
 }
 
 .motorbike-tray-slots {
@@ -560,10 +560,10 @@
 }
 
 .motorbike-tile.in-tray {
-  background: #e0f2fe;
-  color: #0369a1;
-  border-color: #38bdf8;
-  box-shadow: 0 2px 6px rgba(56, 189, 248, 0.3);
+  background: #eef6fc;
+  color: #1c3553;
+  border-color: #7bb5e8;
+  box-shadow: 0 2px 6px rgba(123, 181, 232, 0.3);
 }
 
 .motorbike-tile.shake-wrong {
@@ -647,12 +647,12 @@
 }
 
 .verify-btn {
-  background: #38bdf8;
-  color: #0f172a;
+  background: linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%);
+  color: #ffffff;
 }
 
 .verify-btn:hover:not(:disabled) {
-  background: #0ea5e9;
+  background: linear-gradient(135deg, #4a82b8 0%, #3a6fa0 100%);
   transform: translateY(-2px);
 }
 
@@ -810,7 +810,7 @@
   backdrop-filter: blur(14px);
   padding: 30px;
   border-radius: 20px;
-  border: 2px solid #38bdf8;
+  border: 2px solid #7bb5e8;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
@@ -830,8 +830,8 @@
 }
 
 .next-q-btn {
-  background: #38bdf8;
-  color: #0f172a;
+  background: linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%);
+  color: #ffffff;
 }
 
 /* ================= 11. RESPONSIVE THEO BREAKPOINTS ================= */
