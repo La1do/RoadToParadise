@@ -1,6 +1,7 @@
 /**
  * Game1Copy.css - Giao diện Game 1: Chép lại
  * Đồng bộ chuẩn Theme Cánh Cụt Xanh Trắng (Penguin Blue & White Palette)
+ * Sử dụng CSS Variables tập trung từ colors.css
  */
 
 .game1-container {
@@ -10,16 +11,16 @@
   padding: 16px;
   box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
 }
 
 /* ================= 1. HEADER CÂU HỎI ================= */
 .game1-header {
-  background: #ffffff;
+  background: var(--color-white, #ffffff);
   border-radius: 16px;
   padding: 18px 20px;
   margin-bottom: 20px;
-  border: 1.5px solid #c5def3;
+  border: 1.5px solid var(--color-border, #c5def3);
   box-shadow: 0 4px 18px rgba(74, 130, 184, 0.12);
 }
 
@@ -32,8 +33,8 @@
 }
 
 .game1-chapter-badge {
-  background: #4a82b8;
-  color: #ffffff;
+  background: var(--color-primary-deep, #4a82b8);
+  color: var(--color-white, #ffffff);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.78rem;
@@ -42,9 +43,9 @@
 }
 
 .game1-question-pill {
-  background: #eef6fc;
-  color: #1c3553;
-  border: 1.5px solid #c5def3;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-text-main, #1c3553);
+  border: 1.5px solid var(--color-border, #c5def3);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.78rem;
@@ -53,9 +54,9 @@
 
 .game1-toggle-reference-btn {
   margin-left: auto;
-  background: #ffffff;
-  color: #4a82b8;
-  border: 1.5px solid #c5def3;
+  background: var(--color-white, #ffffff);
+  color: var(--color-primary-deep, #4a82b8);
+  border: 1.5px solid var(--color-border, #c5def3);
   border-radius: 20px;
   padding: 5px 14px;
   font-size: 0.8rem;
@@ -68,16 +69,16 @@
 }
 
 .game1-toggle-reference-btn:hover {
-  background: #eef6fc;
-  color: #1c3553;
-  border-color: #7bb5e8;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-text-main, #1c3553);
+  border-color: var(--color-primary, #7bb5e8);
 }
 
 .game1-question-title {
   margin: 0;
   font-size: 1.18rem;
   line-height: 1.55;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
   font-weight: 700;
 }
 
@@ -91,9 +92,9 @@
 
 /* Card cho từng ý */
 .game1-slot-card {
-  background: #ffffff;
+  background: var(--color-white, #ffffff);
   border-radius: 16px;
-  border: 1.5px solid #c5def3;
+  border: 1.5px solid var(--color-border, #c5def3);
   padding: 18px 20px;
   box-sizing: border-box;
   box-shadow: 0 4px 14px rgba(74, 130, 184, 0.08);
@@ -101,13 +102,13 @@
 }
 
 .game1-slot-card.slot-passed {
-  border-color: #7bb5e8;
-  background: linear-gradient(180deg, #ffffff 0%, #eef6fc 100%);
+  border-color: var(--color-primary, #7bb5e8);
+  background: linear-gradient(180deg, #ffffff 0%, var(--color-bg-ice, #eef6fc) 100%);
   box-shadow: 0 0 0 2px rgba(123, 181, 232, 0.35);
 }
 
 .game1-slot-card.slot-failed {
-  border-color: #fca5a5;
+  border-color: var(--color-blush, #fca5a5);
   background: linear-gradient(180deg, #ffffff 0%, #fff5f5 100%);
 }
 
@@ -128,8 +129,8 @@
 }
 
 .slot-tag-pill {
-  background: #7bb5e8;
-  color: #ffffff;
+  background: var(--color-primary, #7bb5e8);
+  color: var(--color-white, #ffffff);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -139,7 +140,7 @@
 
 .slot-title-text {
   font-size: 0.98rem;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
   font-weight: 600;
 }
 
@@ -151,22 +152,22 @@
 }
 
 .badge-exact {
-  background: #eef6fc;
-  color: #4a82b8;
-  border: 1.5px solid #c5def3;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-primary-deep, #4a82b8);
+  border: 1.5px solid var(--color-border, #c5def3);
 }
 
 .badge-wrong {
   background: #fee2e2;
   color: #991b1b;
-  border: 1px solid #fca5a5;
+  border: 1px solid var(--color-blush, #fca5a5);
 }
 
 /* Hộp mẫu đáp án */
 .slot-sample-box {
-  background: #eef6fc;
-  border: 1.5px solid #c5def3;
-  border-left: 4px solid #7bb5e8;
+  background: var(--color-bg-ice, #eef6fc);
+  border: 1.5px solid var(--color-border, #c5def3);
+  border-left: 4px solid var(--color-primary, #7bb5e8);
   border-radius: 10px;
   padding: 12px 16px;
   margin-bottom: 14px;
@@ -183,16 +184,16 @@
 .sample-mini-label {
   display: block;
   font-size: 0.75rem;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 .sample-hide-inline-btn {
-  background: #ffffff;
-  color: #4a82b8;
-  border: 1px solid #c5def3;
+  background: var(--color-white, #ffffff);
+  color: var(--color-primary-deep, #4a82b8);
+  border: 1px solid var(--color-border, #c5def3);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -201,13 +202,13 @@
 }
 
 .sample-hide-inline-btn:hover {
-  background: #eef6fc;
-  color: #1c3553;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-text-main, #1c3553);
 }
 
 .slot-sample-box.sample-hidden-box {
   background: #f8fafc;
-  border: 1.5px dashed #c5def3;
+  border: 1.5px dashed var(--color-border, #c5def3);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -216,13 +217,13 @@
 }
 
 .slot-sample-box.sample-hidden-box:hover {
-  border-color: #7bb5e8;
-  background: #eef6fc;
+  border-color: var(--color-primary, #7bb5e8);
+  background: var(--color-bg-ice, #eef6fc);
 }
 
 .sample-hidden-msg {
   font-size: 0.88rem;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   font-style: italic;
   font-weight: 500;
 }
@@ -231,7 +232,7 @@
   margin: 0;
   font-size: 1.02rem;
   line-height: 1.55;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
   font-weight: 500;
 }
 
@@ -246,9 +247,9 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1.5px solid #c5def3;
-  background: #ffffff;
-  color: #1c3553;
+  border: 1.5px solid var(--color-border, #c5def3);
+  background: var(--color-white, #ffffff);
+  color: var(--color-text-main, #1c3553);
   font-size: 1.05rem;
   line-height: 1.5;
   box-sizing: border-box;
@@ -259,17 +260,17 @@
 }
 
 .slot-textarea:focus {
-  border-color: #4a82b8;
+  border-color: var(--color-primary-deep, #4a82b8);
   box-shadow: 0 0 0 3px rgba(123, 181, 232, 0.3);
 }
 
 .slot-textarea.border-success {
-  border-color: #7bb5e8;
-  background: #eef6fc;
+  border-color: var(--color-primary, #7bb5e8);
+  background: var(--color-bg-ice, #eef6fc);
 }
 
 .slot-textarea.border-error {
-  border-color: #fca5a5;
+  border-color: var(--color-blush, #fca5a5);
   background: #fff5f5;
 }
 
@@ -282,9 +283,9 @@
 }
 
 .slot-hint-btn {
-  background: #eef6fc;
-  color: #4a82b8;
-  border: 1.5px solid #c5def3;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-primary-deep, #4a82b8);
+  border: 1.5px solid var(--color-border, #c5def3);
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -295,13 +296,13 @@
 }
 
 .slot-hint-btn:hover {
-  background: #c5def3;
-  color: #1c3553;
+  background: var(--color-border, #c5def3);
+  color: var(--color-text-main, #1c3553);
 }
 
 .slot-single-check-btn {
-  background: #4a82b8;
-  color: #ffffff;
+  background: var(--color-primary-deep, #4a82b8);
+  color: var(--color-white, #ffffff);
   border: none;
   padding: 8px 18px;
   border-radius: 20px;
@@ -321,8 +322,8 @@
 /* Hộp gợi ý */
 .slot-hint-box {
   margin-top: 10px;
-  background: #eef6fc;
-  border: 1.5px solid #c5def3;
+  background: var(--color-bg-ice, #eef6fc);
+  border: 1.5px solid var(--color-border, #c5def3);
   border-radius: 10px;
   padding: 10px 16px;
   display: flex;
@@ -334,13 +335,13 @@
 
 .hint-message {
   font-size: 0.9rem;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
   font-weight: 600;
 }
 
 .hint-fill-btn {
-  background: #4a82b8;
-  color: #ffffff;
+  background: var(--color-primary-deep, #4a82b8);
+  color: var(--color-white, #ffffff);
   border: none;
   padding: 6px 12px;
   border-radius: 16px;
@@ -355,7 +356,7 @@
   background: #f8fafc;
   border-radius: 10px;
   padding: 14px;
-  border: 1.5px solid #eef6fc;
+  border: 1.5px solid var(--color-bg-ice, #eef6fc);
 }
 
 .diff-section {
@@ -369,7 +370,7 @@
 .diff-label {
   display: block;
   font-size: 0.75rem;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   font-weight: 700;
   margin-bottom: 6px;
 }
@@ -396,7 +397,7 @@
 .token-wrong {
   background: #f8d7da;
   color: #991b1b;
-  border: 1.5px solid #fca5a5;
+  border: 1.5px solid var(--color-blush, #fca5a5);
   font-weight: 700;
   text-decoration: line-through;
   text-decoration-thickness: 2px;
@@ -412,18 +413,18 @@
 }
 
 .token-neutral {
-  background: #eef6fc;
-  color: #1c3553;
-  border: 1px solid #c5def3;
+  background: var(--color-bg-ice, #eef6fc);
+  color: var(--color-text-main, #1c3553);
+  border: 1px solid var(--color-border, #c5def3);
 }
 
 /* Hộp đáp án chuẩn nguyên mẫu (đầy đủ dấu câu) */
 .diff-full-answer-box {
   margin-top: 14px;
   padding: 12px 16px;
-  background: #eef6fc;
-  border: 1.5px solid #c5def3;
-  border-left: 4px solid #4a82b8;
+  background: var(--color-bg-ice, #eef6fc);
+  border: 1.5px solid var(--color-border, #c5def3);
+  border-left: 4px solid var(--color-primary-deep, #4a82b8);
   border-radius: 12px;
 }
 
@@ -431,7 +432,7 @@
   display: block;
   font-size: 0.78rem;
   font-weight: 800;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   letter-spacing: 0.04em;
   margin-bottom: 6px;
   text-transform: uppercase;
@@ -441,7 +442,7 @@
   margin: 0;
   font-size: 1.05rem;
   line-height: 1.6;
-  color: #1c3553;
+  color: var(--color-text-main, #1c3553);
   font-weight: 600;
   white-space: pre-wrap;
 }
@@ -452,7 +453,7 @@
   bottom: 12px;
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(12px);
-  border: 2px solid #c5def3;
+  border: 2px solid var(--color-border, #c5def3);
   border-radius: 18px;
   padding: 14px 20px;
   box-shadow: 0 10px 30px rgba(74, 130, 184, 0.18);
@@ -468,9 +469,9 @@
 }
 
 .summary-passed {
-  background: #eef6fc;
-  border: 1.5px solid #7bb5e8;
-  color: #1c3553;
+  background: var(--color-bg-ice, #eef6fc);
+  border: 1.5px solid var(--color-primary, #7bb5e8);
+  color: var(--color-text-main, #1c3553);
 }
 
 .summary-pending {
@@ -496,8 +497,8 @@
 .game1-check-all-btn {
   flex: 1;
   min-height: 48px;
-  background: linear-gradient(135deg, #4a82b8 0%, #3a6fa0 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary-deep, #4a82b8) 0%, #3a6fa0 100%);
+  color: var(--color-white, #ffffff);
   border: none;
   border-radius: 24px;
   font-size: 1.05rem;
@@ -518,8 +519,8 @@
 .game1-next-btn {
   min-height: 48px;
   padding: 0 24px;
-  background: linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary, #7bb5e8) 0%, var(--color-primary-deep, #4a82b8) 100%);
+  color: var(--color-white, #ffffff);
   border: none;
   border-radius: 24px;
   font-size: 1rem;

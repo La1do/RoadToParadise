@@ -85,3 +85,23 @@ test('Theme CSS: Kiểm tra đầy đủ 4 chặng class, biến chuẩn và med
   // prefers-reduced-motion
   assert.ok(css.includes('prefers-reduced-motion'), 'Phải hỗ trợ prefers-reduced-motion');
 });
+
+test('Bảng màu tập trung: Kiểm tra file colors.css và colors.js tồn tại và cung cấp đầy đủ tokens', () => {
+  const colorsCssPath = path.resolve('./src/styles/colors.css');
+  const colorsJsPath = path.resolve('./src/styles/colors.js');
+
+  assert.ok(fs.existsSync(colorsCssPath), 'File src/styles/colors.css phải tồn tại');
+  assert.ok(fs.existsSync(colorsJsPath), 'File src/styles/colors.js phải tồn tại');
+
+  const css = fs.readFileSync(colorsCssPath, 'utf8');
+  assert.ok(css.includes('--color-primary:'), 'colors.css phải có --color-primary');
+  assert.ok(css.includes('--color-primary-deep:'), 'colors.css phải có --color-primary-deep');
+  assert.ok(css.includes('--color-text-main:'), 'colors.css phải có --color-text-main');
+  assert.ok(css.includes('--color-border:'), 'colors.css phải có --color-border');
+  assert.ok(css.includes('--color-bg-ice:'), 'colors.css phải có --color-bg-ice');
+  assert.ok(css.includes('--color-white:'), 'colors.css phải có --color-white');
+
+  const themeCss = fs.readFileSync(path.resolve('./src/styles/theme.css'), 'utf8');
+  assert.ok(themeCss.includes("import './colors.css'"), 'theme.css phải import colors.css');
+});
+

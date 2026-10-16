@@ -27,11 +27,11 @@
 }
 
 .fp-interactive-container.stage-2 {
-  --fp-room-bg-1: #eef6fc;
-  --fp-room-bg-2: #c5def3;
+  --fp-room-bg-1: var(--color-bg-ice, #eef6fc);
+  --fp-room-bg-2: var(--color-border, #c5def3);
   --fp-light-beam: rgba(197, 222, 243, 0.55);
-  --fp-desk-color: #1c3553;
-  --fp-accent-gold: #4a82b8;
+  --fp-desk-color: var(--color-text-main, #1c3553);
+  --fp-accent-gold: var(--color-primary-deep, #4a82b8);
 }
 
 .fp-interactive-container.stage-3 {
@@ -258,7 +258,7 @@
 .fp-camera {
   width: 7px;
   height: 7px;
-  background: #4a82b8;
+  background: var(--color-primary-deep, #4a82b8);
   border-radius: 50%;
   opacity: 0.8;
 }
@@ -362,7 +362,7 @@
 .fp-banner-callaction {
   margin-top: 8px;
   font-size: 0.78rem;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   font-weight: 600;
 }
 
@@ -410,7 +410,7 @@
 }
 
 .question-card {
-  border-left: 4px solid #7bb5e8;
+  border-left: 4px solid var(--color-primary, #7bb5e8);
 }
 
 .answer-card {
@@ -423,7 +423,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.78rem;
-  color: #4a82b8;
+  color: var(--color-primary-deep, #4a82b8);
   letter-spacing: 0.03em;
   margin-bottom: 6px;
 }
@@ -459,7 +459,7 @@
   width: 100%;
   min-height: 48px;
   padding: 10px 14px;
-  background: linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%);
+  background: linear-gradient(135deg, var(--color-primary, #7bb5e8) 0%, var(--color-primary-deep, #4a82b8) 100%);
   color: #ffffff;
   border: none;
   border-radius: 12px;

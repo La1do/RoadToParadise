@@ -42,8 +42,8 @@ function MinhAvatar({ isFloating = true, size = 44 }) {
             <stop offset="100%" stopColor="#fcd34d" />
           </linearGradient>
           <linearGradient id="minhShirt" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#7bb5e8" />
-            <stop offset="100%" stopColor="#4a82b8" />
+            <stop offset="0%" stopColor="var(--color-primary, #7bb5e8)" />
+            <stop offset="100%" stopColor="var(--color-primary-deep, #4a82b8)" />
           </linearGradient>
           <linearGradient id="minhHair" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#334155" />
@@ -524,7 +524,7 @@ export default function DayRoadMap({
 
             {/* Trích dẫn câu hỏi */}
             <div className="modal-question-box">
-              <span className="modal-section-label" style={{ color: '#4a82b8', fontWeight: 'bold', display: 'block', marginBottom: 4 }}>
+              <span className="modal-section-label" style={{ color: 'var(--color-primary-deep, #4a82b8)', fontWeight: 'bold', display: 'block', marginBottom: 4 }}>
                 ❓ NỘI DUNG CÂU HỎI:
               </span>
               <p className="modal-question-text">{activeModalData.question}</p>
@@ -549,7 +549,7 @@ export default function DayRoadMap({
                   padding: '12px 14px',
                   borderRadius: 10,
                   border: 'none',
-                  background: 'linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%)',
+                  background: 'linear-gradient(135deg, var(--color-primary, #7bb5e8) 0%, var(--color-primary-deep, #4a82b8) 100%)',
                   color: '#fff',
                   cursor: 'pointer',
                   fontWeight: 'bold',

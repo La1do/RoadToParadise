@@ -87,7 +87,7 @@ export function MorningWindowIllustration() {
       {/* Chiếc điện thoại reo báo câu kinh mới */}
       <circle cx="280" cy="188" r="30" fill="url(#phoneGlow)" />
       <rect x="260" y="172" width="40" height="26" rx="4" fill="#1e293b" stroke="#f59e0b" strokeWidth="1.5" />
-      <rect x="264" y="176" width="32" height="18" rx="2" fill="#7bb5e8" />
+      <rect x="264" y="176" width="32" height="18" rx="2" fill="var(--color-primary, #7bb5e8)" />
       {/* Biểu tượng chuông rung / sóng phát */}
       <path d="M253 175 C250 185 250 190 253 195" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" />
       <path d="M307 175 C310 185 310 190 307 195" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" />
@@ -116,8 +116,8 @@ export function TrafficLibraryIllustration() {
     >
       <defs>
         <linearGradient id="skyDay" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#c5def3" />
-          <stop offset="100%" stopColor="#eef6fc" />
+          <stop offset="0%" stopColor="var(--color-border, #c5def3)" />
+          <stop offset="100%" stopColor="var(--color-bg-ice, #eef6fc)" />
         </linearGradient>
         <radialGradient id="redLightGlow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#ef4444" stopOpacity="0.9" />
@@ -144,8 +144,8 @@ export function TrafficLibraryIllustration() {
       <circle cx="36" cy="92" r="5" fill="#475569" />
 
       {/* Biển hiệu, tờ rơi chữ lộn xộn gợi nhớ câu kinh */}
-      <rect x="65" y="65" width="55" height="32" rx="3" fill="#ffffff" stroke="#4a82b8" strokeWidth="1.5" />
-      <text x="70" y="80" fontSize="8" fontWeight="bold" fill="#1c3553" fontFamily="monospace">BẢNG HIỆU</text>
+      <rect x="65" y="65" width="55" height="32" rx="3" fill="#ffffff" stroke="var(--color-primary-deep, #4a82b8)" strokeWidth="1.5" />
+      <text x="70" y="80" fontSize="8" fontWeight="bold" fill="var(--color-text-main, #1c3553)" fontFamily="monospace">BẢNG HIỆU</text>
       <text x="70" y="91" fontSize="7" fill="#64748b" fontFamily="monospace">A B C ... ?</text>
 
       <rect x="85" y="105" width="35" height="22" rx="2" fill="#fef08a" stroke="#ca8a04" strokeWidth="1" />
@@ -164,7 +164,7 @@ export function TrafficLibraryIllustration() {
 
       {/* Những gáy sách nhiều màu sắc */}
       {/* Tầng 1 */}
-      <rect x="205" y="30" width="10" height="40" fill="#4a82b8" />
+      <rect x="205" y="30" width="10" height="40" fill="var(--color-primary-deep, #4a82b8)" />
       <rect x="217" y="35" width="12" height="35" fill="#ef4444" />
       <rect x="231" y="28" width="14" height="42" fill="#10b981" />
       <rect x="247" y="32" width="10" height="38" fill="#f59e0b" />
@@ -172,7 +172,7 @@ export function TrafficLibraryIllustration() {
       {/* Tầng 2 */}
       <rect x="205" y="80" width="14" height="40" fill="#6366f1" />
       <rect x="221" y="85" width="10" height="35" fill="#ec4899" />
-      <rect x="233" y="78" width="15" height="42" fill="#7bb5e8" />
+      <rect x="233" y="78" width="15" height="42" fill="var(--color-primary, #7bb5e8)" />
       <rect x="250" y="82" width="12" height="38" fill="#84cc16" />
 
       {/* Bàn học thư viện & Cuốn sách đang mở ghép từng chữ */}
@@ -180,9 +180,9 @@ export function TrafficLibraryIllustration() {
       <polygon points="260,185 295,182 320,195 285,200" fill="#ffffff" stroke="#475569" strokeWidth="1.5" />
       <polygon points="295,182 330,185 355,200 320,195" fill="#f8fafc" stroke="#475569" strokeWidth="1.5" />
       {/* Dòng chữ gợi nhớ */}
-      <line x1="272" y1="188" x2="290" y2="188" stroke="#4a82b8" strokeWidth="2" />
-      <line x1="275" y1="193" x2="300" y2="193" stroke="#4a82b8" strokeWidth="2" />
-      <line x1="325" y1="188" x2="345" y2="188" stroke="#4a82b8" strokeWidth="2" />
+      <line x1="272" y1="188" x2="290" y2="188" stroke="var(--color-primary-deep, #4a82b8)" strokeWidth="2" />
+      <line x1="275" y1="193" x2="300" y2="193" stroke="var(--color-primary-deep, #4a82b8)" strokeWidth="2" />
+      <line x1="325" y1="188" x2="345" y2="188" stroke="var(--color-primary-deep, #4a82b8)" strokeWidth="2" />
     </svg>
   );
 }
@@ -248,7 +248,7 @@ export function CoffeeWorkIllustration() {
       <path d="M146 155 Q149 146 145 140" stroke="#fed7aa" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
 
       {/* Khăn lau bàn gấp gọn bên cạnh vết bàn sáng bóng */}
-      <rect x="250" y="168" width="38" height="18" rx="4" fill="#7bb5e8" stroke="#4a82b8" strokeWidth="1" />
+      <rect x="250" y="168" width="38" height="18" rx="4" fill="var(--color-primary, #7bb5e8)" stroke="var(--color-primary-deep, #4a82b8)" strokeWidth="1" />
       <ellipse cx="305" cy="180" rx="25" ry="8" fill="#fef08a" opacity="0.25" />
 
       {/* Đôi bàn tay cần mẫn lau dọn (biểu tượng) & bong bóng suy nghĩ lời kinh */}
