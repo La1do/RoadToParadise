@@ -1094,6 +1094,20 @@ export default function CustomExamReview({ onBackToMap }) {
             >
               ⚙️ Thiết lập đợt mới
             </button>
+
+            <button
+              type="button"
+              className="action-btn exit-btn"
+              onClick={() => {
+                if (typeof onBackToMap === 'function') {
+                  onBackToMap();
+                } else {
+                  setViewState('setup');
+                }
+              }}
+            >
+              🚪 Thoát
+            </button>
           </div>
 
           {/* Chi tiết từng câu hỏi và phân tích lỗi */}
@@ -1213,6 +1227,57 @@ export default function CustomExamReview({ onBackToMap }) {
                 </div>
               );
             })}
+          </div>
+
+          {/* Thanh nút hành động ở cuối trang kết quả */}
+          <footer className="result-bottom-bar">
+            <button
+              type="button"
+              className="result-bottom-btn scroll-top-btn"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              ⬆️ Lên đầu trang xem điểm
+            </button>
+
+            <button
+              type="button"
+              className="result-bottom-btn exit-btn"
+              onClick={() => {
+                if (typeof onBackToMap === 'function') {
+                  onBackToMap();
+                } else {
+                  setViewState('setup');
+                }
+              }}
+            >
+              🚪 Thoát
+            </button>
+          </footer>
+
+          {/* Nút nổi hỗ trợ cuộn nhanh lên đầu trang xem điểm & thoát */}
+          <div className="result-floating-actions">
+            <button
+              type="button"
+              className="floating-action-btn scroll-top"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              title="Lên đầu trang xem điểm số"
+            >
+              ⬆️ Xem điểm
+            </button>
+            <button
+              type="button"
+              className="floating-action-btn exit-quick"
+              onClick={() => {
+                if (typeof onBackToMap === 'function') {
+                  onBackToMap();
+                } else {
+                  setViewState('setup');
+                }
+              }}
+              title="Thoát về trang chính"
+            >
+              🚪 Thoát
+            </button>
           </div>
         </div>
       )}
