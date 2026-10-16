@@ -6,11 +6,12 @@
 :root {
   /* ================= 1. BẢNG MÀU CHÍNH (THEME PALETTE) ================= */
   --color-primary: #7bb5e8;        /* Xanh pastel chủ đạo (baby blue) */
+  --color-primary-soft: #9ecaf1;   /* Xanh pastel dịu mát bổ trợ */
   --color-primary-deep: #4a82b8;   /* Xanh đậm: nút chính, đường viền active, nhấn mạnh */
   --color-text-main: #1c3553;      /* Xanh than đậm: chữ chính, độ tương phản cao */
-  --color-border: #c5def3;         /* Viền sáng màu băng nhẹ */
-  --color-bg-ice: #eef6fc;         /* Nền trắng sữa ánh băng */
-  --color-white: #ffffff;          /* Trắng tinh khiết */
+  --color-border: #b8daf5;         /* Viền xanh pastel rõ nét */
+  --color-bg-ice: #dcedfa;         /* Nền xanh pastel băng tuyết chủ đạo */
+  --color-white: #f5f9fd;          /* Trắng nhẹ dịu mắt phụ trợ (soft auxiliary off-white) */
   --color-blush: #fca5a5;          /* Hồng nhẹ má hồng / viền lỗi */
   --color-beak: #fbd38d;           /* Vàng kem nhẹ */
 
@@ -38,7 +39,7 @@
   --color-missing-border: #fde68a;
 
   /* ================= 4. HIỆU ỨNG ĐỔ BÓNG THEO MÀU THEME ================= */
-  --shadow-theme-sm: 0 2px 6px rgba(74, 130, 184, 0.1);
-  --shadow-theme-md: 0 4px 14px rgba(74, 130, 184, 0.15);
-  --shadow-theme-lg: 0 10px 30px rgba(74, 130, 184, 0.2);
+  --shadow-theme-sm: 0 2px 6px rgba(74, 130, 184, 0.12);
+  --shadow-theme-md: 0 4px 14px rgba(74, 130, 184, 0.18);
+  --shadow-theme-lg: 0 10px 30px rgba(74, 130, 184, 0.22);
 }
