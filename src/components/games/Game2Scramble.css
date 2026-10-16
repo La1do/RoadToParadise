@@ -232,11 +232,12 @@
   background: #f8fafc;
   border: 2px dashed #c5def3;
   border-radius: 16px;
-  padding: 10px 14px;
-  min-height: 64px;
+  padding: 12px 14px 18px 14px;
+  min-height: 80px;
   box-sizing: border-box;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   transition: all 0.2s ease;
 }
 
@@ -299,6 +300,7 @@
   gap: 8px;
   align-items: center;
   width: 100%;
+  min-height: 48px;
   transition: all 0.2s ease;
 }
 
@@ -323,6 +325,15 @@
   pointer-events: none;
   user-select: none;
   white-space: nowrap;
+}
+
+.game2-drop-placeholder.at-end {
+  width: 100%;
+  margin-top: 6px;
+  background: rgba(123, 181, 232, 0.28);
+  border: 2px dashed #4a82b8;
+  color: #1c3553;
+  min-height: 46px;
 }
 
 .placeholder-arrow {
