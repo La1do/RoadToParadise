@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { generateStep2Arrange, evaluateStep2Arrange } from '../../core/learningStepEngine.js';
 import { compareAnswer } from '../../core/gradeEngine.js';
-import StickerReaction from '../common/StickerReaction.jsx';
+import StickerReaction, { formatWithUserName } from '../common/StickerReaction.jsx';
 import './Game2Scramble.css';
 
 /**
@@ -811,41 +811,47 @@ export default function Game2Scramble({
 
       {/* 3. NÚT KIỂM TRA DUY NHẤT Ở CUỐI CÙNG */}
       <footer className="game2-footer">
-        {summary && (
-          <div className={`game2-summary-bar ${summary.isAllExact ? 'summary-passed' : 'summary-pending'}`}>
-            <StickerReaction
-              type={
-                summary.isAllExact
-                  ? 'determined'
-                  : slots.every(s => (slotStates[s.slotIndex]?.trayItems.length || 0) === 0)
-                  ? 'wake_up'
-                  : 'shocked'
-              }
-              text={
-                summary.isAllExact
-                  ? 'Đỉnh nóc kịch trần! Xếp đúng 100%!'
-                  : slots.every(s => (slotStates[s.slotIndex]?.trayItems.length || 0) === 0)
-                  ? 'Tỉnh táo lên! Cố lên nào, đừng bỏ trống chứ!'
-                  : 'Ái chà còn cụm sai vị trí, đổi chỗ nhé!!'
-              }
-              size="sm"
-              layout="badge"
-              animate={summary.isAllExact ? 'bounce' : 'shake'}
-            />
-            <div className="summary-text">
-              <strong>
-                {summary.isAllExact
-                  ? `Xuất sắc! Bạn đã xếp đúng toàn bộ ${summary.totalCount}/${summary.totalCount} ý!`
-                  : `Đã đúng ${summary.correctCount}/${summary.totalCount} ý (Độ chính xác: ${summary.avgAccuracy}%)`}
-              </strong>
-              <div>
-                {summary.isAllExact
-                  ? 'Tuyệt vời! Bạn có thể tiếp tục sang câu tiếp theo.'
-                  : 'Hãy xem các cụm có đánh dấu ĐỎ "✕ Sai" ở trên để đổi chỗ rồi kiểm tra lại.'}
+        {summary && (() => {
+          const isAllBlank = slots.every(s => (slotStates[s.slotIndex]?.trayItems.length || 0) === 0);
+          const mascotType = summary.isAllExact
+            ? 'determined'
+            : isAllBlank
+            ? 'wake_up'
+            : 'shocked';
+          const quoteText = summary.isAllExact
+            ? 'Đỉnh nóc kịch trần! Xếp đúng 100%!'
+            : isAllBlank
+            ? 'Tỉnh táo lên! Cố lên nào, đừng bỏ trống chứ!'
+            : 'Ái chà còn cụm sai vị trí, đổi chỗ nhé!!';
+
+          return (
+            <div className={`game2-summary-bar ${summary.isAllExact ? 'summary-passed' : 'summary-pending'}`}>
+              <div className="summary-mascot-col">
+                <img
+                  src={`/stickers/${mascotType}.png`}
+                  alt="Mascot reaction"
+                  className="summary-mascot-img"
+                  draggable="false"
+                />
+              </div>
+              <div className="summary-text-col">
+                <div className="summary-quote-bubble">
+                  "{formatWithUserName(quoteText)}"
+                </div>
+                <strong className="summary-headline">
+                  {summary.isAllExact
+                    ? `Xuất sắc! Bạn đã xếp đúng toàn bộ ${summary.totalCount}/${summary.totalCount} ý!`
+                    : `Đã đúng ${summary.correctCount}/${summary.totalCount} ý (Độ chính xác: ${summary.avgAccuracy}%)`}
+                </strong>
+                <div className="summary-subline">
+                  {summary.isAllExact
+                    ? 'Tuyệt vời! Bạn có thể tiếp tục sang câu tiếp theo.'
+                    : 'Hãy xem các cụm có đánh dấu ĐỎ "✕ Sai" ở trên để đổi chỗ rồi kiểm tra lại.'}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         <div className="game2-main-actions">
           <button

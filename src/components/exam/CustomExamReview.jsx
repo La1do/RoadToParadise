@@ -1106,10 +1106,12 @@ export default function CustomExamReview({ onBackToMap }) {
               return (
                 <div key={q.id} className={`result-q-card ${r.isPerfect ? 'q-perfect' : 'q-has-error'}`}>
                   <div className="result-q-top">
-                    <span className="q-badge">Câu {q.id}</span>
-                    <strong className="q-status">
-                      {r.isPerfect ? '✓ Đúng 100%' : `Độ chính xác: ${r.accuracy}%`}
-                    </strong>
+                    <div className="result-q-meta">
+                      <span className="q-badge">Câu {q.id}</span>
+                      <strong className="q-status">
+                        {r.isPerfect ? '✓ Đúng 100%' : `Độ chính xác: ${r.accuracy}%`}
+                      </strong>
+                    </div>
                     <StickerReaction
                       type={
                         r.isPerfect
