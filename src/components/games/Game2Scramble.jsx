@@ -30,6 +30,9 @@ export default function Game2Scramble({
   questionText,
   initialState,
   onStateChange,
+  isLastQuestion = false,
+  onResetAll,
+  onFinish,
   onComplete,
   onNext
 }) {
@@ -286,6 +289,27 @@ export default function Game2Scramble({
       poolItems: cur.exerciseData?.shuffledItems || [],
       result: null
     }));
+  };
+
+  // Đặt lại toàn bộ bài làm của câu hỏi hiện tại
+  const handleResetCurrentQuestion = () => {
+    setSlotStates(prev => {
+      const next = {};
+      slots.forEach(s => {
+        const cur = prev[s.slotIndex];
+        next[s.slotIndex] = {
+          ...cur,
+          trayItems: [],
+          poolItems: cur?.exerciseData?.shuffledItems || [],
+          result: null
+        };
+      });
+      if (typeof onStateChange === 'function') {
+        onStateChange({ slotStates: next, summary: null });
+      }
+      return next;
+    });
+    setSummary(null);
   };
 
   const handleTrayDragOver = (slotIndex, e) => {
@@ -854,22 +878,64 @@ export default function Game2Scramble({
         })()}
 
         <div className="game2-main-actions">
-          <button
-            type="button"
-            className="game2-check-all-btn"
-            onClick={handleCheckAll}
-          >
-            ✓ Kiểm tra kết quả các ý
-          </button>
-
-          {summary?.isAllExact && onNext && (
+          {!summary ? (
             <button
               type="button"
-              className="game2-next-btn"
-              onClick={onNext}
+              className="game2-check-all-btn"
+              onClick={handleCheckAll}
             >
-              Tiếp tục câu tiếp theo →
+              ✓ Kiểm tra kết quả các ý
             </button>
+          ) : !isLastQuestion ? (
+            <>
+              <button
+                type="button"
+                className="game2-retry-btn"
+                onClick={handleResetCurrentQuestion}
+              >
+                🔄 Làm lại câu này
+              </button>
+
+              {onNext && (
+                <button
+                  type="button"
+                  className="game2-next-btn"
+                  onClick={onNext}
+                >
+                  Tiếp tục câu tiếp theo →
+                </button>
+              )}
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="game2-retry-all-btn"
+                onClick={() => {
+                  if (typeof onResetAll === 'function') {
+                    onResetAll();
+                  } else {
+                    handleResetCurrentQuestion();
+                  }
+                }}
+              >
+                🔄 Làm lại cả bài
+              </button>
+
+              <button
+                type="button"
+                className="game2-finish-btn"
+                onClick={() => {
+                  if (typeof onFinish === 'function') {
+                    onFinish();
+                  } else if (typeof onNext === 'function') {
+                    onNext();
+                  }
+                }}
+              >
+                🏁 Kết thúc
+              </button>
+            </>
           )}
         </div>
       </footer>

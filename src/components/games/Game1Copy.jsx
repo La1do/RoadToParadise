@@ -21,6 +21,9 @@ export default function Game1Copy({
   onStateChange,
   initialShowReference = true,
   onToggleReference,
+  isLastQuestion = false,
+  onResetAll,
+  onFinish,
   onComplete,
   onNext
 }) {
@@ -91,6 +94,17 @@ export default function Game1Copy({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialShowReference]);
+
+  const handleResetCurrentQuestion = () => {
+    setInputs({});
+    setGradeResults({});
+    setHints({});
+    setUsedHints({});
+    setSummary(null);
+    if (typeof onStateChange === 'function') {
+      onStateChange({});
+    }
+  };
 
   const handleInputChange = (slotIndex, value) => {
     setInputs(prev => {
@@ -447,22 +461,64 @@ export default function Game1Copy({
         })()}
 
         <div className="game1-main-actions">
-          <button
-            type="button"
-            className="game1-check-all-btn"
-            onClick={handleCheckAll}
-          >
-            ✓ Kiểm tra tất cả các ý
-          </button>
-
-          {summary?.isAllExact && onNext && (
+          {!summary ? (
             <button
               type="button"
-              className="game1-next-btn"
-              onClick={onNext}
+              className="game1-check-all-btn"
+              onClick={handleCheckAll}
             >
-              Tiếp tục bài tiếp theo →
+              ✓ Kiểm tra tất cả các ý
             </button>
+          ) : !isLastQuestion ? (
+            <>
+              <button
+                type="button"
+                className="game1-retry-btn"
+                onClick={handleResetCurrentQuestion}
+              >
+                🔄 Làm lại câu này
+              </button>
+
+              {onNext && (
+                <button
+                  type="button"
+                  className="game1-next-btn"
+                  onClick={onNext}
+                >
+                  Tiếp tục bài tiếp theo →
+                </button>
+              )}
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="game1-retry-all-btn"
+                onClick={() => {
+                  if (typeof onResetAll === 'function') {
+                    onResetAll();
+                  } else {
+                    handleResetCurrentQuestion();
+                  }
+                }}
+              >
+                🔄 Làm lại cả bài
+              </button>
+
+              <button
+                type="button"
+                className="game1-finish-btn"
+                onClick={() => {
+                  if (typeof onFinish === 'function') {
+                    onFinish();
+                  } else if (typeof onNext === 'function') {
+                    onNext();
+                  }
+                }}
+              >
+                🏁 Kết thúc
+              </button>
+            </>
           )}
         </div>
       </footer>
