@@ -43,11 +43,11 @@
 }
 
 .fp-interactive-container.stage-4 {
-  --fp-room-bg-1: #1e1b4b;
+  --fp-room-bg-1: #122338;
   --fp-room-bg-2: #0f172a;
-  --fp-light-beam: rgba(147, 197, 253, 0.3);
+  --fp-light-beam: rgba(123, 181, 232, 0.3);
   --fp-desk-color: #020617;
-  --fp-accent-gold: #818cf8;
+  --fp-accent-gold: #7bb5e8;
 }
 
 /* ================= 1. NỀN PHÒNG TRỌ BUỔI SÁNG ================= */
@@ -415,7 +415,7 @@
 
 .answer-card {
   border: 1.5px solid #f59e0b;
-  background: linear-gradient(180deg, #1e293b 0%, #172554 100%);
+  background: linear-gradient(180deg, #1c3553 0%, #2b4c73 100%);
 }
 
 .fp-card-title {

@@ -120,6 +120,43 @@ export default function Game2Scramble({
     setSummary(null);
   };
 
+  // Tính toán vị trí chèn (tách khe giữa các thẻ) dựa vào tọa độ ngón tay / con trỏ
+  const calculateInsertIndex = (slotIndex, clientX, clientY) => {
+    const trayElem = document.querySelector(`[data-tray-slot="${slotIndex}"]`);
+    if (!trayElem) return undefined;
+
+    const cards = Array.from(trayElem.querySelectorAll('[data-tray-card-index]'));
+    if (cards.length === 0) return 0;
+
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i];
+      const rect = card.getBoundingClientRect();
+      if (
+        clientX >= rect.left - 15 &&
+        clientX <= rect.right + 15 &&
+        clientY >= rect.top - 25 &&
+        clientY <= rect.bottom + 25
+      ) {
+        const midX = rect.left + rect.width / 2;
+        return clientX < midX ? i : i + 1;
+      }
+    }
+
+    const lastCard = cards[cards.length - 1];
+    const lastRect = lastCard.getBoundingClientRect();
+    if (clientY > lastRect.bottom || (clientY >= lastRect.top - 10 && clientX > lastRect.right)) {
+      return cards.length;
+    }
+
+    const firstCard = cards[0];
+    const firstRect = firstCard.getBoundingClientRect();
+    if (clientY < firstRect.top || (clientY <= firstRect.bottom + 10 && clientX < firstRect.left)) {
+      return 0;
+    }
+
+    return cards.length;
+  };
+
   // --- THẢ VÀO 1 Ô KHAY DUY NHẤT (Thêm vào cuối hoặc chèn vào vị trí targetIndex) ---
   const dropOnTray = (slotIndex, targetIndex) => {
     const drag = dragRef.current;
@@ -132,7 +169,7 @@ export default function Game2Scramble({
       if (drag.source === 'pool') {
         // Lấy từ kho từ vào ô khay
         nextPool = nextPool.filter(c => c.id !== drag.item.id);
-        if (typeof targetIndex === 'number' && targetIndex >= 0 && targetIndex < nextTray.length) {
+        if (typeof targetIndex === 'number' && targetIndex >= 0 && targetIndex <= nextTray.length) {
           nextTray.splice(targetIndex, 0, drag.item);
         } else {
           nextTray.push(drag.item);
@@ -142,9 +179,10 @@ export default function Game2Scramble({
         const fromIdx = drag.fromIndex ?? nextTray.findIndex(c => c.id === drag.item.id);
         if (fromIdx !== -1) {
           const [moved] = nextTray.splice(fromIdx, 1);
-          const safeIdx = typeof targetIndex === 'number'
-            ? Math.min(Math.max(0, targetIndex), nextTray.length)
+          const adjustedIndex = typeof targetIndex === 'number'
+            ? (targetIndex > fromIdx ? targetIndex - 1 : targetIndex)
             : nextTray.length;
+          const safeIdx = Math.min(Math.max(0, adjustedIndex), nextTray.length);
           nextTray.splice(safeIdx, 0, moved);
         }
       }
@@ -210,6 +248,13 @@ export default function Game2Scramble({
     }
   };
 
+  const handleTrayDragOver = (slotIndex, e) => {
+    if (dragRef.current?.slotIndex !== slotIndex) return;
+    e.preventDefault();
+    const insertIdx = calculateInsertIndex(slotIndex, e.clientX, e.clientY);
+    setHoverTarget({ slotIndex, type: 'tray-insert', index: insertIdx });
+  };
+
   const handleDragEnd = () => {
     dragRef.current = null;
     setDragInfo(null);
@@ -252,17 +297,14 @@ export default function Game2Scramble({
       if (e.cancelable) e.preventDefault(); // Ngăn cuộn trang trong lúc kéo
       setGhostPos({ x: touch.clientX, y: touch.clientY });
 
-      // Phát hiện phần tử dưới ngón tay
+      // Phát hiện phần tử dưới ngón tay và tách khe chèn
       const elem = document.elementFromPoint(touch.clientX, touch.clientY);
-      const cardElem = elem?.closest(`[data-tray-card-index]`);
       const trayElem = elem?.closest(`[data-tray-slot="${slotIndex}"]`);
       const poolElem = elem?.closest(`[data-pool-slot="${slotIndex}"]`);
 
-      if (cardElem) {
-        const idx = parseInt(cardElem.getAttribute('data-tray-card-index'), 10);
-        setHoverTarget({ slotIndex, type: 'tray-card', index: idx });
-      } else if (trayElem) {
-        setHoverTarget({ slotIndex, type: 'tray' });
+      if (trayElem) {
+        const insertIdx = calculateInsertIndex(slotIndex, touch.clientX, touch.clientY);
+        setHoverTarget({ slotIndex, type: 'tray-insert', index: insertIdx });
       } else if (poolElem) {
         setHoverTarget({ slotIndex, type: 'pool' });
       } else {
@@ -285,7 +327,7 @@ export default function Game2Scramble({
     } else {
       // Nếu là kéo thả ngón tay (drag release)
       if (hoverTarget?.slotIndex === slotIndex) {
-        if (hoverTarget.type === 'tray-card' || hoverTarget.type === 'tray') {
+        if (hoverTarget.type === 'tray-insert' || hoverTarget.type === 'tray') {
           dropOnTray(slotIndex, hoverTarget.index);
         } else if (hoverTarget.type === 'pool' && source === 'tray') {
           dropOnPool(slotIndex);
@@ -457,87 +499,99 @@ export default function Game2Scramble({
                 </div>
 
                 {/* Ô KHAY ĐƠN CHỨA TẤT CẢ CÁC CỤM TỪ */}
-                <div
-                  data-tray-slot={sIndex}
-                  className={`game2-single-tray ${st.trayItems.length === 0 ? 'is-empty' : 'has-items'} ${
-                    isTrayDragOver ? 'is-drag-over' : ''
-                  } ${res ? (res.isCorrect ? 'tray-correct' : 'tray-wrong') : ''}`}
-                  onDragOver={e => {
-                    if (dragRef.current?.slotIndex !== sIndex) return;
-                    e.preventDefault();
-                    setHoverTarget({ slotIndex: sIndex, type: 'tray' });
-                  }}
-                  onDragLeave={() => {
-                    if (hoverTarget?.slotIndex === sIndex && hoverTarget.type === 'tray') {
-                      setHoverTarget(null);
-                    }
-                  }}
-                  onDrop={e => {
-                    e.preventDefault();
-                    dropOnTray(sIndex);
-                    handleDragEnd();
-                  }}
-                >
-                  {st.trayItems.length === 0 ? (
-                    <div className="game2-tray-empty-prompt">
-                      <span className="tray-empty-icon">📥</span>
-                      <span className="tray-empty-text">Kéo thả hoặc chạm các cụm từ bên dưới vào đây...</span>
-                    </div>
-                  ) : (
-                    <div className="game2-tray-items-flow">
-                      {st.trayItems.map((item, idx) => {
-                        const isHoveredTarget = hoverTarget?.slotIndex === sIndex && hoverTarget.type === 'tray-card' && hoverTarget.index === idx;
-                        const posCorrect = res?.posResults ? res.posResults[idx] : null;
+                {(() => {
+                  const isDraggingThisSlot = dragInfo?.slotIndex === sIndex;
+                  const targetInsertIndex = (hoverTarget?.slotIndex === sIndex && hoverTarget.type === 'tray-insert')
+                    ? hoverTarget.index
+                    : undefined;
 
-                        return (
-                          <div
-                            key={item.id}
-                            data-tray-card-index={idx}
-                            draggable
-                            className={`game2-placed-card ${dragInfo?.itemId === item.id ? 'is-dragging' : ''} ${
-                              isHoveredTarget ? 'is-insert-target' : ''
-                            } ${posCorrect === true ? 'pos-correct' : ''} ${posCorrect === false ? 'pos-wrong' : ''}`}
-                            onTouchStart={e => handleTouchStart(sIndex, item, 'tray', idx, e)}
-                            onTouchMove={e => handleTouchMove(sIndex, e)}
-                            onTouchEnd={() => handleTouchEnd(sIndex, item, 'tray')}
-                            onTouchCancel={handleDragEnd}
-                            onDragStart={e => handleDragStart(sIndex, item, 'tray', idx, e)}
-                            onDragEnd={handleDragEnd}
-                            onDragOver={e => {
-                              if (dragRef.current?.slotIndex !== sIndex) return;
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setHoverTarget({ slotIndex: sIndex, type: 'tray-card', index: idx });
-                            }}
-                            onDrop={e => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              dropOnTray(sIndex, idx);
-                              handleDragEnd();
-                            }}
-                            onClick={() => handleRemoveTrayCard(sIndex, item)}
-                            title="Kéo sang cụm khác để đổi chỗ • Chạm để gỡ về kho"
-                          >
-                            <span className="placed-chip-num">#{idx + 1}</span>
-                            <span className="placed-chip-text">{item.text}</span>
-                            {posCorrect === true && <span className="cell-badge correct">✓ Đúng</span>}
-                            {posCorrect === false && <span className="cell-badge wrong">✕ Sai</span>}
-                            <span
-                              className="remove-cross"
-                              title="Gỡ về kho từ"
-                              onClick={e => {
-                                e.stopPropagation();
-                                handleRemoveTrayCard(sIndex, item);
-                              }}
-                            >
-                              ✕
-                            </span>
-                          </div>
-                        );
-                      })}
+                  return (
+                    <div
+                      data-tray-slot={sIndex}
+                      className={`game2-single-tray ${st.trayItems.length === 0 ? 'is-empty' : 'has-items'} ${
+                        isTrayDragOver ? 'is-drag-over' : ''
+                      } ${res ? (res.isCorrect ? 'tray-correct' : 'tray-wrong') : ''}`}
+                      onDragOver={e => handleTrayDragOver(sIndex, e)}
+                      onDragLeave={() => {
+                        if (hoverTarget?.slotIndex === sIndex && hoverTarget.type?.startsWith('tray')) {
+                          setHoverTarget(null);
+                        }
+                      }}
+                      onDrop={e => {
+                        e.preventDefault();
+                        dropOnTray(sIndex, targetInsertIndex);
+                        handleDragEnd();
+                      }}
+                    >
+                      {st.trayItems.length === 0 ? (
+                        <div className={`game2-tray-empty-prompt ${isTrayDragOver ? 'is-target-hovered' : ''}`}>
+                          <span className="tray-empty-icon">{isTrayDragOver ? '✨' : '📥'}</span>
+                          <span className="tray-empty-text">
+                            {isTrayDragOver ? 'Thả cụm từ vào đây...' : 'Kéo thả hoặc chạm các cụm từ bên dưới vào đây...'}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="game2-tray-items-flow">
+                          {st.trayItems.map((item, idx) => {
+                            const isInsertBeforeThis = isDraggingThisSlot && targetInsertIndex === idx;
+                            const posCorrect = res?.posResults ? res.posResults[idx] : null;
+
+                            return (
+                              <React.Fragment key={item.id}>
+                                {/* KHE TÁCH RA KHI KÉO THẺ QUA VỊ TRÍ NÀY */}
+                                {isInsertBeforeThis && (
+                                  <div className="game2-drop-placeholder" key={`placeholder-${idx}`}>
+                                    <span className="placeholder-arrow">↳</span>
+                                    <span className="placeholder-text">Thả vào đây</span>
+                                  </div>
+                                )}
+
+                                <div
+                                  data-tray-card-index={idx}
+                                  draggable
+                                  className={`game2-placed-card ${dragInfo?.itemId === item.id ? 'is-dragging' : ''} ${
+                                    posCorrect === true ? 'pos-correct' : ''
+                                  } ${posCorrect === false ? 'pos-wrong' : ''}`}
+                                  onTouchStart={e => handleTouchStart(sIndex, item, 'tray', idx, e)}
+                                  onTouchMove={e => handleTouchMove(sIndex, e)}
+                                  onTouchEnd={() => handleTouchEnd(sIndex, item, 'tray')}
+                                  onTouchCancel={handleDragEnd}
+                                  onDragStart={e => handleDragStart(sIndex, item, 'tray', idx, e)}
+                                  onDragEnd={handleDragEnd}
+                                  onClick={() => handleRemoveTrayCard(sIndex, item)}
+                                  title="Kéo sang cụm khác để đổi chỗ • Chạm để gỡ về kho"
+                                >
+                                  <span className="placed-chip-num">#{idx + 1}</span>
+                                  <span className="placed-chip-text">{item.text}</span>
+                                  {posCorrect === true && <span className="cell-badge correct">✓ Đúng</span>}
+                                  {posCorrect === false && <span className="cell-badge wrong">✕ Sai</span>}
+                                  <span
+                                    className="remove-cross"
+                                    title="Gỡ về kho từ"
+                                    onClick={e => {
+                                      e.stopPropagation();
+                                      handleRemoveTrayCard(sIndex, item);
+                                    }}
+                                  >
+                                    ✕
+                                  </span>
+                                </div>
+                              </React.Fragment>
+                            );
+                          })}
+
+                          {/* KHE TÁCH RA Ở CUỐI CÙNG (NẾU THẢ VÀO VỊ TRÍ CUỐI CÙNG) */}
+                          {isDraggingThisSlot && targetInsertIndex === st.trayItems.length && (
+                            <div className="game2-drop-placeholder at-end" key="placeholder-end">
+                              <span className="placeholder-arrow">↳</span>
+                              <span className="placeholder-text">Thả vào đây</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  );
+                })()}
               </div>
 
               {/* Thông báo lỗi rõ ràng sau khi bấm kiểm tra */}

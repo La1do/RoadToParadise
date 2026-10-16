@@ -170,7 +170,7 @@ export function TrafficLibraryIllustration() {
       <rect x="247" y="32" width="10" height="38" fill="#f59e0b" />
       <rect x="260" y="36" width="16" height="34" fill="#8b5cf6" />
       {/* Tầng 2 */}
-      <rect x="205" y="80" width="14" height="40" fill="#6366f1" />
+      <rect x="205" y="80" width="14" height="40" fill="#4a82b8" />
       <rect x="221" y="85" width="10" height="35" fill="#ec4899" />
       <rect x="233" y="78" width="15" height="42" fill="#7bb5e8" />
       <rect x="250" y="82" width="12" height="38" fill="#84cc16" />
@@ -287,12 +287,12 @@ export function NightGateIllustration() {
         <radialGradient id="heavenGlow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#fef08a" stopOpacity="0.95" />
           <stop offset="40%" stopColor="#c084fc" stopOpacity="0.8" />
-          <stop offset="80%" stopColor="#6366f1" stopOpacity="0.3" />
+          <stop offset="80%" stopColor="#7bb5e8" stopOpacity="0.3" />
           <stop offset="100%" stopColor="#0f0c29" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="roadToGate" x1="0.5" y1="1" x2="0.5" y2="0">
-          <stop offset="0%" stopColor="#312e81" />
-          <stop offset="60%" stopColor="#818cf8" />
+          <stop offset="0%" stopColor="#1c3553" />
+          <stop offset="60%" stopColor="#7bb5e8" />
           <stop offset="100%" stopColor="#fef08a" />
         </linearGradient>
       </defs>
@@ -338,7 +338,7 @@ export function NightGateIllustration() {
       <line x1="170" y1="50" x2="150" y2="35" stroke="#c084fc" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
 
       {/* Góc phòng trọ đêm khuya bên dưới */}
-      <rect x="0" y="165" width="115" height="60" fill="#1e1b4b" opacity="0.95" />
+      <rect x="0" y="165" width="115" height="60" fill="#1c3553" opacity="0.95" />
       {/* Ngọn đèn bàn nhỏ thắp sáng góc phòng */}
       <polygon points="35,175 65,175 58,160 42,160" fill="#f59e0b" />
       <line x1="50" y1="175" x2="50" y2="200" stroke="#78350f" strokeWidth="3" />

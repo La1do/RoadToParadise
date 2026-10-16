@@ -29,6 +29,7 @@ export default function App() {
   const homeTab = isTabEnabled('map') ? 'map' : (isTabEnabled(defaultTab) ? defaultTab : 'custom-practice');
 
   const [viewMode, setViewMode] = useState(isTabEnabled(defaultTab) ? defaultTab : 'custom-practice');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Đảm bảo nếu tab hiện tại bị ẩn theo permissions.json thì tự động chuyển về tab mặc định hợp lệ
   useEffect(() => {
@@ -76,17 +77,138 @@ export default function App() {
   ];
 
   const visibleNavItems = navItems.filter(item => isTabEnabled(item.id));
+  const hasMultipleTabs = visibleNavItems.length > 1;
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #eef6fc 0%, #ffffff 35%, #eef6fc 100%)', color: '#1c3553', display: 'flex', flexDirection: 'column' }}>
-      {/* Top Navbar - Phong cách Cánh Cụt Xanh Trắng */}
+      <style>{`
+        .app-desktop-nav {
+          display: flex;
+          gap: 0.4rem;
+          flex-wrap: wrap;
+        }
+        .app-mobile-menu-btn {
+          display: none;
+          background: #eef6fc;
+          border: 1.5px solid #c5def3;
+          color: #1c3553;
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.3rem;
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }
+        .app-mobile-menu-btn:hover {
+          background: #c5def3;
+        }
+        .app-sidebar-backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(15, 23, 42, 0.45);
+          backdrop-filter: blur(4px);
+          z-index: 999;
+          animation: appFadeIn 0.2s ease-out;
+        }
+        .app-sidebar-drawer {
+          position: fixed;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          width: 290px;
+          max-width: 82vw;
+          background: #ffffff;
+          z-index: 1000;
+          box-shadow: -4px 0 24px rgba(74, 130, 184, 0.25);
+          display: flex;
+          flex-direction: column;
+          animation: appSlideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .app-sidebar-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1rem 1.2rem;
+          border-bottom: 1.5px solid #eef6fc;
+          background: #f8fbfe;
+        }
+        .app-sidebar-close-btn {
+          background: #eef6fc;
+          border: none;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          font-size: 1rem;
+          color: #64748b;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .app-sidebar-list {
+          padding: 0.8rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+          overflow-y: auto;
+          flex: 1;
+        }
+        .app-sidebar-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.75rem 1rem;
+          border-radius: 12px;
+          border: 1.5px solid transparent;
+          background: #f8fbfe;
+          color: #1c3553;
+          font-size: 0.92rem;
+          font-weight: 600;
+          cursor: pointer;
+          text-align: left;
+          min-height: 48px;
+          transition: all 0.15s ease;
+        }
+        .app-sidebar-item:hover {
+          background: #eef6fc;
+        }
+        .app-sidebar-item.active {
+          background: #e0f2fe;
+          border-color: #38bdf8;
+          color: #0284c7;
+          font-weight: 700;
+        }
+        .app-sidebar-check {
+          color: #0284c7;
+          font-weight: bold;
+        }
+        @keyframes appFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes appSlideInRight {
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
+        }
+        @media (max-width: 767px) {
+          .app-desktop-nav {
+            display: none !important;
+          }
+          .app-mobile-menu-btn {
+            display: flex !important;
+          }
+        }
+      `}</style>
+
+      {/* Top Navbar */}
       <header
         style={{
           background: 'rgba(255, 255, 255, 0.96)',
           borderBottom: '2px solid #c5def3',
           padding: '0.6rem 1rem',
           display: 'flex',
-          flexWrap: 'wrap',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '0.5rem',
@@ -99,8 +221,14 @@ export default function App() {
       >
         <div
           style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }}
-          onClick={() => setViewMode(homeTab)}
-          title="Trở về trang chính"
+          onClick={() => {
+            if (hasMultipleTabs && window.innerWidth < 768) {
+              setIsSidebarOpen(true);
+            } else {
+              setViewMode(homeTab);
+            }
+          }}
+          title={hasMultipleTabs && typeof window !== 'undefined' && window.innerWidth < 768 ? "Mở danh mục" : "Trở về trang chính"}
         >
           <img
             src="/logo.png"
@@ -118,7 +246,8 @@ export default function App() {
           <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem', color: '#1c3553' }}>{appTitle}</strong>
         </div>
 
-        <nav style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
+        {/* Desktop Navbar */}
+        <nav className="app-desktop-nav">
           {visibleNavItems.map(item => (
             <button
               key={item.id}
@@ -140,7 +269,61 @@ export default function App() {
             </button>
           ))}
         </nav>
+
+        {/* Mobile Hamburger Menu Button (chỉ hiện khi có nhiều hơn 1 tab) */}
+        {hasMultipleTabs && (
+          <button
+            type="button"
+            className="app-mobile-menu-btn"
+            onClick={() => setIsSidebarOpen(true)}
+            aria-label="Mở danh mục điều hướng"
+          >
+            ☰
+          </button>
+        )}
       </header>
+
+      {/* Mobile Sidebar Drawer */}
+      {hasMultipleTabs && isSidebarOpen && (
+        <>
+          <div className="app-sidebar-backdrop" onClick={() => setIsSidebarOpen(false)} />
+          <aside className="app-sidebar-drawer">
+            <div className="app-sidebar-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                <img
+                  src="/logo.png"
+                  alt="Logo"
+                  style={{ width: 30, height: 30, borderRadius: '50%', border: '1.5px solid #7bb5e8' }}
+                />
+                <strong style={{ fontSize: '0.98rem', color: '#1c3553' }}>{appTitle}</strong>
+              </div>
+              <button
+                type="button"
+                className="app-sidebar-close-btn"
+                onClick={() => setIsSidebarOpen(false)}
+                title="Đóng danh mục"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="app-sidebar-list">
+              {visibleNavItems.map(item => (
+                <button
+                  key={item.id}
+                  className={`app-sidebar-item ${viewMode === item.id ? 'active' : ''}`}
+                  onClick={() => {
+                    setViewMode(item.id);
+                    setIsSidebarOpen(false);
+                  }}
+                >
+                  <span>{item.label}</span>
+                  {viewMode === item.id && <span className="app-sidebar-check">✓</span>}
+                </button>
+              ))}
+            </div>
+          </aside>
+        </>
+      )}
 
       {/* Main Content Area */}
       <main style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>

@@ -274,15 +274,22 @@
   justify-content: center;
   gap: 8px;
   width: 100%;
-  min-height: 44px;
+  min-height: 48px;
   color: #4a82b8;
   font-size: 0.9rem;
   font-style: italic;
   user-select: none;
+  transition: all 0.2s ease;
+}
+
+.game2-tray-empty-prompt.is-target-hovered {
+  color: #1c3553;
+  font-weight: 700;
+  transform: scale(1.02);
 }
 
 .tray-empty-icon {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
 }
 
 /* Dòng các cụm từ xếp trong ô khay */
@@ -292,9 +299,64 @@
   gap: 8px;
   align-items: center;
   width: 100%;
+  transition: all 0.2s ease;
 }
 
-/* Thẻ từ đã đặt vào ô khay */
+/* ================= KHE TÁCH RA KHI KÉO VÀO VỊ TRÍ (SLOT EXPANDER) ================= */
+.game2-drop-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  min-width: 110px;
+  padding: 4px 14px;
+  border-radius: 22px;
+  background: rgba(123, 181, 232, 0.22);
+  border: 2px dashed #4a82b8;
+  color: #1c3553;
+  font-size: 0.84rem;
+  font-weight: 800;
+  box-shadow: 0 0 14px rgba(123, 181, 232, 0.55);
+  box-sizing: border-box;
+  animation: placeholderSplit 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.placeholder-arrow {
+  color: #4a82b8;
+  font-size: 1rem;
+  font-weight: 900;
+  animation: bounceDown 0.6s infinite alternate ease-in-out;
+}
+
+.placeholder-text {
+  letter-spacing: 0.02em;
+}
+
+@keyframes placeholderSplit {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(6px);
+    max-width: 0;
+    margin: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    max-width: 220px;
+    margin: 0 4px;
+  }
+}
+
+@keyframes bounceDown {
+  from { transform: translateY(-2px); }
+  to { transform: translateY(2px); }
+}
+
+/* Thẻ từ đã đặt vào ô khay — hiệu ứng trượt vào đúng vị trí */
 .game2-placed-card {
   display: inline-flex;
   align-items: center;
@@ -312,12 +374,29 @@
   touch-action: none;
   box-sizing: border-box;
   box-shadow: 0 2px 6px rgba(74, 130, 184, 0.1);
-  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  animation: cardSlideIn 0.24s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.15s ease, border-color 0.15s ease, box-shadow 0.2s ease;
+}
+
+@keyframes cardSlideIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(12px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-3px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .game2-placed-card:hover {
   background: #eef6fc;
   border-color: #7bb5e8;
+  transform: translateY(-1px);
 }
 
 .game2-placed-card:active {
@@ -325,25 +404,33 @@
 }
 
 .game2-placed-card.is-dragging {
-  opacity: 0.35;
-  transform: scale(0.96);
-}
-
-.game2-placed-card.is-insert-target {
-  border-color: #4a82b8 !important;
-  box-shadow: 0 0 10px rgba(123, 181, 232, 0.6);
-  transform: scale(1.05);
+  opacity: 0.3;
+  transform: scale(0.94);
 }
 
 .game2-placed-card.pos-correct {
   border-color: #7bb5e8 !important;
   background: #eef6fc !important;
+  animation: correctPulse 0.35s ease;
+}
+
+@keyframes correctPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); box-shadow: 0 0 12px rgba(123, 181, 232, 0.6); }
+  100% { transform: scale(1); }
 }
 
 .game2-placed-card.pos-wrong {
   border-color: #fca5a5 !important;
   background: #fff5f5 !important;
   box-shadow: 0 0 8px rgba(252, 165, 165, 0.5);
+  animation: wrongWiggle 0.35s ease;
+}
+
+@keyframes wrongWiggle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
 
 .placed-chip-num {
