@@ -13,7 +13,16 @@
   color: var(--color-text-main, #1c3553);
 }
 
-/* Header câu hỏi */
+/* ================= 1. HEADER CÂU HỎI ================= */
+.game2-header {
+  background: var(--color-white, #ffffff);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  border: 1.5px solid var(--color-border, #c5def3);
+  box-shadow: 0 4px 18px rgba(74, 130, 184, 0.12);
+}
+
 .game2-badge-row {
   display: flex;
   gap: 8px;
@@ -140,10 +149,6 @@
   background-color: #fee2e2;
   color: #991b1b;
   border: 1.5px solid #fca5a5;
-}
-
-.game2-header {
-  margin-bottom: 14px;
 }
 
 .game2-slot-info {
@@ -950,6 +955,10 @@
   .game2-container {
     max-width: 430px;
     padding: 12px;
+  }
+
+  .game2-header {
+    padding: 14px;
   }
 }
 
