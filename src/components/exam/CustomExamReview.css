@@ -318,9 +318,9 @@
 .questions-select-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 8px;
+  gap: 10px 8px;
   overflow-y: auto;
-  padding: 2px;
+  padding: 4px 2px;
 }
 
 .q-select-card {
@@ -334,7 +334,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 82px;
+  min-height: 102px;
   box-sizing: border-box;
   transition: all 0.15s ease;
 }
@@ -373,15 +373,16 @@
 .q-hint-text,
 .q-text-snippet {
   margin: 4px 0 6px 0;
-  font-size: 0.82rem;
-  line-height: 1.35;
+  font-size: 0.84rem;
+  line-height: 1.45;
   color: var(--color-text-main, #1c3553);
   font-weight: 500;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   word-break: break-word;
+  padding-bottom: 2px;
 }
 
 .q-slots-count {
@@ -423,7 +424,7 @@
 
   .setup-col-right .questions-select-grid {
     flex: 1;
-    max-height: 420px;
+    max-height: 520px;
   }
 }
 
