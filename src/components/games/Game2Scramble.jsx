@@ -128,54 +128,67 @@ export default function Game2Scramble({
     const cards = Array.from(trayElem.querySelectorAll('[data-tray-card-index]'));
     if (cards.length === 0) return 0;
 
+    const firstCard = cards[0];
+    const firstRect = firstCard.getBoundingClientRect();
     const lastCard = cards[cards.length - 1];
     const lastRect = lastCard.getBoundingClientRect();
 
-    // 1. Nếu ngón tay/con trỏ ở ngang hoặc bên dưới thẻ cuối cùng -> vị trí cuối cùng
-    if (clientY >= lastRect.bottom - 10) {
+    // 1. Nếu ngón tay/con trỏ ở phía dưới hẳn hàng cuối cùng -> vị trí cuối cùng
+    if (clientY > lastRect.bottom + 8) {
       return cards.length;
     }
 
-    const firstCard = cards[0];
-    const firstRect = firstCard.getBoundingClientRect();
-
-    // 2. Nếu ngón tay/con trỏ ở phía trên thẻ đầu tiên -> vị trí đầu tiên (0)
-    if (clientY <= firstRect.top + 6) {
+    // 2. Nếu ngón tay/con trỏ ở phía trên hẳn hàng đầu tiên -> vị trí đầu tiên
+    if (clientY < firstRect.top - 8) {
       return 0;
     }
 
-    // 3. Duyệt qua từng thẻ để xác định chèn trước hay sau thẻ đó
-    for (let i = 0; i < cards.length; i++) {
-      const card = cards[i];
-      const rect = card.getBoundingClientRect();
+    // 3. Tìm các thẻ cùng hàng với con trỏ (cùng khoảng Y)
+    const rowCards = cards.map((card, idx) => ({
+      index: idx,
+      rect: card.getBoundingClientRect()
+    })).filter(c => clientY >= c.rect.top - 12 && clientY <= c.rect.bottom + 12);
 
-      // Kiểm tra vùng lân cận của thẻ
-      if (
-        clientY >= rect.top - 8 &&
-        clientY <= rect.bottom + 8 &&
-        clientX >= rect.left - 25 &&
-        clientX <= rect.right + 25
-      ) {
-        const midY = rect.top + rect.height / 2;
-        const midX = rect.left + rect.width / 2;
+    if (rowCards.length > 0) {
+      const firstOnRow = rowCards[0];
+      const lastOnRow = rowCards[rowCards.length - 1];
 
-        // Nếu thẻ cao hoặc đang ở dòng riêng (như trên mobile)
-        if (rect.height >= 40) {
-          if (clientY > midY + 3) return i + 1;
-          if (clientY < midY - 3) return i;
+      // Nếu ở bên trái thẻ đầu tiên của hàng này:
+      if (clientX < firstOnRow.rect.left) {
+        return firstOnRow.index;
+      }
+      // Nếu ở bên phải thẻ cuối cùng của hàng này:
+      if (clientX > lastOnRow.rect.right) {
+        return lastOnRow.index + 1;
+      }
+
+      // Nằm trong phạm vi các thẻ của hàng này:
+      for (const c of rowCards) {
+        const midX = c.rect.left + c.rect.width / 2;
+        if (clientX <= c.rect.right) {
+          return clientX < midX ? c.index : c.index + 1;
         }
+      }
 
-        // Nếu thẻ nằm ngang cùng 1 hàng
-        return clientX >= midX ? i + 1 : i;
+      return lastOnRow.index + 1;
+    }
+
+    // 4. Nếu nằm giữa các hàng hoặc lệch: so sánh khoảng cách tới tâm của từng thẻ
+    let closestIndex = cards.length;
+    let minDistance = Infinity;
+
+    for (let i = 0; i < cards.length; i++) {
+      const rect = cards[i].getBoundingClientRect();
+      const midX = rect.left + rect.width / 2;
+      const midY = rect.top + rect.height / 2;
+      const dist = Math.hypot(clientX - midX, clientY - midY);
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestIndex = (clientX >= midX || clientY >= midY) ? i + 1 : i;
       }
     }
 
-    // 4. Nếu con trỏ nằm thấp hơn đỉnh thẻ cuối cùng -> vị trí cuối cùng
-    if (clientY >= lastRect.top) {
-      return cards.length;
-    }
-
-    return cards.length;
+    return closestIndex;
   };
 
   // --- THẢ VÀO 1 Ô KHAY DUY NHẤT (Thêm vào cuối hoặc chèn vào vị trí targetIndex) ---
