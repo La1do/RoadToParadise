@@ -18,6 +18,7 @@ export default function Game1Copy({
   questionText,
   initialInputs,
   onStateChange,
+  initialShowReference = true,
   onComplete,
   onNext
 }) {
@@ -34,8 +35,26 @@ export default function Game1Copy({
 
   // State: lưu giá trị gõ của từng ý { [slotIndex]: text }
   const [inputs, setInputs] = useState(() => initialInputs || {});
-  // State: ẩn / hiện đáp án tham khảo
-  const [showReference, setShowReference] = useState(true);
+  // State: ẩn / hiện đáp án tham khảo (chung & độc lập từng ý)
+  const [showReference, setShowReference] = useState(initialShowReference ?? true);
+  const [slotRefVisibility, setSlotRefVisibility] = useState({});
+
+  // Kiểm tra riêng từng ý: nếu ý này đã được bấm ẩn/hiện thì dùng giá trị của nó, nếu chưa thì theo showReference chung
+  const isSlotRefVisible = (slotIndex) => {
+    if (slotRefVisibility[slotIndex] !== undefined) {
+      return slotRefVisibility[slotIndex];
+    }
+    return showReference;
+  };
+
+  // Bấm ẩn/hiện ở ý nào thì CHỈ thay đổi đúng ý đó
+  const toggleSlotRef = (slotIndex) => {
+    setSlotRefVisibility(prev => ({
+      ...prev,
+      [slotIndex]: !isSlotRefVisible(slotIndex)
+    }));
+  };
+
   // State: kết quả chấm điểm từng ý { [slotIndex]: GradeResult }
   const [gradeResults, setGradeResults] = useState({});
   // State: gợi ý từng ý { [slotIndex]: Hint }
@@ -52,7 +71,11 @@ export default function Game1Copy({
     setHints({});
     setUsedHints({});
     setSummary(null);
-  }, [targetQuestion?.id, initialInputs]);
+    setSlotRefVisibility({});
+    if (initialShowReference !== undefined) {
+      setShowReference(initialShowReference);
+    }
+  }, [targetQuestion?.id, initialInputs, initialShowReference]);
 
   const handleInputChange = (slotIndex, value) => {
     setInputs(prev => {
@@ -147,10 +170,16 @@ export default function Game1Copy({
           <button
             type="button"
             className="game1-toggle-reference-btn"
-            onClick={() => setShowReference(prev => !prev)}
-            title={showReference ? "Ẩn đáp án tham khảo để tự gõ từ trí nhớ" : "Hiện đáp án tham khảo để xem mẫu"}
+            onClick={() => {
+              const nextVal = !showReference;
+              setShowReference(nextVal);
+              const nextMap = {};
+              slots.forEach(s => { nextMap[s.slotIndex] = nextVal; });
+              setSlotRefVisibility(nextMap);
+            }}
+            title={showReference ? "Ẩn đáp án tham khảo của tất cả các ý" : "Hiện đáp án tham khảo của tất cả các ý"}
           >
-            {showReference ? '🙈 Ẩn đáp án tham khảo' : '👁️ Hiện đáp án tham khảo'}
+            {showReference ? '🙈 Ẩn mẫu tất cả' : '👁️ Hiện mẫu tất cả'}
           </button>
         </div>
         <h2 className="game1-question-title">{targetQuestion.question}</h2>
@@ -163,6 +192,7 @@ export default function Game1Copy({
           const currentVal = inputs[sIndex] || '';
           const result = gradeResults[sIndex];
           const slotHint = hints[sIndex];
+          const isThisRefVisible = isSlotRefVisible(sIndex);
 
           return (
             <div
@@ -183,18 +213,18 @@ export default function Game1Copy({
                 )}
               </div>
 
-              {/* Mẫu đáp án chuẩn của ý này (Bậc 1: Chép lại) - có thể ẩn/hiện */}
-              {showReference ? (
+              {/* Mẫu đáp án chuẩn của ý này (Bậc 1: Chép lại) - ẩn/hiện ĐỘC LẬP TỪNG Ý */}
+              {isThisRefVisible ? (
                 <div className="slot-sample-box">
                   <div className="sample-box-header">
                     <span className="sample-mini-label">Mẫu đáp án chuẩn:</span>
                     <button
                       type="button"
                       className="sample-hide-inline-btn"
-                      onClick={() => setShowReference(false)}
-                      title="Tạm ẩn đáp án này để tự gõ"
+                      onClick={() => toggleSlotRef(sIndex)}
+                      title="Tạm ẩn đáp án của riêng ý này để tự gõ"
                     >
-                      Ẩn mẫu
+                      Ẩn mẫu ý này
                     </button>
                   </div>
                   <p className="sample-text-content">{s.answer}</p>
@@ -202,11 +232,11 @@ export default function Game1Copy({
               ) : (
                 <div
                   className="slot-sample-box sample-hidden-box"
-                  onClick={() => setShowReference(true)}
-                  title="Bấm vào đây để hiện đáp án tham khảo"
+                  onClick={() => toggleSlotRef(sIndex)}
+                  title="Bấm vào đây để hiện đáp án của riêng ý này"
                 >
                   <span className="sample-hidden-msg">
-                    🙈 Đáp án tham khảo đang ẩn (Chạm vào đây để xem mẫu)
+                    🙈 Đáp án ý này đang ẩn (Chạm vào đây để xem mẫu)
                   </span>
                 </div>
               )}

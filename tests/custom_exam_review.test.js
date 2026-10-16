@@ -90,4 +90,20 @@ test('App: Thanh header trên Mobile có sidebar drawer khi nhiều tab', () => 
   assert.ok(appJsx.includes('hasMultipleTabs'), 'Chỉ hiện nút mở sidebar khi có nhiều hơn 1 tab');
 });
 
+test('CustomExamReview & Game1Copy: Nút hiện đáp án chỉ ở chế độ copy và ẩn/hiện độc lập từng ý', () => {
+  const customReviewJsx = fs.readFileSync('./src/components/exam/CustomExamReview.jsx', 'utf8');
+  const game1Jsx = fs.readFileSync('./src/components/games/Game1Copy.jsx', 'utf8');
+
+  // Nút toggle đáp án tham khảo ở header chỉ xuất hiện khi mode === 'copy'
+  assert.ok(customReviewJsx.includes("mode === 'copy' && (\n                <button\n                  type=\"button\"\n                  className=\"toggle-ref-action-btn\""), 'Nút toggle-ref-action-btn chỉ xuất hiện ở chế độ copy');
+
+  // Hộp đáp án tham khảo floating-ref-drawer chỉ xuất hiện khi mode === 'copy'
+  assert.ok(customReviewJsx.includes("mode === 'copy' && showReferenceAnswer"), 'floating-ref-drawer chỉ hiển thị ở chế độ copy');
+
+  // Game1Copy hỗ trợ ẩn/hiện độc lập từng ý
+  assert.ok(game1Jsx.includes('toggleSlotRef'), 'Game1Copy có hàm toggle riêng cho từng ý');
+  assert.ok(game1Jsx.includes('isSlotRefVisible'), 'Game1Copy kiểm tra hiển thị riêng cho từng ý');
+});
+
+
 
