@@ -5,13 +5,14 @@
  */
 
 export const COLORS = {
-  // Theme chính
+  // Theme chính: Xanh pastel chủ đạo, trắng nhẹ phụ trợ
   primary: '#7bb5e8',        // Xanh pastel chủ đạo
+  primarySoft: '#9ecaf1',    // Xanh pastel dịu mát bổ trợ
   primaryDeep: '#4a82b8',    // Xanh đậm nhấn mạnh, nút chính
   textDark: '#1c3553',       // Xanh than đậm chữ chính
-  borderLight: '#c5def3',    // Viền xanh sáng
-  bgIce: '#eef6fc',          // Nền sữa ánh băng
-  white: '#ffffff',          // Trắng tinh
+  borderLight: '#b8daf5',    // Viền xanh pastel rõ nét
+  bgIce: '#dcedfa',          // Nền xanh pastel băng tuyết chủ đạo
+  white: '#f5f9fd',          // Trắng nhẹ dịu mắt (auxiliary soft off-white)
   blush: '#fca5a5',          // Hồng nhẹ má hồng
   beak: '#fbd38d',           // Vàng mỏ chim cánh cụt
   gold: '#f59e0b',           // Vàng cam ấm

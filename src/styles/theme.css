@@ -22,24 +22,24 @@
   --penguin-blush: #fca5a5;
   --penguin-beak: #fbd38d;
 
-  /* Theme gốc / Stage 1: Xanh pastel cánh cụt & trắng mây */
-  --bg-gradient: linear-gradient(135deg, #eef6fc 0%, #ffffff 50%, #eef6fc 100%);
-  --text-primary: #1c3553;
-  --text-secondary: #4a82b8;
-  --card-bg: rgba(255, 255, 255, 0.95);
-  --accent-warm: #7bb5e8;
-  --road-glow: rgba(123, 181, 232, 0.45);
+  /* Theme gốc / Stage 1: Xanh pastel chủ đạo, trắng nhẹ phụ trợ */
+  --bg-gradient: linear-gradient(135deg, #cde4f7 0%, #e5f1fb 45%, #d6ebf9 100%);
+  --text-primary: var(--color-text-main, #1c3553);
+  --text-secondary: var(--color-primary-deep, #4a82b8);
+  --card-bg: rgba(245, 249, 253, 0.95);
+  --accent-warm: var(--color-primary, #7bb5e8);
+  --road-glow: rgba(123, 181, 232, 0.55);
   --light-intensity: 0.95;
 
   /* Bổ sung các biến hỗ trợ UI */
-  --border-color: #c5def3;
-  --button-primary-bg: #4a82b8;
-  --button-primary-text: #ffffff;
-  --button-secondary-bg: #eef6fc;
-  --button-secondary-text: #1c3553;
-  --shadow-sm: 0 2px 6px rgba(74, 130, 184, 0.1);
-  --shadow-md: 0 4px 14px rgba(74, 130, 184, 0.15);
-  --shadow-lg: 0 10px 30px rgba(74, 130, 184, 0.2);
+  --border-color: var(--color-border, #b8daf5);
+  --button-primary-bg: var(--color-primary-deep, #4a82b8);
+  --button-primary-text: var(--color-white, #f5f9fd);
+  --button-secondary-bg: var(--color-bg-ice, #dcedfa);
+  --button-secondary-text: var(--color-text-main, #1c3553);
+  --shadow-sm: var(--shadow-theme-sm, 0 2px 6px rgba(74, 130, 184, 0.12));
+  --shadow-md: var(--shadow-theme-md, 0 4px 14px rgba(74, 130, 184, 0.18));
+  --shadow-lg: var(--shadow-theme-lg, 0 10px 30px rgba(74, 130, 184, 0.22));
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 18px;
@@ -49,40 +49,40 @@
 
 /* ==========================================================================
    CHẶNG 1 (.theme-stage-1)
-   Sáng sớm mùa đông tuyết: Xanh băng tuyết, trắng tinh khôi
+   Sáng sớm: Xanh pastel sương sớm chủ đạo, trắng mờ nhẹ phụ trợ
    ========================================================================== */
 .theme-stage-1 {
-  --bg-gradient: linear-gradient(135deg, #eef6fc 0%, #ffffff 50%, #eef6fc 100%);
-  --text-primary: #1c3553;
-  --text-secondary: #4a82b8;
-  --card-bg: rgba(255, 255, 255, 0.95);
-  --accent-warm: #7bb5e8;
-  --road-glow: rgba(123, 181, 232, 0.45);
+  --bg-gradient: linear-gradient(135deg, #cde4f7 0%, #e5f1fb 45%, #d6ebf9 100%);
+  --text-primary: var(--color-text-main, #1c3553);
+  --text-secondary: var(--color-primary-deep, #4a82b8);
+  --card-bg: rgba(245, 249, 253, 0.95);
+  --accent-warm: var(--color-primary, #7bb5e8);
+  --road-glow: rgba(123, 181, 232, 0.55);
   --light-intensity: 0.95;
-  --border-color: #c5def3;
-  --button-primary-bg: #4a82b8;
-  --button-primary-text: #ffffff;
-  --button-secondary-bg: #eef6fc;
-  --button-secondary-text: #1c3553;
+  --border-color: var(--color-border, #b8daf5);
+  --button-primary-bg: var(--color-primary-deep, #4a82b8);
+  --button-primary-text: var(--color-white, #f5f9fd);
+  --button-secondary-bg: var(--color-bg-ice, #dcedfa);
+  --button-secondary-text: var(--color-text-main, #1c3553);
 }
 
 /* ==========================================================================
    CHẶNG 2 (.theme-stage-2)
-   Đường đi & giảng đường: Xanh cánh cụt tươi sáng, mây trắng
+   Đường đi & giảng đường: Xanh pastel thanh xuân năng động, trắng nhẹ
    ========================================================================== */
 .theme-stage-2 {
-  --bg-gradient: linear-gradient(135deg, #e0effa 0%, #eef6fc 45%, #ffffff 100%);
-  --text-primary: #1c3553;
-  --text-secondary: #4a82b8;
-  --card-bg: rgba(255, 255, 255, 0.96);
-  --accent-warm: #7bb5e8;
-  --road-glow: rgba(123, 181, 232, 0.5);
+  --bg-gradient: linear-gradient(135deg, #c4def4 0%, #dcedfa 45%, #eaf3fb 100%);
+  --text-primary: var(--color-text-main, #1c3553);
+  --text-secondary: var(--color-primary-deep, #4a82b8);
+  --card-bg: rgba(245, 249, 253, 0.96);
+  --accent-warm: var(--color-primary, #7bb5e8);
+  --road-glow: rgba(123, 181, 232, 0.55);
   --light-intensity: 0.92;
-  --border-color: #c5def3;
-  --button-primary-bg: #4a82b8;
-  --button-primary-text: #ffffff;
-  --button-secondary-bg: #eef6fc;
-  --button-secondary-text: #1c3553;
+  --border-color: var(--color-border, #b8daf5);
+  --button-primary-bg: var(--color-primary-deep, #4a82b8);
+  --button-primary-text: var(--color-white, #f5f9fd);
+  --button-secondary-bg: var(--color-bg-ice, #dcedfa);
+  --button-secondary-text: var(--color-text-main, #1c3553);
 }
 
 /* ==========================================================================
