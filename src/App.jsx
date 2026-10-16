@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import questionsData from './data/questions.json';
+import permissions from './config/permissions.json';
 import {
   compareAnswer,
   generateExerciseForStep,
@@ -12,8 +13,30 @@ import DayRoadMap from './components/map/DayRoadMap';
 import { CutscenePlayer, FirstPersonIntro, CUTSCENES } from './components/cutscenes';
 import { CustomExamReview } from './components/exam';
 
+export function isTabEnabled(tabId) {
+  if (Array.isArray(permissions.enabledTabs)) {
+    return permissions.enabledTabs.includes(tabId);
+  }
+  if (permissions.tabs && typeof permissions.tabs === 'object') {
+    return Boolean(permissions.tabs[tabId]);
+  }
+  return true;
+}
+
 export default function App() {
-  const [viewMode, setViewMode] = useState('map'); // 'map' | 'pov' | 'cutscene' | 'game1' | 'game2' | 'custom-practice' | 'character' | 'bench'
+  const defaultTab = permissions.defaultTab || 'map';
+  const appTitle = permissions.title || 'Road to Paradise';
+  const homeTab = isTabEnabled('map') ? 'map' : (isTabEnabled(defaultTab) ? defaultTab : 'custom-practice');
+
+  const [viewMode, setViewMode] = useState(isTabEnabled(defaultTab) ? defaultTab : 'custom-practice');
+
+  // Đảm bảo nếu tab hiện tại bị ẩn theo permissions.json thì tự động chuyển về tab mặc định hợp lệ
+  useEffect(() => {
+    if (!isTabEnabled(viewMode)) {
+      setViewMode(homeTab);
+    }
+  }, [viewMode, homeTab]);
+
   const [selectedQuestion, setSelectedQuestion] = useState(questionsData.questions[0]);
   const [selectedSlotIndex, setSelectedSlotIndex] = useState(0);
   const [selectedStep, setSelectedStep] = useState(1);
@@ -52,6 +75,8 @@ export default function App() {
     { id: 'bench', label: '🧪 Core Bench' }
   ];
 
+  const visibleNavItems = navItems.filter(item => isTabEnabled(item.id));
+
   return (
     <div style={{ minHeight: '100vh', background: '#0f172a', color: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
       {/* Top Navbar */}
@@ -72,8 +97,8 @@ export default function App() {
       >
         <div
           style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }}
-          onClick={() => setViewMode('map')}
-          title="Trở về bản đồ"
+          onClick={() => setViewMode(homeTab)}
+          title="Trở về trang chính"
         >
           <img
             src="/logo.png"
@@ -88,11 +113,11 @@ export default function App() {
               flexShrink: 0
             }}
           />
-          <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem' }}>Một Đời Người, Một Con Đường</strong>
+          <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem' }}>{appTitle}</strong>
         </div>
 
         <nav style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
-          {navItems.map(item => (
+          {visibleNavItems.map(item => (
             <button
               key={item.id}
               onClick={() => setViewMode(item.id)}
@@ -117,17 +142,17 @@ export default function App() {
       {/* Main Content Area */}
       <main style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
         {/* 1. Bản đồ một ngày */}
-        {viewMode === 'map' && (
+        {viewMode === 'map' && isTabEnabled('map') && (
           <div style={{ width: '100%', maxWidth: 1240, margin: '0 auto', background: '#090d16' }}>
             <DayRoadMap
               onSelectAction={({ mode, question, slotIndex, stepId }) => {
                 setSelectedQuestion(question);
                 setSelectedSlotIndex(slotIndex || 0);
                 if (stepId === 2) {
-                  setViewMode('game2');
+                  setViewMode(isTabEnabled('game2') ? 'game2' : homeTab);
                 } else {
                   setSelectedStep(stepId || 1);
-                  setViewMode('game1');
+                  setViewMode(isTabEnabled('game1') ? 'game1' : homeTab);
                 }
               }}
             />
@@ -135,14 +160,14 @@ export default function App() {
         )}
 
         {/* 1.2. Chế độ Ôn tập Xáo từ & Thi riêng tự chọn (Tab riêng) */}
-        {viewMode === 'custom-practice' && (
+        {viewMode === 'custom-practice' && isTabEnabled('custom-practice') && (
           <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
-            <CustomExamReview onBackToMap={() => setViewMode('map')} />
+            <CustomExamReview onBackToMap={() => setViewMode(homeTab)} />
           </div>
         )}
 
         {/* 1.5. Cảnh mở đầu góc nhìn thứ nhất (POV Intro) */}
-        {viewMode === 'pov' && (
+        {viewMode === 'pov' && isTabEnabled('pov') && (
           <div style={{ width: '100%', maxWidth: 1100, margin: '1rem auto' }}>
             <FirstPersonIntro
               tenNhanVat="Minh"
@@ -152,7 +177,7 @@ export default function App() {
               chang={selectedQuestion.stageId}
               onStartGame1={({ userInput: typed }) => {
                 setUserInput(typed || '');
-                setViewMode('game1');
+                setViewMode(isTabEnabled('game1') ? 'game1' : homeTab);
               }}
               onSkip={() => {}}
             />
@@ -160,7 +185,7 @@ export default function App() {
         )}
 
         {/* 2. Cảnh Kịch Bản (Cutscene Player) */}
-        {viewMode === 'cutscene' && (
+        {viewMode === 'cutscene' && isTabEnabled('cutscene') && (
           <div style={{ width: '100%', maxWidth: 900, margin: '1rem auto' }}>
             <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center', marginBottom: '0.8rem' }}>
               {[1, 2, 3, 4].map(sId => (
@@ -186,18 +211,18 @@ export default function App() {
             <CutscenePlayer
               key={cutsceneStageId}
               stageId={cutsceneStageId}
-              onComplete={() => setViewMode('map')}
-              onSkip={() => setViewMode('map')}
+              onComplete={() => setViewMode(homeTab)}
+              onSkip={() => setViewMode(homeTab)}
             />
           </div>
         )}
 
         {/* 3. Game 1: Chép lại (Học cả câu - tách từng ô input cho từng ý) */}
-        {viewMode === 'game1' && (
+        {viewMode === 'game1' && isTabEnabled('game1') && (
           <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
               <button
-                onClick={() => setViewMode('map')}
+                onClick={() => setViewMode(homeTab)}
                 style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
               >
                 ← Trở về bản đồ
@@ -210,18 +235,18 @@ export default function App() {
             <Game1Copy
               question={selectedQuestion}
               onComplete={res => setModalResult(res.summary ? { isExact: res.isExact, accuracy: res.summary.avgAccuracy } : res.gradeResult)}
-              onNext={() => setViewMode('game2')}
+              onNext={() => setViewMode(isTabEnabled('game2') ? 'game2' : homeTab)}
             />
           </div>
         )}
 
         {/* 4. Game 2: Xáo từ (Học cả câu - tách từng ô theo từng ý) */}
-        {viewMode === 'game2' && (
+        {viewMode === 'game2' && isTabEnabled('game2') && (
           <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <button
-                  onClick={() => setViewMode('map')}
+                  onClick={() => setViewMode(homeTab)}
                   style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
                 >
                   ← Trở về bản đồ
@@ -279,12 +304,14 @@ export default function App() {
                 <span style={{ fontSize: '1rem', color: '#f59e0b', fontWeight: 'bold' }}>
                   Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Xáo từ
                 </span>
-                <button
-                  onClick={() => setViewMode('motorbike')}
-                  style={{ background: '#0284c7', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}
-                >
-                  🛵 Chuyển sang góc nhìn xe máy
-                </button>
+                {isTabEnabled('motorbike') && (
+                  <button
+                    onClick={() => setViewMode('motorbike')}
+                    style={{ background: '#0284c7', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}
+                  >
+                    🛵 Chuyển sang góc nhìn xe máy
+                  </button>
+                )}
               </div>
             </div>
 
@@ -307,7 +334,7 @@ export default function App() {
                   setSelectedQuestion(nextQ);
                   setSelectedSlotIndex(0);
                 } else {
-                  setViewMode('map');
+                  setViewMode(homeTab);
                 }
               }}
             />
@@ -315,11 +342,11 @@ export default function App() {
         )}
 
         {/* 4.5. Game 2: Cảnh chạy xe máy góc nhìn thứ nhất (Motorbike POV) */}
-        {viewMode === 'motorbike' && (
+        {viewMode === 'motorbike' && isTabEnabled('motorbike') && (
           <div style={{ width: '100%', maxWidth: 1440, padding: '1rem', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <button
-                onClick={() => setViewMode('map')}
+                onClick={() => setViewMode(homeTab)}
                 style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
               >
                 ← Trở về bản đồ
@@ -329,12 +356,14 @@ export default function App() {
                 <span style={{ fontSize: '1rem', color: '#38bdf8', fontWeight: 'bold' }}>
                   🛵 Minh (21 tuổi) lái xe Wave đi học • Xáo từ góc nhìn thứ nhất
                 </span>
-                <button
-                  onClick={() => setViewMode('game2')}
-                  style={{ background: '#334155', border: 'none', color: '#cbd5e1', padding: '0.4rem 0.8rem', borderRadius: 6, cursor: 'pointer', fontSize: '0.85rem' }}
-                >
-                  🧩 Xem dạng danh sách
-                </button>
+                {isTabEnabled('game2') && (
+                  <button
+                    onClick={() => setViewMode('game2')}
+                    style={{ background: '#334155', border: 'none', color: '#cbd5e1', padding: '0.4rem 0.8rem', borderRadius: 6, cursor: 'pointer', fontSize: '0.85rem' }}
+                  >
+                    🧩 Xem dạng danh sách
+                  </button>
+                )}
               </div>
             </div>
 
@@ -347,20 +376,20 @@ export default function App() {
               theNhieu={['Lời giả dối', 'Kh 22:15', 'sách đóng']}
               chang={selectedQuestion.stageId || 1}
               onComplete={res => setModalResult({ isExact: res.isPassed, accuracy: res.accuracy })}
-              onNext={() => setViewMode('map')}
+              onNext={() => setViewMode(homeTab)}
             />
           </div>
         )}
 
         {/* 5. Nhân vật Minh */}
-        {viewMode === 'character' && (
+        {viewMode === 'character' && isTabEnabled('character') && (
           <div style={{ width: '100%', padding: '1rem', boxSizing: 'border-box' }}>
             <CharacterDemo />
           </div>
         )}
 
         {/* 6. Core Bench */}
-        {viewMode === 'bench' && (
+        {viewMode === 'bench' && isTabEnabled('bench') && (
           <div style={{ width: '100%', maxWidth: 850, margin: '1.5rem auto', padding: '0 1rem', color: '#0f172a' }}>
             <div style={{ background: '#ffffff', padding: '1.5rem', borderRadius: 8, boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
               <h2 style={{ marginTop: 0 }}>Core Engines Test Bench</h2>
@@ -521,7 +550,7 @@ export default function App() {
           onRetry={() => setModalResult(null)}
           onContinue={() => {
             setModalResult(null);
-            setViewMode('map');
+            setViewMode(homeTab);
           }}
         />
       )}
