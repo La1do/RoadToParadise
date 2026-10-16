@@ -1,15 +1,7 @@
 {
   "title": "Road to Paradise",
-  "defaultTab": "map",
+  "defaultTab": "custom-practice",
   "tabs": {
-    "map": true,
-    "custom-practice": true,
-    "pov": true,
-    "cutscene": true,
-    "game1": true,
-    "game2": true,
-    "motorbike": true,
-    "character": true,
-    "bench": true
+    "custom-practice": true
   }
 }
