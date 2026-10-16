@@ -88,7 +88,7 @@ export default function App() {
               flexShrink: 0
             }}
           />
-          <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem' }}>Một Đời Người, Một Con Đường</strong>
+          <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem' }}>Road to Paradise</strong>
         </div>
 
         <nav style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
@@ -118,7 +118,7 @@ export default function App() {
       <main style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
         {/* 1. Bản đồ một ngày */}
         {viewMode === 'map' && (
-          <div style={{ width: '100%', maxWidth: 1240, margin: '0 auto', background: '#090d16' }}>
+          <div style={{ width: '100%', maxWidth: 1040, margin: '0 auto', background: '#090d16' }}>
             <DayRoadMap
               onSelectAction={({ mode, question, slotIndex, stepId }) => {
                 setSelectedQuestion(question);
@@ -136,14 +136,14 @@ export default function App() {
 
         {/* 1.2. Chế độ Ôn tập Xáo từ & Thi riêng tự chọn (Tab riêng) */}
         {viewMode === 'custom-practice' && (
-          <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
+          <div style={{ width: '100%', maxWidth: 1040, padding: '0.5rem 1rem', boxSizing: 'border-box', margin: '0 auto' }}>
             <CustomExamReview onBackToMap={() => setViewMode('map')} />
           </div>
         )}
 
         {/* 1.5. Cảnh mở đầu góc nhìn thứ nhất (POV Intro) */}
         {viewMode === 'pov' && (
-          <div style={{ width: '100%', maxWidth: 1100, margin: '1rem auto' }}>
+          <div style={{ width: '100%', maxWidth: 1040, margin: '0.5rem auto', padding: '0 1rem' }}>
             <FirstPersonIntro
               tenNhanVat="Minh"
               soCau={selectedQuestion.id}
@@ -161,7 +161,7 @@ export default function App() {
 
         {/* 2. Cảnh Kịch Bản (Cutscene Player) */}
         {viewMode === 'cutscene' && (
-          <div style={{ width: '100%', maxWidth: 900, margin: '1rem auto' }}>
+          <div style={{ width: '100%', maxWidth: 1040, margin: '0.5rem auto', padding: '0 1rem' }}>
             <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center', marginBottom: '0.8rem' }}>
               {[1, 2, 3, 4].map(sId => (
                 <button
@@ -194,7 +194,7 @@ export default function App() {
 
         {/* 3. Game 1: Chép lại (Học cả câu - tách từng ô input cho từng ý) */}
         {viewMode === 'game1' && (
-          <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
+          <div style={{ width: '100%', maxWidth: 1040, padding: '0.5rem 1rem', boxSizing: 'border-box', margin: '0 auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
               <button
                 onClick={() => setViewMode('map')}
@@ -217,7 +217,7 @@ export default function App() {
 
         {/* 4. Game 2: Xáo từ (Học cả câu - tách từng ô theo từng ý) */}
         {viewMode === 'game2' && (
-          <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
+          <div style={{ width: '100%', maxWidth: 1040, padding: '0.5rem 1rem', boxSizing: 'border-box', margin: '0 auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <button
@@ -316,7 +316,7 @@ export default function App() {
 
         {/* 4.5. Game 2: Cảnh chạy xe máy góc nhìn thứ nhất (Motorbike POV) */}
         {viewMode === 'motorbike' && (
-          <div style={{ width: '100%', maxWidth: 1440, padding: '1rem', boxSizing: 'border-box' }}>
+          <div style={{ width: '100%', maxWidth: 1040, padding: '0.5rem 1rem', boxSizing: 'border-box', margin: '0 auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <button
                 onClick={() => setViewMode('map')}
