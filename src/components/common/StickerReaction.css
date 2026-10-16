@@ -117,11 +117,15 @@
 
 .sticker-reaction-wrap.layout-badge {
   display: inline-flex;
-  padding: 4px 10px 4px 4px;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
   border-radius: 30px;
   background: var(--color-white, #ffffff);
   border: 1.5px solid var(--color-border, #b8daf5);
   box-shadow: 0 2px 8px rgba(74, 130, 184, 0.12);
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .sticker-reaction-wrap.layout-badge .sticker-bubble {
@@ -130,6 +134,8 @@
   box-shadow: none;
   padding: 0;
   max-width: none;
+  white-space: normal;
+  line-height: 1.35;
 }
 
 .sticker-reaction-wrap.layout-badge .sticker-speech-arrow {
@@ -290,6 +296,15 @@
   .sticker-reaction-wrap.size-xl .sticker-img-container {
     width: 90px;
     height: 90px;
+  }
+
+  .sticker-reaction-wrap.layout-badge {
+    padding: 3px 10px 3px 3px;
+    gap: 6px;
+  }
+
+  .sticker-reaction-wrap.layout-badge .sticker-text {
+    font-size: 0.8rem;
   }
 
   .sticker-bubble {
