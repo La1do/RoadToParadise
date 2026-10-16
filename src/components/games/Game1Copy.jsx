@@ -290,35 +290,44 @@ export default function Game1Copy({
                 </div>
               )}
 
-              {/* Phân tích kết quả chấm điểm từng ý (Tô đỏ từ sai, tô vàng từ thiếu) */}
+              {/* Phân tích kết quả chấm điểm từng ý: từ đúng xanh lá, từ dư gạch đi, thế vào từ đúng màu vàng */}
               {result && !result.isExact && (
                 <div className="slot-diff-box">
                   <div className="diff-section">
-                    <span className="diff-label">Từ bạn đã gõ (tô đỏ chỗ sai):</span>
+                    <span className="diff-label">Sửa bài trực tiếp (xanh: từ đúng • gạch ngang: từ dư • vàng: từ đúng thay thế):</span>
                     <div className="diff-tokens-row">
-                      {result.userTokensResult.map((tok, idx) => (
-                        <span
-                          key={idx}
-                          className={`token-chip ${tok.status === 'correct' ? 'token-correct' : 'token-wrong'}`}
-                        >
-                          {tok.text}
-                        </span>
-                      ))}
+                      {result.diff && result.diff.length > 0 ? (
+                        result.diff.map((item, idx) => {
+                          if (item.type === 'correct') {
+                            return (
+                              <span key={idx} className="token-chip token-correct" title="Từ đúng">
+                                {item.text}
+                              </span>
+                            );
+                          }
+                          if (item.type === 'wrong') {
+                            return (
+                              <span key={idx} className="token-chip token-wrong" title="Từ dư / sai (gạch bỏ)">
+                                {item.text}
+                              </span>
+                            );
+                          }
+                          return (
+                            <span key={idx} className="token-chip token-missing" title="Thế vào từ đúng">
+                              {item.text}
+                            </span>
+                          );
+                        })
+                      ) : (
+                        <span className="empty-text">(Chưa nhập câu trả lời)</span>
+                      )}
                     </div>
                   </div>
 
-                  <div className="diff-section">
-                    <span className="diff-label">Từ còn thiếu trong đáp án chuẩn:</span>
-                    <div className="diff-tokens-row">
-                      {result.targetTokensResult.map((tok, idx) => (
-                        <span
-                          key={idx}
-                          className={`token-chip ${tok.status === 'correct' ? 'token-neutral' : 'token-missing'}`}
-                        >
-                          {tok.text}
-                        </span>
-                      ))}
-                    </div>
+                  {/* Hiện đáp án ở dưới bản full nguyên mẫu có đầy đủ dấu câu , . () → */}
+                  <div className="diff-full-answer-box">
+                    <span className="diff-full-answer-label">✦ Đáp án chuẩn nguyên mẫu:</span>
+                    <p className="diff-full-answer-text">{slot.answer}</p>
                   </div>
                 </div>
               )}

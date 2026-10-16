@@ -387,30 +387,63 @@
 }
 
 .token-correct {
-  background: #eef6fc;
-  color: #4a82b8;
-  border: 1px solid #c5def3;
+  background: #dcfce7;
+  color: #15803d;
+  border: 1.5px solid #86efac;
+  font-weight: 700;
 }
 
 .token-wrong {
   background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  color: #991b1b;
+  border: 1.5px solid #fca5a5;
   font-weight: 700;
-  text-decoration: underline;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  opacity: 0.9;
 }
 
 .token-missing {
   background: #fef3c7;
   color: #92400e;
-  border: 1px solid #fde68a;
-  font-weight: 700;
+  border: 1.5px solid #fde68a;
+  font-weight: 800;
+  box-shadow: 0 1px 4px rgba(245, 158, 11, 0.2);
 }
 
 .token-neutral {
   background: #eef6fc;
   color: #1c3553;
   border: 1px solid #c5def3;
+}
+
+/* Hộp đáp án chuẩn nguyên mẫu (đầy đủ dấu câu) */
+.diff-full-answer-box {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: #eef6fc;
+  border: 1.5px solid #c5def3;
+  border-left: 4px solid #4a82b8;
+  border-radius: 12px;
+}
+
+.diff-full-answer-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #4a82b8;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.diff-full-answer-text {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #1c3553;
+  font-weight: 600;
+  white-space: pre-wrap;
 }
 
 /* ================= 3. FOOTER TỔNG KẾT & ACTION ================= */
