@@ -267,12 +267,12 @@
 }
 
 .result-btn-continue {
-  background-color: #2563eb;
+  background: linear-gradient(135deg, #7bb5e8 0%, #4a82b8 100%);
   color: #ffffff;
 }
 
 .result-btn-continue:hover {
-  background-color: #1d4ed8;
+  filter: brightness(1.08);
 }
 
 @keyframes modalFadeIn {

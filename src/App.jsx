@@ -78,12 +78,12 @@ export default function App() {
   const visibleNavItems = navItems.filter(item => isTabEnabled(item.id));
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0f172a', color: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
-      {/* Top Navbar */}
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #eef6fc 0%, #ffffff 35%, #eef6fc 100%)', color: '#1c3553', display: 'flex', flexDirection: 'column' }}>
+      {/* Top Navbar - Phong cách Cánh Cụt Xanh Trắng */}
       <header
         style={{
-          background: '#1e293b',
-          borderBottom: '1px solid #334155',
+          background: 'rgba(255, 255, 255, 0.96)',
+          borderBottom: '2px solid #c5def3',
           padding: '0.6rem 1rem',
           display: 'flex',
           flexWrap: 'wrap',
@@ -92,7 +92,9 @@ export default function App() {
           gap: '0.5rem',
           position: 'sticky',
           top: 0,
-          zIndex: 100
+          zIndex: 100,
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 4px 18px rgba(74, 130, 184, 0.12)'
         }}
       >
         <div
@@ -108,12 +110,12 @@ export default function App() {
               height: 36,
               borderRadius: '50%',
               objectFit: 'cover',
-              border: '2px solid #f59e0b',
-              boxShadow: '0 0 8px rgba(245, 158, 11, 0.45)',
+              border: '2px solid #7bb5e8',
+              boxShadow: '0 0 10px rgba(123, 181, 232, 0.45)',
               flexShrink: 0
             }}
           />
-          <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem' }}>{appTitle}</strong>
+          <strong style={{ fontSize: '1.05rem', letterSpacing: '0.02rem', color: '#1c3553' }}>{appTitle}</strong>
         </div>
 
         <nav style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
@@ -122,14 +124,15 @@ export default function App() {
               key={item.id}
               onClick={() => setViewMode(item.id)}
               style={{
-                padding: '0.4rem 0.75rem',
-                borderRadius: 6,
-                border: 'none',
-                background: viewMode === item.id ? '#0284c7' : '#334155',
-                color: viewMode === item.id ? '#fff' : '#cbd5e1',
+                padding: '0.45rem 0.85rem',
+                borderRadius: 20,
+                border: viewMode === item.id ? '2px solid #4a82b8' : '1.5px solid #c5def3',
+                background: viewMode === item.id ? '#4a82b8' : '#eef6fc',
+                color: viewMode === item.id ? '#ffffff' : '#1c3553',
                 cursor: 'pointer',
-                fontWeight: viewMode === item.id ? 'bold' : 'normal',
+                fontWeight: viewMode === item.id ? 'bold' : '600',
                 fontSize: '0.85rem',
+                boxShadow: viewMode === item.id ? '0 2px 8px rgba(74, 130, 184, 0.3)' : 'none',
                 transition: 'all 0.15s ease'
               }}
             >
@@ -193,14 +196,15 @@ export default function App() {
                   key={sId}
                   onClick={() => setCutsceneStageId(sId)}
                   style={{
-                    padding: '0.4rem 0.8rem',
-                    borderRadius: 4,
-                    border: 'none',
-                    background: cutsceneStageId === sId ? '#f59e0b' : '#334155',
-                    color: cutsceneStageId === sId ? '#000' : '#fff',
+                    padding: '0.45rem 1rem',
+                    borderRadius: 20,
+                    border: cutsceneStageId === sId ? '2px solid #4a82b8' : '1.5px solid #c5def3',
+                    background: cutsceneStageId === sId ? '#4a82b8' : '#ffffff',
+                    color: cutsceneStageId === sId ? '#ffffff' : '#1c3553',
                     fontWeight: 'bold',
                     cursor: 'pointer',
-                    fontSize: '0.85rem'
+                    fontSize: '0.85rem',
+                    boxShadow: '0 2px 8px rgba(74, 130, 184, 0.15)'
                   }}
                 >
                   Chặng {sId}
@@ -223,11 +227,11 @@ export default function App() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
               <button
                 onClick={() => setViewMode(homeTab)}
-                style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
+                style={{ background: '#ffffff', border: '1.5px solid #c5def3', color: '#4a82b8', padding: '0.5rem 1rem', borderRadius: 20, cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 6px rgba(74, 130, 184, 0.12)' }}
               >
                 ← Trở về bản đồ
               </button>
-              <span style={{ fontSize: '1rem', color: '#f59e0b', fontWeight: 'bold' }}>
+              <span style={{ fontSize: '1rem', color: '#4a82b8', fontWeight: 'bold' }}>
                 Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Tách riêng từng ý
               </span>
             </div>
@@ -247,7 +251,7 @@ export default function App() {
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <button
                   onClick={() => setViewMode(homeTab)}
-                  style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
+                  style={{ background: '#ffffff', border: '1.5px solid #c5def3', color: '#4a82b8', padding: '0.5rem 1rem', borderRadius: 20, cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 6px rgba(74, 130, 184, 0.12)' }}
                 >
                   ← Trở về bản đồ
                 </button>
@@ -263,11 +267,11 @@ export default function App() {
                     }
                   }}
                   style={{
-                    background: selectedQuestion.id <= 1 ? '#1e293b' : '#334155',
-                    color: selectedQuestion.id <= 1 ? '#64748b' : '#fff',
-                    border: '1px solid #475569',
+                    background: selectedQuestion.id <= 1 ? '#f0f4f8' : '#ffffff',
+                    color: selectedQuestion.id <= 1 ? '#8fa4b8' : '#4a82b8',
+                    border: '1.5px solid #c5def3',
                     padding: '0.5rem 0.8rem',
-                    borderRadius: 6,
+                    borderRadius: 20,
                     cursor: selectedQuestion.id <= 1 ? 'not-allowed' : 'pointer',
                     fontWeight: 600,
                     fontSize: '0.85rem'
@@ -286,11 +290,11 @@ export default function App() {
                     }
                   }}
                   style={{
-                    background: selectedQuestion.id >= questionsData.questions.length ? '#1e293b' : '#334155',
-                    color: selectedQuestion.id >= questionsData.questions.length ? '#64748b' : '#fff',
-                    border: '1px solid #475569',
+                    background: selectedQuestion.id >= questionsData.questions.length ? '#f0f4f8' : '#ffffff',
+                    color: selectedQuestion.id >= questionsData.questions.length ? '#8fa4b8' : '#4a82b8',
+                    border: '1.5px solid #c5def3',
                     padding: '0.5rem 0.8rem',
-                    borderRadius: 6,
+                    borderRadius: 20,
                     cursor: selectedQuestion.id >= questionsData.questions.length ? 'not-allowed' : 'pointer',
                     fontWeight: 600,
                     fontSize: '0.85rem'
@@ -301,13 +305,13 @@ export default function App() {
               </div>
 
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '1rem', color: '#f59e0b', fontWeight: 'bold' }}>
+                <span style={{ fontSize: '1rem', color: '#4a82b8', fontWeight: 'bold' }}>
                   Học Câu {selectedQuestion.id} (Chặng {selectedQuestion.stageId}) • Xáo từ
                 </span>
                 {isTabEnabled('motorbike') && (
                   <button
                     onClick={() => setViewMode('motorbike')}
-                    style={{ background: '#0284c7', border: 'none', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem' }}
+                    style={{ background: '#7bb5e8', border: '1.5px solid #4a82b8', color: '#ffffff', padding: '0.45rem 0.85rem', borderRadius: 20, cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem', boxShadow: '0 2px 8px rgba(74, 130, 184, 0.25)' }}
                   >
                     🛵 Chuyển sang góc nhìn xe máy
                   </button>
@@ -347,19 +351,19 @@ export default function App() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <button
                 onClick={() => setViewMode(homeTab)}
-                style={{ background: '#334155', border: 'none', color: '#fff', padding: '0.5rem 1rem', borderRadius: 6, cursor: 'pointer', fontWeight: 'bold' }}
+                style={{ background: '#ffffff', border: '1.5px solid #c5def3', color: '#4a82b8', padding: '0.5rem 1rem', borderRadius: 20, cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 6px rgba(74, 130, 184, 0.12)' }}
               >
                 ← Trở về bản đồ
               </button>
 
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '1rem', color: '#38bdf8', fontWeight: 'bold' }}>
+                <span style={{ fontSize: '1rem', color: '#4a82b8', fontWeight: 'bold' }}>
                   🛵 Minh (21 tuổi) lái xe Wave đi học • Xáo từ góc nhìn thứ nhất
                 </span>
                 {isTabEnabled('game2') && (
                   <button
                     onClick={() => setViewMode('game2')}
-                    style={{ background: '#334155', border: 'none', color: '#cbd5e1', padding: '0.4rem 0.8rem', borderRadius: 6, cursor: 'pointer', fontSize: '0.85rem' }}
+                    style={{ background: '#ffffff', border: '1.5px solid #c5def3', color: '#4a82b8', padding: '0.45rem 0.85rem', borderRadius: 20, cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}
                   >
                     🧩 Xem dạng danh sách
                   </button>
@@ -494,7 +498,7 @@ export default function App() {
                 <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
                   <button
                     onClick={handleCheck}
-                    style={{ padding: '0.5rem 1rem', background: '#0284c7', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontWeight: 'bold' }}
+                    style={{ padding: '0.5rem 1rem', background: '#4a82b8', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer', fontWeight: 'bold' }}
                   >
                     Chấm điểm
                   </button>
