@@ -12,6 +12,7 @@ import CharacterDemo from './components/character/CharacterDemo';
 import DayRoadMap from './components/map/DayRoadMap';
 import { CutscenePlayer, FirstPersonIntro, CUTSCENES } from './components/cutscenes';
 import { CustomExamReview } from './components/exam';
+import ScripturePractice from './components/exam/ScripturePractice.jsx';
 import LoginModal from './components/auth/LoginModal';
 import AnswerDiff from './components/common/AnswerDiff.jsx';
 import { isUserAuthenticated, getStoredUserName, logoutUser } from './utils/cookie';
@@ -74,6 +75,7 @@ export default function App() {
   const navItems = [
     { id: 'map', label: '🗺️ Bản đồ' },
     { id: 'custom-practice', label: '🎯 Ôn & Thi riêng' },
+    { id: 'scripture', label: 'Ôn câu kinh' },
     { id: 'pov', label: '📱 Cảnh mở đầu (POV)' },
     { id: 'cutscene', label: '🎬 Kịch bản' },
     { id: 'game1', label: '✍️ Chép lại' },
@@ -443,6 +445,10 @@ export default function App() {
           <div style={{ width: '100%', maxWidth: 1440, padding: '1.2rem', boxSizing: 'border-box' }}>
             <CustomExamReview onBackToMap={() => setViewMode(homeTab)} />
           </div>
+        )}
+
+        {viewMode === 'scripture' && isTabEnabled('scripture') && (
+          <ScripturePractice />
         )}
 
         {/* 1.5. Cảnh mở đầu góc nhìn thứ nhất (POV Intro) */}

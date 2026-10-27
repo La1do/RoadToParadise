@@ -9,3 +9,4 @@ export * from './spacedRepetitionEngine.js';
 export * from './mistakeBookEngine.js';
 export * from './hintEngine.js';
 export * from './storageEngine.js';
+export * from './scriptureEngine.js';
