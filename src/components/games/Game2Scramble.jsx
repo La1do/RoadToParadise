@@ -31,6 +31,7 @@ export default function Game2Scramble({
   initialState,
   onStateChange,
   isLastQuestion = false,
+  totalQuestions,
   onResetAll,
   onFinish,
   onComplete,
@@ -43,6 +44,10 @@ export default function Game2Scramble({
     question: questionText || slot.questionText || '',
     slots: [slot]
   } : null);
+
+  const hasMultipleQuestions = totalQuestions !== undefined
+    ? totalQuestions > 1
+    : Boolean(onResetAll);
 
   const slots = targetQuestion?.slots && targetQuestion.slots.length > 0
     ? targetQuestion.slots
@@ -869,7 +874,7 @@ export default function Game2Scramble({
                 </strong>
                 <div className="summary-subline">
                   {summary.isAllExact
-                    ? 'Tuyệt vời! Bạn có thể tiếp tục sang câu tiếp theo.'
+                    ? (isLastQuestion ? 'Hoàn thành câu cuối cùng! Bấm Kết thúc để xem kết quả.' : 'Tuyệt vời! Bạn có thể tiếp tục sang câu tiếp theo.')
                     : 'Hãy xem các cụm có đánh dấu ĐỎ "✕ Sai" ở trên để đổi chỗ rồi kiểm tra lại.'}
                 </div>
               </div>
@@ -886,8 +891,9 @@ export default function Game2Scramble({
             >
               ✓ Kiểm tra kết quả các ý
             </button>
-          ) : !isLastQuestion ? (
+          ) : (
             <>
+              {/* Luôn luôn có nút làm lại câu này bất kể ở câu nào */}
               <button
                 type="button"
                 className="game2-retry-btn"
@@ -896,45 +902,47 @@ export default function Game2Scramble({
                 🔄 Làm lại câu này
               </button>
 
-              {onNext && (
-                <button
-                  type="button"
-                  className="game2-next-btn"
-                  onClick={onNext}
-                >
-                  Tiếp tục câu tiếp theo →
-                </button>
-              )}
-            </>
-          ) : (
-            <>
-              <button
-                type="button"
-                className="game2-retry-all-btn"
-                onClick={() => {
-                  if (typeof onResetAll === 'function') {
-                    onResetAll();
-                  } else {
-                    handleResetCurrentQuestion();
-                  }
-                }}
-              >
-                🔄 Làm lại cả bài
-              </button>
+              {!isLastQuestion ? (
+                onNext && (
+                  <button
+                    type="button"
+                    className="game2-next-btn"
+                    onClick={onNext}
+                  >
+                    Tiếp tục câu tiếp theo →
+                  </button>
+                )
+              ) : (
+                <>
+                  {/* Nếu đợt ôn có từ 2 câu trở lên thì mới có lựa chọn làm lại cả bài */}
+                  {hasMultipleQuestions && onResetAll && (
+                    <button
+                      type="button"
+                      className="game2-retry-all-btn"
+                      onClick={() => {
+                        handleResetCurrentQuestion();
+                        onResetAll();
+                      }}
+                    >
+                      🔄 Làm lại cả bài
+                    </button>
+                  )}
 
-              <button
-                type="button"
-                className="game2-finish-btn"
-                onClick={() => {
-                  if (typeof onFinish === 'function') {
-                    onFinish();
-                  } else if (typeof onNext === 'function') {
-                    onNext();
-                  }
-                }}
-              >
-                🏁 Kết thúc
-              </button>
+                  <button
+                    type="button"
+                    className="game2-finish-btn"
+                    onClick={() => {
+                      if (typeof onFinish === 'function') {
+                        onFinish();
+                      } else if (typeof onNext === 'function') {
+                        onNext();
+                      }
+                    }}
+                  >
+                    🏁 Kết thúc
+                  </button>
+                </>
+              )}
             </>
           )}
         </div>

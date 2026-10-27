@@ -979,6 +979,7 @@
 .game2-main-actions {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .game2-check-all-btn {
@@ -1071,6 +1072,16 @@
 
   .game2-header {
     padding: 14px;
+  }
+
+  .game2-main-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .game2-main-actions button {
+    width: 100%;
+    min-height: 44px;
   }
 
   /* Tăng khoảng cách các mảnh từ trên màn hình cảm ứng để tránh chạm nhầm 2 mảnh cùng lúc */

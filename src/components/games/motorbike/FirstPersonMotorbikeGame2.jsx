@@ -3,6 +3,7 @@ import HondaWaveHandlebar from './HondaWaveHandlebar.jsx';
 import ParallaxRoadScene from './ParallaxRoadScene.jsx';
 import { useMotorbikeAudio } from './useMotorbikeAudio.js';
 import { compareAnswer } from '../../../core/gradeEngine.js';
+import AnswerDiff from '../../common/AnswerDiff.jsx';
 import './FirstPersonMotorbikeGame2.css';
 
 /**
@@ -610,17 +611,12 @@ export default function FirstPersonMotorbikeGame2({
             {/* Phân tích kết quả gõ */}
             {gradeResult && !gradeResult.isExact && (
               <div className="grade-diff-card">
-                <div className="diff-title">Còn từ chưa chuẩn (tô đỏ):</div>
-                <div className="tokens-row">
-                  {gradeResult.userTokensResult.map((tok, idx) => (
-                    <span
-                      key={idx}
-                      className={`diff-token ${tok.status === 'correct' ? 'tok-correct' : 'tok-wrong'}`}
-                    >
-                      {tok.text}
-                    </span>
-                  ))}
-                </div>
+                <div className="diff-title">Sửa bài: gạch ngang từ sai / dư, (+ cụm từ) là phần còn thiếu.</div>
+                <AnswerDiff
+                  diff={gradeResult.diff}
+                  userTokensResult={gradeResult.userTokensResult}
+                  variant="motorbike"
+                />
               </div>
             )}
           </div>

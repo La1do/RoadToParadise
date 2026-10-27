@@ -13,6 +13,7 @@ import DayRoadMap from './components/map/DayRoadMap';
 import { CutscenePlayer, FirstPersonIntro, CUTSCENES } from './components/cutscenes';
 import { CustomExamReview } from './components/exam';
 import LoginModal from './components/auth/LoginModal';
+import AnswerDiff from './components/common/AnswerDiff.jsx';
 import { isUserAuthenticated, getStoredUserName, logoutUser } from './utils/cookie';
 
 export function isTabEnabled(tabId) {
@@ -798,22 +799,11 @@ export default function App() {
                   <h4 style={{ margin: '0 0 0.5rem 0', color: gradeResult.isExact ? '#16a34a' : '#dc2626' }}>
                     {gradeResult.isExact ? 'Chính xác 100%!' : `Độ chính xác: ${gradeResult.accuracy}%`}
                   </h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
-                    {gradeResult.userTokensResult.map((t, idx) => (
-                      <span
-                        key={idx}
-                        style={{
-                          padding: '0.15rem 0.4rem',
-                          borderRadius: 3,
-                          background: t.status === 'correct' ? '#bbf7d0' : '#fecaca',
-                          color: t.status === 'correct' ? '#14532d' : '#991b1b',
-                          fontWeight: t.status === 'correct' ? 'normal' : 'bold'
-                        }}
-                      >
-                        {t.text}
-                      </span>
-                    ))}
-                  </div>
+                  <AnswerDiff
+                    diff={gradeResult.diff}
+                    userTokensResult={gradeResult.userTokensResult}
+                    variant="demo"
+                  />
                 </div>
               )}
             </div>

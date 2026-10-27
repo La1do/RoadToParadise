@@ -5,6 +5,8 @@ import { loadMistakeBook, addExamRecord } from '../../core/storageEngine.js';
 import Game1Copy from '../games/Game1Copy.jsx';
 import Game2Scramble from '../games/Game2Scramble.jsx';
 import StickerReaction from '../common/StickerReaction.jsx';
+import AnswerInputCompanion from '../common/AnswerInputCompanion.jsx';
+import AnswerDiff from '../common/AnswerDiff.jsx';
 import './CustomExamReview.css';
 
 /**
@@ -60,6 +62,7 @@ export default function CustomExamReview({ onBackToMap }) {
   // Session state:
   const [sessionQuestions, setSessionQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [sessionKey, setSessionKey] = useState(0);
 
   // Lưu câu trả lời theo từng chế độ để chuyển câu không mất bài:
   // Copy answers: { [questionId]: { [slotIndex]: text } }
@@ -188,6 +191,7 @@ export default function CustomExamReview({ onBackToMap }) {
     setExamAnswers({});
     setScrambleProgress({});
     setElapsedSeconds(0);
+    setSessionKey(prev => prev + 1);
     setViewState('session');
   };
 
@@ -387,7 +391,7 @@ export default function CustomExamReview({ onBackToMap }) {
     setViewState('result');
   };
 
-  // Thi lại các câu bị sai
+  // Thi lại / Ôn lại các câu bị sai
   const handleRetryWrongQuestions = () => {
     if (!examResultData) return;
     const wrongIds = examResultData.results
@@ -400,7 +404,9 @@ export default function CustomExamReview({ onBackToMap }) {
     }
 
     setSelectedQuestionIds(wrongIds);
-    setMode('exam');
+    if (examResultData.mode) {
+      setMode(examResultData.mode);
+    }
     setViewState('setup');
   };
 
@@ -879,17 +885,19 @@ export default function CustomExamReview({ onBackToMap }) {
           {mode === 'copy' && (
             <div className="copy-session-body">
               <Game1Copy
-                key={currentQ.id}
+                key={`${sessionKey}-${currentQ.id}`}
                 question={currentQ}
                 initialInputs={copyAnswers[currentQ.id]}
                 initialShowReference={showReferenceAnswer}
                 isLastQuestion={currentIndex === sessionQuestions.length - 1}
+                totalQuestions={sessionQuestions.length}
                 onStateChange={inputs => handleCopyStateChange(currentQ.id, inputs)}
                 onToggleReference={setShowReferenceAnswer}
                 onResetAll={() => {
                   setCopyAnswers({});
                   setCurrentIndex(0);
                   setElapsedSeconds(0);
+                  setSessionKey(prev => prev + 1);
                 }}
                 onFinish={handleSubmitCopy}
                 onNext={() => {
@@ -933,15 +941,17 @@ export default function CustomExamReview({ onBackToMap }) {
           {mode === 'scramble' && (
             <div className="scramble-session-body">
               <Game2Scramble
-                key={currentQ.id}
+                key={`${sessionKey}-${currentQ.id}`}
                 question={currentQ}
                 initialState={scrambleProgress[currentQ.id]}
                 isLastQuestion={currentIndex === sessionQuestions.length - 1}
+                totalQuestions={sessionQuestions.length}
                 onStateChange={state => handleScrambleStateChange(currentQ.id, state)}
                 onResetAll={() => {
                   setScrambleProgress({});
                   setCurrentIndex(0);
                   setElapsedSeconds(0);
+                  setSessionKey(prev => prev + 1);
                 }}
                 onFinish={handleSubmitScramble}
                 onNext={() => {
@@ -1004,6 +1014,7 @@ export default function CustomExamReview({ onBackToMap }) {
                         <strong>{s.title || `Ý số ${sIdx + 1}`}</strong>
                       </div>
 
+                      <AnswerInputCompanion key={`${currentQ.id}:${s.slotIndex}`} value={currentVal} exam>
                       <textarea
                         className="exam-slot-textarea"
                         rows={3}
@@ -1013,7 +1024,9 @@ export default function CustomExamReview({ onBackToMap }) {
                         autoCapitalize="none"
                         autoCorrect="off"
                         spellCheck="false"
+                        aria-label={`Câu trả lời ${s.title || `ý ${sIdx + 1}`}`}
                       />
+                      </AnswerInputCompanion>
                     </div>
                   );
                 })}
@@ -1119,7 +1132,7 @@ export default function CustomExamReview({ onBackToMap }) {
                 className="action-btn retry-wrong"
                 onClick={handleRetryWrongQuestions}
               >
-                🔄 Thi lại các câu làm sai
+                {examResultData.mode === 'exam' ? '🔄 Thi lại các câu làm sai' : '🔄 Ôn lại các câu làm sai'}
               </button>
             )}
 
@@ -1212,44 +1225,13 @@ export default function CustomExamReview({ onBackToMap }) {
                         <div className="diff-content-box">
                           <div className="diff-line">
                             <span className="line-label">
-                              {sr.grade.isExact ? 'Bài làm của bạn:' : 'Sửa bài trực tiếp (xanh: từ đúng • gạch ngang: từ dư • vàng: từ đúng thay thế):'}
+                              {sr.grade.isExact ? 'Bài làm của bạn:' : 'Sửa bài trực tiếp (xanh: từ đúng • gạch ngang: từ sai / dư • (+ cụm từ): phần còn thiếu):'}
                             </span>
-                            <div className="tokens-display">
-                              {sr.grade.diff && sr.grade.diff.length > 0 ? (
-                                sr.grade.diff.map((item, tIdx) => {
-                                  if (item.type === 'correct') {
-                                    return (
-                                      <span key={tIdx} className="token tok-correct" title="Từ đúng">
-                                        {item.text}
-                                      </span>
-                                    );
-                                  }
-                                  if (item.type === 'wrong') {
-                                    return (
-                                      <span key={tIdx} className="token tok-wrong" title="Từ dư / sai (gạch bỏ)">
-                                        {item.text}
-                                      </span>
-                                    );
-                                  }
-                                  return (
-                                    <span key={tIdx} className="token tok-missing" title="Thế vào từ đúng">
-                                      {item.text}
-                                    </span>
-                                  );
-                                })
-                              ) : sr.grade.userTokensResult && sr.grade.userTokensResult.length > 0 ? (
-                                sr.grade.userTokensResult.map((tok, tIdx) => (
-                                  <span
-                                    key={tIdx}
-                                    className={`token ${tok.status === 'correct' ? 'tok-correct' : 'tok-wrong'}`}
-                                  >
-                                    {tok.text}
-                                  </span>
-                                ))
-                              ) : (
-                                <span className="empty-text">(Chưa nhập câu trả lời)</span>
-                              )}
-                            </div>
+                            <AnswerDiff
+                              diff={sr.grade.diff}
+                              userTokensResult={sr.grade.userTokensResult}
+                              variant="exam"
+                            />
                           </div>
 
                           {/* Hiện đáp án chuẩn ở dưới bản full nguyên mẫu đầy đủ dấu câu , . () → */}

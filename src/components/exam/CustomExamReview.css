@@ -1446,7 +1446,6 @@
   font-weight: 600;
   background: var(--color-bg-ice, #eef6fc);
   border: 1.5px solid var(--color-border, #c5def3);
-  border-left: 4px solid var(--color-primary-deep, #4a82b8);
   border-radius: 10px;
   padding: 10px 14px;
   white-space: pre-wrap;
