@@ -1,7 +1,9 @@
 import React, { useId, useState } from 'react';
-import { getStickerFeedback } from './stickerFeedback.js';
+import { getStickerFeedback, SORA_CAT_STICKERS, SMILE_MEME_STICKERS } from './stickerFeedback.js';
 import { getStoredUserName } from '../../utils/cookie.js';
 import './StickerReaction.css';
+
+export { SORA_CAT_STICKERS, SMILE_MEME_STICKERS };
 
 /**
  * Định dạng bình luận của sticker kèm tên người dùng một cách tự nhiên
@@ -45,6 +47,18 @@ export const STICKER_CONFIGS = {
     src: `/stickers/cats/${file}.png`,
     alt,
     getDefaultText: (name) => formatWithUserName(text, name)
+  }])),
+  ...Object.fromEntries(Object.entries(SORA_CAT_STICKERS).map(([type, [file, alt, text, mood]]) => [type, {
+    src: `/stickers/cats/${file}.png`,
+    alt,
+    getDefaultText: (name) => formatWithUserName(text, name),
+    mood
+  }])),
+  ...Object.fromEntries(Object.entries(SMILE_MEME_STICKERS).map(([type, [file, alt, text, mood]]) => [type, {
+    src: `/stickers/smilekv16/${file}.png`,
+    alt,
+    getDefaultText: (name) => formatWithUserName(text, name),
+    mood
   }])),
   cheer: {
     src: '/stickers/cheer.png',

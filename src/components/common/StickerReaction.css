@@ -24,6 +24,15 @@
   padding: 0;
 }
 
+/* Sticker meme dạng thẻ bo góc mượt mà */
+.sticker-reaction-wrap[class*="sticker-smile_"] .sticker-img-container {
+  border-radius: 14px;
+}
+
+.sticker-reaction-wrap[class*="sticker-smile_"] .sticker-img {
+  border-radius: 10px;
+}
+
 .sticker-interact {
   font: inherit;
   cursor: pointer;

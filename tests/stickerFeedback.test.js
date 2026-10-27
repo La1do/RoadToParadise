@@ -2,11 +2,36 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { compareAnswer } from '../src/core/gradeEngine.js';
-import { getStickerFeedback } from '../src/components/common/stickerFeedback.js';
+import {
+  getStickerFeedback,
+  EXTENDED_REACTION_POOLS,
+  SORA_CAT_STICKERS,
+  SMILE_MEME_STICKERS
+} from '../src/components/common/stickerFeedback.js';
 
 test('all seven supplied cat assets are available locally', () => {
   for (const name of ['confused', 'please', 'happy', 'fist', 'angry', 'loading', 'revenge']) {
     assert.ok(existsSync(new URL(`../public/stickers/cats/${name}.png`, import.meta.url)));
+  }
+});
+
+test('all 40 deduplicated Sora cat assets exist locally and are defined', () => {
+  const keys = Object.keys(SORA_CAT_STICKERS);
+  assert.equal(keys.length, 40);
+  for (const key of keys) {
+    const [file, alt, text, mood] = SORA_CAT_STICKERS[key];
+    assert.ok(existsSync(new URL(`../public/stickers/cats/${file}.png`, import.meta.url)), `File cats/${file}.png must exist`);
+    assert.ok(alt && text && mood);
+  }
+});
+
+test('all 29 Smile meme assets exist locally and are defined', () => {
+  const keys = Object.keys(SMILE_MEME_STICKERS);
+  assert.equal(keys.length, 29);
+  for (const key of keys) {
+    const [file, alt, text, mood] = SMILE_MEME_STICKERS[key];
+    assert.ok(existsSync(new URL(`../public/stickers/smilekv16/${file}.png`, import.meta.url)), `File smilekv16/${file}.png must exist`);
+    assert.ok(alt && text && mood);
   }
 });
 
@@ -49,4 +74,9 @@ test('reaction remains stable until its input or variation changes', () => {
   const grade = compareAnswer('xin', 'xin chào');
   assert.deepEqual(getStickerFeedback('shocked', grade, 'a:0'), getStickerFeedback('shocked', grade, 'a:0'));
   assert.notEqual(getStickerFeedback('shocked', grade, 'a:0').type, getStickerFeedback('shocked', grade, 'a:1').type);
+});
+
+test('tapping cycles into extended reaction pools with new sora and smile stickers', () => {
+  const tappedFeedback = getStickerFeedback('determined', undefined, 'inst:1');
+  assert.ok(EXTENDED_REACTION_POOLS.determined.includes(tappedFeedback.type));
 });
