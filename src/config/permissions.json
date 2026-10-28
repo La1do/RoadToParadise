@@ -2,6 +2,7 @@
   "title": "Road to Paradise",
   "defaultTab": "custom-practice",
   "tabs": {
-    "custom-practice": true
+    "custom-practice": true,
+    "scripture": true
   }
 }

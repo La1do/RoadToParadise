@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useId, useState } from 'react';
+import { getStickerFeedback, SORA_CAT_STICKERS, SMILE_MEME_STICKERS } from './stickerFeedback.js';
 import { getStoredUserName } from '../../utils/cookie.js';
 import './StickerReaction.css';
+
+export { SORA_CAT_STICKERS, SMILE_MEME_STICKERS };
 
 /**
  * Định dạng bình luận của sticker kèm tên người dùng một cách tự nhiên
@@ -29,7 +32,34 @@ export function formatWithUserName(text, userName) {
   return `${userName} ơi, ${text}`;
 }
 
+const CAT_STICKERS = {
+  cat_confused: ['confused', 'Mèo hoang mang', 'Hoang mang chút thôi, xem lại đáp án nào!'],
+  cat_please: ['please', 'Mèo chắp tay năn nỉ', 'Thử thêm một lần nữa nhé!'],
+  cat_happy: ['happy', 'Mèo cười vui', 'Đúng rồi! Mèo tự hào lắm!'],
+  cat_fist: ['fist', 'Mèo giơ tay đập tay', 'Đập tay nào! Làm tốt lắm!'],
+  cat_angry: ['angry', 'Mèo nhíu mày chống nạnh', 'Bắt được lỗi rồi! Sửa lại là nhớ ngay!'],
+  cat_loading: ['loading', 'Mèo đang tải suy nghĩ', 'Đang nhớ lại... xem kỹ phần cần bổ sung nhé!'],
+  cat_revenge: ['revenge', 'Mèo quyết tâm phục thù', 'Quyết tâm phục thù câu này nào!']
+};
+
 export const STICKER_CONFIGS = {
+  ...Object.fromEntries(Object.entries(CAT_STICKERS).map(([type, [file, alt, text]]) => [type, {
+    src: `/stickers/cats/${file}.png`,
+    alt,
+    getDefaultText: (name) => formatWithUserName(text, name)
+  }])),
+  ...Object.fromEntries(Object.entries(SORA_CAT_STICKERS).map(([type, [file, alt, text, mood]]) => [type, {
+    src: `/stickers/cats/${file}.png`,
+    alt,
+    getDefaultText: (name) => formatWithUserName(text, name),
+    mood
+  }])),
+  ...Object.fromEntries(Object.entries(SMILE_MEME_STICKERS).map(([type, [file, alt, text, mood]]) => [type, {
+    src: `/stickers/smilekv16/${file}.png`,
+    alt,
+    getDefaultText: (name) => formatWithUserName(text, name),
+    mood
+  }])),
   cheer: {
     src: '/stickers/cheer.png',
     alt: 'Anh em thi thử nhé 0.0',
@@ -127,12 +157,17 @@ export default function StickerReaction({
   layout = 'horizontal', // 'horizontal' | 'vertical' | 'badge'
   animate = 'pop', // 'pop' | 'bounce' | 'wiggle' | 'shake' | 'none'
   className = '',
-  onClick
+  onClick,
+  grade
 }) {
-  const cfg = STICKER_CONFIGS[type] || STICKER_CONFIGS.cheer;
+  const instanceId = useId();
+  const [tapCount, setTapCount] = useState(0);
+  const feedback = getStickerFeedback(type, grade, `${instanceId}:${tapCount}`);
+  const reactionType = feedback.type;
+  const cfg = STICKER_CONFIGS[reactionType] || STICKER_CONFIGS.cheer;
   const currentUserName = userName !== undefined ? userName : getStoredUserName();
 
-  let displayText = text;
+  let displayText = text === '' ? '' : (feedback.text ?? text);
   if (displayText === undefined) {
     displayText = cfg.getDefaultText ? cfg.getDefaultText(currentUserName) : cfg.defaultText;
   } else if (typeof displayText === 'string') {
@@ -141,18 +176,29 @@ export default function StickerReaction({
 
   return (
     <div
-      className={`sticker-reaction-wrap sticker-${type} size-${size} layout-${layout} anim-${animate} ${className}`}
+      className={`sticker-reaction-wrap sticker-${type} sticker-${reactionType} size-${size} layout-${layout} anim-${animate} ${className}`}
       onClick={onClick}
     >
-      <div className="sticker-img-container">
+      <button
+        type="button"
+        className="sticker-img-container sticker-interact"
+        onClick={(event) => {
+          event.stopPropagation();
+          setTapCount(count => count + 1);
+          onClick?.(event);
+        }}
+        aria-label={`${cfg.alt}. Đổi biểu cảm của mèo`}
+        title="Chạm mèo để đổi biểu cảm"
+      >
         <img
+          key={`${reactionType}:${tapCount}:${JSON.stringify(grade?.diff || [])}`}
           src={cfg.src}
-          alt={cfg.alt}
+          alt=""
           className="sticker-img"
           loading="lazy"
           draggable="false"
         />
-      </div>
+      </button>
 
       {displayText && (
         <div className="sticker-bubble">

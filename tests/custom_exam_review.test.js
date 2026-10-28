@@ -91,8 +91,8 @@ test('App: Thanh header trên Mobile có sidebar drawer khi nhiều tab', () => 
 });
 
 test('CustomExamReview & Game1Copy: Nút hiện đáp án chỉ ở chế độ copy và ẩn/hiện độc lập từng ý', () => {
-  const customReviewJsx = fs.readFileSync('./src/components/exam/CustomExamReview.jsx', 'utf8');
-  const game1Jsx = fs.readFileSync('./src/components/games/Game1Copy.jsx', 'utf8');
+  const customReviewJsx = fs.readFileSync('./src/components/exam/CustomExamReview.jsx', 'utf8').replace(/\r\n/g, '\n');
+  const game1Jsx = fs.readFileSync('./src/components/games/Game1Copy.jsx', 'utf8').replace(/\r\n/g, '\n');
 
   // Nút toggle đáp án tham khảo ở header chỉ xuất hiện khi mode === 'copy'
   assert.ok(customReviewJsx.includes("mode === 'copy' && (\n                <button\n                  type=\"button\"\n                  className=\"toggle-ref-action-btn\""), 'Nút toggle-ref-action-btn chỉ xuất hiện ở chế độ copy');
@@ -117,23 +117,43 @@ test('Chấm bài & Sửa bài: Trực quan (xanh lá đúng, gạch bỏ từ d
   assert.ok(g2Css.includes('.game2-main-actions'), 'Có CSS cho game2-main-actions');
   assert.match(g2Css, /\.game2-check-all-btn\s*\{[^}]*min-height:\s*48px/, 'Nút kiểm tra Game 2 min-height >= 48px');
 
-  // 2. Game 1 sửa bài trực tiếp: xanh lá đúng, gạch ngang từ dư, vàng từ thiếu
-  assert.ok(g1Jsx.includes('token-correct'), 'Có class token-correct trong Game 1');
-  assert.ok(g1Jsx.includes('token-wrong'), 'Có class token-wrong trong Game 1');
-  assert.ok(g1Jsx.includes('token-missing'), 'Có class token-missing trong Game 1');
+  // 2. Game 1 delegates correction rendering to the shared component.
+  assert.match(g1Jsx, /<AnswerDiff diff=\{result\.diff\}/, 'Game 1 sử dụng diff có cả từ thiếu');
   assert.ok(g1Jsx.includes('diff-full-answer-box'), 'Có hộp đáp án full nguyên mẫu trong Game 1');
   assert.match(g1Css, /\.token-wrong\s*\{[^}]*line-through/, 'Từ dư được gạch ngang line-through');
   assert.match(g1Css, /\.token-correct\s*\{[^}]*background:\s*#dcfce7/, 'Từ đúng có màu xanh lá');
   assert.match(g1Css, /\.token-missing\s*\{[^}]*background:\s*#fef3c7/, 'Từ đúng thay thế có màu vàng');
 
   // 3. Màn hình phân tích chi tiết bài thi CustomExamReview
-  assert.ok(examJsx.includes('tok-correct'), 'Có class tok-correct trong chi tiết thi');
-  assert.ok(examJsx.includes('tok-wrong'), 'Có class tok-wrong trong chi tiết thi');
-  assert.ok(examJsx.includes('tok-missing'), 'Có class tok-missing trong chi tiết thi');
+  assert.match(examJsx, /<AnswerDiff\s+diff=\{sr\.grade\.diff\}/, 'Chi tiết thi sử dụng chung AnswerDiff');
+  const sharedCss = fs.readFileSync('./src/components/common/AnswerDiff.css', 'utf8');
+  assert.match(sharedCss, /\.answer-diff__token--wrong\s*\{[^}]*line-through/, 'Từ sai vẫn gạch bỏ trong renderer dùng chung');
+  assert.match(sharedCss, /\.answer-diff__token--missing\s*\{[^}]*text-decoration:\s*none/, 'Phần thiếu không bị gạch ngang');
   assert.ok(examJsx.includes('full-answer-text'), 'Có đáp án full nguyên mẫu trong chi tiết thi');
   assert.match(examCss, /\.tok-wrong\s*\{[^}]*line-through/, 'Từ dư trong bài thi được gạch ngang');
   assert.match(examCss, /\.tok-correct\s*\{[^}]*background:\s*#dcfce7/, 'Từ đúng trong bài thi màu xanh lá');
   assert.match(examCss, /\.tok-missing\s*\{[^}]*background:\s*#fef3c7/, 'Từ đúng thay thế trong bài thi màu vàng');
+});
+
+test('Chép lại & Xáo từ: Luôn có nút Làm lại câu này ở câu cuối cùng và hỗ trợ đợt ôn 1 câu', () => {
+  const g1Jsx = fs.readFileSync('./src/components/games/Game1Copy.jsx', 'utf8').replace(/\r\n/g, '\n');
+  const g2Jsx = fs.readFileSync('./src/components/games/Game2Scramble.jsx', 'utf8').replace(/\r\n/g, '\n');
+  const customReviewJsx = fs.readFileSync('./src/components/exam/CustomExamReview.jsx', 'utf8').replace(/\r\n/g, '\n');
+
+  // 1. Game 1 luôn luôn có nút "Làm lại câu này" bất kể là câu cuối cùng hay không
+  assert.match(g1Jsx, /<button[^>]*className="game1-retry-btn"[^>]*onClick=\{handleResetCurrentQuestion\}[^>]*>[\s\S]*?Làm lại câu này/, 'Game 1 luôn có nút Làm lại câu này gọi handleResetCurrentQuestion');
+
+  // 2. Game 1 ở câu cuối cùng có cả nút "Làm lại cả bài" (nếu có nhiều hơn 1 câu) và "Kết thúc"
+  assert.match(g1Jsx, /hasMultipleQuestions\s*&&\s*onResetAll/, 'Game 1 kiểm tra hasMultipleQuestions trước khi hiện Làm lại cả bài');
+  assert.match(g1Jsx, /handleResetCurrentQuestion\(\);\s*onResetAll\(\);/, 'Khi bấm Làm lại cả bài phải reset câu hiện tại và reset cả bài');
+
+  // 3. Game 2 tương tự Game 1
+  assert.match(g2Jsx, /<button[^>]*className="game2-retry-btn"[^>]*onClick=\{handleResetCurrentQuestion\}[^>]*>[\s\S]*?Làm lại câu này/, 'Game 2 luôn có nút Làm lại câu này');
+  assert.match(g2Jsx, /hasMultipleQuestions\s*&&\s*onResetAll/, 'Game 2 kiểm tra hasMultipleQuestions trước khi hiện Làm lại cả bài');
+
+  // 4. CustomExamReview truyền totalQuestions và sessionKey để remount sạch khi làm lại cả bài
+  assert.match(customReviewJsx, /key=\{`\$\{sessionKey\}-\$\{currentQ\.id\}`\}/, 'CustomExamReview dùng sessionKey trong key để reset hoàn toàn');
+  assert.match(customReviewJsx, /totalQuestions=\{sessionQuestions\.length\}/, 'CustomExamReview truyền totalQuestions vào game component');
 });
 
 

@@ -141,6 +141,7 @@ export default function GameResultModal({
             <StickerReaction
               type={stickerInfo.type}
               text={stickerInfo.text}
+              grade={!isExamMode && data.userTokensResult ? data : undefined}
               size="lg"
               layout="vertical"
               animate={isPerfect ? 'bounce' : calculatedAccuracy < 50 ? 'shake' : 'pop'}

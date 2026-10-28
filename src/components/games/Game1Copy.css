@@ -167,7 +167,6 @@
 .slot-sample-box {
   background: var(--color-bg-ice, #eef6fc);
   border: 1.5px solid var(--color-border, #c5def3);
-  border-left: 4px solid var(--color-primary, #7bb5e8);
   border-radius: 10px;
   padding: 12px 16px;
   margin-bottom: 14px;
@@ -435,7 +434,6 @@
   padding: 12px 16px;
   background: var(--color-bg-ice, #eef6fc);
   border: 1.5px solid var(--color-border, #c5def3);
-  border-left: 4px solid var(--color-primary-deep, #4a82b8);
   border-radius: 12px;
 }
 
@@ -567,6 +565,7 @@
 .game1-main-actions {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .game1-check-all-btn {
@@ -658,5 +657,15 @@
 
   .game1-slot-card {
     padding: 14px;
+  }
+
+  .game1-main-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .game1-main-actions button {
+    width: 100%;
+    min-height: 44px;
   }
 }

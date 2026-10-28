@@ -16,6 +16,46 @@
   transform: translateY(-2px);
 }
 
+/* Sticker mèo giữ nền trong suốt và có thể chạm để đổi biểu cảm. */
+.sticker-reaction-wrap[class*="sticker-cat_"] .sticker-img-container {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+/* Sticker meme dạng thẻ bo góc mượt mà */
+.sticker-reaction-wrap[class*="sticker-smile_"] .sticker-img-container {
+  border-radius: 14px;
+}
+
+.sticker-reaction-wrap[class*="sticker-smile_"] .sticker-img {
+  border-radius: 10px;
+}
+
+.sticker-interact {
+  font: inherit;
+  cursor: pointer;
+}
+
+.sticker-interact:focus-visible {
+  outline: 2px solid var(--color-text-main, #1c3553);
+  outline-offset: 3px;
+}
+
+.sticker-bubble {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticker-reaction-wrap,
+  .sticker-reaction-wrap .sticker-img {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 /* ================= 1. KÍCH THƯỚC ================= */
 .sticker-reaction-wrap.size-sm .sticker-img-container {
   width: 48px;
@@ -159,7 +199,7 @@
 }
 
 .sticker-reaction-wrap.anim-bounce .sticker-img {
-  animation: stickerBounce 1.8s infinite ease-in-out;
+  animation: stickerBounce 0.9s 2 ease-in-out;
 }
 
 @keyframes stickerBounce {
@@ -172,7 +212,7 @@
 }
 
 .sticker-reaction-wrap.anim-wiggle .sticker-img {
-  animation: stickerWiggle 1.4s infinite ease-in-out;
+  animation: stickerWiggle 0.7s 2 ease-in-out;
 }
 
 @keyframes stickerWiggle {

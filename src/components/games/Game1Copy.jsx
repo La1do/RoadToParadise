@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { compareAnswer } from '../../core/gradeEngine.js';
 import { getNextWordHint } from '../../core/hintEngine.js';
 import StickerReaction, { formatWithUserName } from '../common/StickerReaction.jsx';
+import AnswerDiff from '../common/AnswerDiff.jsx';
+import AnswerInputCompanion from '../common/AnswerInputCompanion.jsx';
 import './Game1Copy.css';
 
 /**
@@ -22,6 +24,7 @@ export default function Game1Copy({
   initialShowReference = true,
   onToggleReference,
   isLastQuestion = false,
+  totalQuestions,
   onResetAll,
   onFinish,
   onComplete,
@@ -37,6 +40,10 @@ export default function Game1Copy({
   const slots = targetQuestion?.slots && targetQuestion.slots.length > 0
     ? targetQuestion.slots
     : [{ slotIndex: 1, label: '①', title: '', answer: targetQuestion?.fullAnswer || targetQuestion?.answer || '' }];
+
+  const hasMultipleQuestions = totalQuestions !== undefined
+    ? totalQuestions > 1
+    : Boolean(onResetAll);
 
   // State: lưu giá trị gõ của từng ý { [slotIndex]: text }
   const [inputs, setInputs] = useState(() => initialInputs || {});
@@ -104,6 +111,12 @@ export default function Game1Copy({
     if (typeof onStateChange === 'function') {
       onStateChange({});
     }
+    setTimeout(() => {
+      const firstTextarea = document.querySelector('.game1-slots-list .slot-textarea');
+      if (firstTextarea) {
+        firstTextarea.focus();
+      }
+    }, 50);
   };
 
   const handleInputChange = (slotIndex, value) => {
@@ -240,27 +253,6 @@ export default function Game1Copy({
 
                 {result && (
                   <div className="slot-result-badge-wrap">
-                    <StickerReaction
-                      type={
-                        !currentVal.trim()
-                          ? 'wake_up'
-                          : result.isExact
-                          ? 'determined'
-                          : result.accuracy < 40
-                          ? 'angry'
-                          : 'shocked'
-                      }
-                      text={
-                        !currentVal.trim()
-                          ? 'Tỉnh táo lên! Cố lên nào, đừng bỏ trống chứ!'
-                          : result.isExact
-                          ? 'Đúng 100%!'
-                          : `Sai rồi (${result.accuracy}%)`
-                      }
-                      size="sm"
-                      layout="badge"
-                      animate={result.isExact ? 'bounce' : 'shake'}
-                    />
                     <span className={`slot-status-badge ${result.isExact ? 'badge-exact' : 'badge-wrong'}`}>
                       {!currentVal.trim()
                         ? '✕ Bỏ trống'
@@ -302,6 +294,7 @@ export default function Game1Copy({
 
               {/* Ô gõ riêng cho ý này */}
               <div className="slot-input-wrap">
+                <AnswerInputCompanion key={`${targetQuestion.id}:${sIndex}`} value={currentVal} grade={result}>
                 <textarea
                   className={`slot-textarea ${result ? (result.isExact ? 'border-success' : 'border-error') : ''}`}
                   rows={2}
@@ -311,7 +304,9 @@ export default function Game1Copy({
                   autoCapitalize="none"
                   autoCorrect="off"
                   spellCheck="false"
+                  aria-label={`Câu trả lời ${s.title || `ý ${index + 1}`}`}
                 />
+                </AnswerInputCompanion>
 
                 {/* Thanh công cụ phụ trợ cho từng ý */}
                 <div className="slot-tools-bar">
@@ -359,51 +354,9 @@ export default function Game1Copy({
               {/* Phân tích kết quả chấm điểm từng ý: từ đúng xanh lá, từ dư gạch đi, thế vào từ đúng màu vàng */}
               {result && !result.isExact && (
                 <div className="slot-diff-box">
-                  <div className="slot-diff-reaction-row">
-                    <StickerReaction
-                      type={!currentVal.trim() ? 'wake_up' : result.accuracy < 40 ? 'angry' : 'shocked'}
-                      text={
-                        !currentVal.trim()
-                          ? 'Tỉnh táo lên! Cố lên nào, đừng bỏ trống chứ!'
-                          : result.accuracy < 40
-                          ? 'Quạu ghê! Xem lại các từ gạch đỏ nhé!'
-                          : 'Ối làng nước ơi sai mất rồi!!'
-                      }
-                      size="sm"
-                      layout="badge"
-                      animate="shake"
-                    />
-                  </div>
-
                   <div className="diff-section">
-                    <span className="diff-label">Sửa bài trực tiếp (xanh: từ đúng • gạch ngang: từ dư • vàng: từ đúng thay thế):</span>
-                    <div className="diff-tokens-row">
-                      {result.diff && result.diff.length > 0 ? (
-                        result.diff.map((item, idx) => {
-                          if (item.type === 'correct') {
-                            return (
-                              <span key={idx} className="token-chip token-correct" title="Từ đúng">
-                                {item.text}
-                              </span>
-                            );
-                          }
-                          if (item.type === 'wrong') {
-                            return (
-                              <span key={idx} className="token-chip token-wrong" title="Từ dư / sai (gạch bỏ)">
-                                {item.text}
-                              </span>
-                            );
-                          }
-                          return (
-                            <span key={idx} className="token-chip token-missing" title="Thế vào từ đúng">
-                              {item.text}
-                            </span>
-                          );
-                        })
-                      ) : (
-                        <span className="empty-text">(Chưa nhập câu trả lời)</span>
-                      )}
-                    </div>
+                    <span className="diff-label">Sửa bài trực tiếp (xanh: từ đúng • gạch ngang: từ sai / dư • (+ cụm từ): phần còn thiếu):</span>
+                    <AnswerDiff diff={result.diff} userTokensResult={result.userTokensResult} />
                   </div>
 
                   {/* Hiện đáp án ở dưới bản full nguyên mẫu có đầy đủ dấu câu , . () → */}
@@ -453,7 +406,9 @@ export default function Game1Copy({
                     : `Đã đúng ${summary.correctCount}/${summary.totalCount} ý (Độ chính xác: ${summary.avgAccuracy}%)`}
                 </strong>
                 <div className="summary-subline">
-                  {summary.isAllExact ? 'Có thể tiếp tục sang câu tiếp theo.' : 'Hãy xem lại các từ màu đỏ để sửa lại.'}
+                  {summary.isAllExact
+                    ? (isLastQuestion ? 'Hoàn thành câu cuối cùng! Bấm Kết thúc để xem kết quả.' : 'Có thể tiếp tục sang câu tiếp theo.')
+                    : 'Hãy xem lại các từ màu đỏ để sửa lại.'}
                 </div>
               </div>
             </div>
@@ -469,8 +424,9 @@ export default function Game1Copy({
             >
               ✓ Kiểm tra tất cả các ý
             </button>
-          ) : !isLastQuestion ? (
+          ) : (
             <>
+              {/* Luôn luôn có nút làm lại câu này bất kể ở câu nào */}
               <button
                 type="button"
                 className="game1-retry-btn"
@@ -479,45 +435,47 @@ export default function Game1Copy({
                 🔄 Làm lại câu này
               </button>
 
-              {onNext && (
-                <button
-                  type="button"
-                  className="game1-next-btn"
-                  onClick={onNext}
-                >
-                  Tiếp tục bài tiếp theo →
-                </button>
-              )}
-            </>
-          ) : (
-            <>
-              <button
-                type="button"
-                className="game1-retry-all-btn"
-                onClick={() => {
-                  if (typeof onResetAll === 'function') {
-                    onResetAll();
-                  } else {
-                    handleResetCurrentQuestion();
-                  }
-                }}
-              >
-                🔄 Làm lại cả bài
-              </button>
+              {!isLastQuestion ? (
+                onNext && (
+                  <button
+                    type="button"
+                    className="game1-next-btn"
+                    onClick={onNext}
+                  >
+                    Tiếp tục bài tiếp theo →
+                  </button>
+                )
+              ) : (
+                <>
+                  {/* Nếu đợt ôn có từ 2 câu trở lên thì mới có lựa chọn làm lại cả bài */}
+                  {hasMultipleQuestions && onResetAll && (
+                    <button
+                      type="button"
+                      className="game1-retry-all-btn"
+                      onClick={() => {
+                        handleResetCurrentQuestion();
+                        onResetAll();
+                      }}
+                    >
+                      🔄 Làm lại cả bài
+                    </button>
+                  )}
 
-              <button
-                type="button"
-                className="game1-finish-btn"
-                onClick={() => {
-                  if (typeof onFinish === 'function') {
-                    onFinish();
-                  } else if (typeof onNext === 'function') {
-                    onNext();
-                  }
-                }}
-              >
-                🏁 Kết thúc
-              </button>
+                  <button
+                    type="button"
+                    className="game1-finish-btn"
+                    onClick={() => {
+                      if (typeof onFinish === 'function') {
+                        onFinish();
+                      } else if (typeof onNext === 'function') {
+                        onNext();
+                      }
+                    }}
+                  >
+                    🏁 Kết thúc
+                  </button>
+                </>
+              )}
             </>
           )}
         </div>
